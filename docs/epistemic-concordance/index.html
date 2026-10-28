@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Epistemic Concordance — Bible ↔ Catechism of Trent (1566) ↔ CCC (Bsar 6D XCube)</title>
+<style>
+  :root {
+    --bg: #faf7f0;
+    --paper: #fffdf9;
+    --ink: #1b2220;
+    --muted: #5a6460;
+    --line: #d8d0c1;
+    --pine: #1b4332;
+    --gold: #9a6700;
+    --burgundy: #7a2021;
+    --navy: #1e3a5f;
+    --violet: #4c1d95;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: Georgia, "Iowan Old Style", "Palatino Linotype", serif;
+    line-height: 1.55;
+  }
+  header {
+    background: var(--pine);
+    color: #f8f5ec;
+    padding: 1.4rem 1.5rem;
+    border-bottom: 4px solid var(--gold);
+  }
+  header h1 { margin: 0 0 .35rem 0; font-size: 1.45rem; letter-spacing: .01em; }
+  header p { margin: 0; font-size: .94rem; color: #d8f3dc; font-family: system-ui, -apple-system, sans-serif; }
+  .pill-row { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: .7rem; font-family: system-ui, sans-serif; font-size: .78rem; }
+  .pill { background: rgba(255,255,255,.13); padding: .22rem .6rem; border-radius: 999px; border: 1px solid rgba(255,255,255,.24); }
+  main { max-width: 1240px; margin: 0 auto; padding: 1.25rem; }
+  .tabs { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1.1rem; font-family: system-ui, sans-serif; }
+  .tab-btn {
+    border: 1px solid var(--line);
+    background: var(--paper);
+    color: var(--ink);
+    padding: .55rem 1rem;
+    border-radius: 6px;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: .9rem;
+  }
+  .tab-btn.active { background: var(--pine); color: #fff; border-color: var(--pine); }
+  .panel { display: none; }
+  .panel.active { display: block; }
+  .controls {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: .9rem 1rem;
+    margin-bottom: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: .85rem;
+    align-items: center;
+    font-family: system-ui, sans-serif;
+    font-size: .86rem;
+  }
+  select, input[type="range"] { padding: .35rem .5rem; border: 1px solid var(--line); border-radius: 5px; background: #fff; }
+  .grid-2 { display: grid; grid-template-columns: 340px 1fr; gap: 1rem; }
+  @media (max-width: 900px) { .grid-2 { grid-template-columns: 1fr; } }
+  .sidebar-list { display: flex; flex-direction: column; gap: .45rem; }
+  .node-item {
+    text-align: left;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--pine);
+    border-radius: 6px;
+    padding: .65rem .8rem;
+    cursor: pointer;
+    font-family: system-ui, sans-serif;
+  }
+  .node-item.active { background: #edf6f0; border-color: var(--pine); box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+  .node-item strong { display: block; font-size: .92rem; color: var(--pine); }
+  .node-item small { color: var(--muted); font-size: .78rem; }
+  .card {
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 1.1rem 1.25rem;
+    margin-bottom: 1rem;
+  }
+  .card h2, .card h3 { margin-top: 0; }
+  .badge {
+    display: inline-block;
+    padding: .16rem .5rem;
+    border-radius: 4px;
+    font-family: system-ui, sans-serif;
+    font-size: .74rem;
+    font-weight: 700;
+    margin-right: .35rem;
+  }
+  .b-shared { background: #d8f3dc; color: #1b4332; }
+  .b-deut { background: #fef3c7; color: #92400e; }
+  .b-db { background: #e0e7ff; color: #1e3a8a; }
+  .b-spread { background: #f3e8ff; color: #581c87; }
+  .verse-box {
+    border-left: 3px solid var(--gold);
+    background: #fcfaf4;
+    padding: .7rem .95rem;
+    margin: .65rem 0;
+    border-radius: 0 6px 6px 0;
+  }
+  .trent-box {
+    border-left: 4px solid var(--burgundy);
+    background: #fdf8f6;
+    padding: .85rem 1rem;
+    border-radius: 0 6px 6px 0;
+    white-space: pre-wrap;
+    font-size: .92rem;
+    max-height: 290px;
+    overflow-y: auto;
+  }
+  .lenses { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: .75rem; margin-top: .75rem; font-family: system-ui, sans-serif; font-size: .84rem; }
+  .lens-card { border: 1px solid var(--line); border-radius: 6px; padding: .7rem .85rem; background: #fff; }
+  .out-links { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .75rem; font-family: system-ui, sans-serif; }
+  .btn-link {
+    display: inline-block;
+    padding: .38rem .75rem;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: .8rem;
+    font-weight: 700;
+    color: #fff;
+    background: var(--pine);
+  }
+  .btn-link.alt { background: var(--burgundy); }
+  .btn-link.carm { background: var(--navy); }
+  .btn-link.luth { background: var(--gold); }
+  pre.code {
+    background: #1b2220;
+    color: #d8f3dc;
+    padding: .9rem 1rem;
+    border-radius: 6px;
+    overflow-x: auto;
+    font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+    font-size: .82rem;
+  }
+  table { width: 100%; border-collapse: collapse; font-family: system-ui, sans-serif; font-size: .84rem; }
+  th, td { border-bottom: 1px solid var(--line); padding: .55rem .5rem; text-align: left; vertical-align: top; }
+  th { background: #f3efe4; font-weight: 700; }
+  footer {
+    max-width: 1240px;
+    margin: 1.5rem auto 2.5rem auto;
+    padding: 0 1.25rem;
+    font-family: system-ui, sans-serif;
+    font-size: .8rem;
+    color: var(--muted);
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Epistemic Concordance: Scripture ↔ Catechism of Trent (1566) ↔ CCC</h1>
+  <p>Powered by <strong>Bsar 6D XCube</strong> (Asar 3-Pass Slab + R Pipe Verbs + Lua Dynamic Frames + CarrollCube ∃m) · Cardinal Newman 7-Note Profiles · Psychometric Replicability Engine</p>
+  <div class="pill-row">
+    <span class="pill" id="meta-rats">RATS SHA-256: loading…</span>
+    <span class="pill">Trent 1566 Witness: Public Domain (Byte-Pinned)</span>
+    <span class="pill">Scripture: Douay-Rheims 1899 &amp; KJV 1769 (Public Domain)</span>
+    <span class="pill">License: GNU AGPLv3 (Free Open Hosting · Dual-License Commercial Ready)</span>
+  </div>
+</header>
+
+<main>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('ccc')">1. CCC Statement → Bible &amp; Trent (Forward CSR)</button>
+    <button class="tab-btn" onclick="switchTab('verse')">2. Bible Verse → All Supporting CCC §§ (Reverse CSC)</button>
+    <button class="tab-btn" onclick="switchTab('rpipe')">3. Live R-Verb XCube Slicer (|&gt;)</button>
+    <button class="tab-btn" onclick="switchTab('hume')">4. Hume “Of Miracles” (@PAHoyeck) Replicability Lab</button>
+    <button class="tab-btn" onclick="switchTab('cosm')">5. Nicene Cosmology Boundary: LDS &amp; Antiquity (1 / ? / 0)</button>
+  </div>
+
+  <!-- TAB 1: CCC -> BIBLE & TRENT -->
+  <section id="panel-ccc" class="panel active">
+    <div class="controls">
+      <label><strong>Bible Translation:</strong>
+        <select id="bible-ver" onchange="renderActiveCCC()">
+          <option value="drb">Douay-Rheims 1899 (73-Book Catholic PD)</option>
+          <option value="kjv">King James Version 1769 (66-Book + Apocrypha PD)</option>
+        </select>
+      </label>
+      <label><strong>Canon Filter:</strong>
+        <select id="canon-filter" onchange="renderActiveCCC()">
+          <option value="ALL">All 73 Books (Full Catholic Canon)</option>
+          <option value="ECUMENICAL_66_SHARED">66-Book Shared Canon Only (Lutheran / Reformed / CARM Intersection)</option>
+        </select>
+      </label>
+      <label>
+        <input type="checkbox" id="eliminate-mediator" onchange="renderActiveCCC()">
+        <strong>CarrollCube Middle-Term Projection (∃m):</strong> Collapse mediators into direct CCC ↔ Verse view
+      </label>
+    </div>
+
+    <div class="grid-2">
+      <div class="sidebar-list" id="ccc-sidebar"></div>
+      <div id="ccc-detail"></div>
+    </div>
+  </section>
+
+  <!-- TAB 2: REVERSE VERSE -> CCC -->
+  <section id="panel-verse" class="panel">
+    <div class="controls">
+      <label><strong>Select Any Scripture Locus:</strong>
+        <select id="verse-selector" onchange="renderReverseVerse()"></select>
+      </label>
+      <span style="color:var(--muted)">Instant O(1) lookup via Bsar Reverse CSC Index (`reverse_verse_to_edge_ids`)</span>
+    </div>
+    <div id="verse-detail"></div>
+  </section>
+
+  <!-- TAB 3: LIVE R-VERB XCUBE SLICER -->
+  <section id="panel-rpipe" class="panel">
+    <div class="card">
+      <h3>Interactive <code>Bsar</code> R-Verb Hypercube Pipeline (Copy-on-Modify)</h3>
+      <div class="controls" style="margin-top:.5rem">
+        <label><strong><code>filter(pillar == …)</code></strong>
+          <select id="r-pillar" onchange="runRPipe()">
+            <option value="ALL">* (All 4 Pillars)</option>
+            <option value="I_CREED">I_CREED</option>
+            <option value="II_SACRAMENTS">II_SACRAMENTS</option>
+            <option value="III_LIFE_IN_CHRIST">III_LIFE_IN_CHRIST</option>
+            <option value="IV_PRAYER">IV_PRAYER</option>
+          </select>
+        </label>
+        <label><strong><code>filter(canon_scope == …)</code></strong>
+          <select id="r-canon" onchange="runRPipe()">
+            <option value="ALL">* (73-Book All)</option>
+            <option value="ECUMENICAL_66_SHARED">ECUMENICAL_66_SHARED (66-Book Core)</option>
+            <option value="DEUTEROCANON_7_BOOKS">DEUTEROCANON_7_BOOKS</option>
+          </select>
+        </label>
+        <label><strong><code>rollup_slice(by = …)</code></strong>
+          <select id="r-group" onchange="runRPipe()">
+            <option value="ccc_id">CCC Paragraph (Newman Cable Strength)</option>
+            <option value="pillar">4 Catechism Pillars</option>
+            <option value="newman_note">Cardinal Newman 7 Notes</option>
+          </select>
+        </label>
+      </div>
+      <pre class="code" id="r-code-preview"></pre>
+      <div id="r-table-out"></div>
+    </div>
+  </section>
+
+  <!-- TAB 4: HUME OF MIRACLES REPLICABILITY LAB -->
+  <section id="panel-hume" class="panel">
+    <div class="card">
+      <h2>Psychometric Replicability Testimony vs. Hume's <em>Of Miracles</em> (<code>@PAHoyeck</code> Audit)</h2>
+      <p id="hume-intro" style="color:var(--muted)"></p>
+      <div class="controls">
+        <label><strong>Skeptical Starting Prior <code>P(Resurrection)</code>:</strong>
+          <input type="range" id="hume-prior-log" min="-6" max="-0.3" step="0.1" value="-3.0" oninput="renderHumeLab()">
+          <span id="hume-prior-label" style="font-weight:700;color:var(--burgundy)"></span>
+        </label>
+        <label><strong>Post-Hoc Naturalistic <code>HARKing</code> Patches (<code>Δk</code>):</strong>
+          <select id="hume-patches" onchange="renderHumeLab()">
+            <option value="0">0 Patches — Single Coherent Naturalistic Mechanism (Honest Skeptic)</option>
+            <option value="2">2 Patches — Grief Hallucination + Separate Wrong-Tomb Excuse (-10 dB MDL)</option>
+            <option value="3" selected>3 Patches — Hallucination + Hostile Paul Seizure + Stolen/Wrong Tomb (-15 dB MDL)</option>
+            <option value="4">4 Patches — Swoon + Conspiracy + Mass Hallucination + Paul Seizure (-20 dB MDL)</option>
+          </select>
+        </label>
+      </div>
+      <div id="hume-scoreboard"></div>
+      <div id="hume-channels"></div>
+    </div>
+  </section>
+
+  <!-- TAB 5: NICENE COSMOLOGY BOUNDARY (FRONTIER LDS & ANTIQUITY REMIXES) -->
+  <section id="panel-cosm" class="panel">
+    <div class="card">
+      <h2>Nicene Creed Cosmology Boundary: American-Frontier LDS Literature &amp; Antiquity's Philosophies</h2>
+      <p id="cosm-intro" style="color:var(--muted)"></p>
+      <div class="controls">
+        <label><strong>Filter by Carrollian 4-Valued Epistemic State:</strong>
+          <select id="cosm-filter" onchange="renderCosmologyLab()">
+            <option value="ALL">Show All (1 Attested · ? Permissible Speculation · 0 Nicene Contradiction)</option>
+            <option value="SAFE_OR_ATTESTED">Acceptable to Theorize / Affirm Inside Nicene Orthodoxy (1 &amp; ?)</option>
+            <option value="0">Incompatible with Nicene Creed (0 — Catholic, Lutheran &amp; CARM Agreed)</option>
+          </select>
+        </label>
+      </div>
+      <div id="cosm-cards"></div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <strong>Respectful Concordance &amp; Fair Revenue Architecture:</strong> Verbatim Bible texts (Douay-Rheims 1899 &amp; KJV 1769) and the 1566 Roman Catechism of Trent are in the Public Domain. Modern CCC paragraphs are indexed by uncopyrightable factual citation coordinates paired with original 1-sentence summaries and direct outbound links to <a href="https://www.vatican.va/archive/ENG0015/_INDEX.HTM" target="_blank" rel="noopener">Vatican.va</a>, <a href="https://www.usccb.org/beliefs-and-teachings/what-we-believe/catechism/catechism-of-the-catholic-church" target="_blank" rel="noopener">USCCB Official Print/Licensed Editions</a>, <a href="https://bookofconcord.org/" target="_blank" rel="noopener">BookOfConcord.org</a>, and <a href="https://carm.org/" target="_blank" rel="noopener">CARM.org</a>. Licensed under <strong>GNU AGPLv3</strong>; commercial publishers holding official CCC prose licenses can hydrate inline text via <code>LicensedTextAdapter</code> under a commercial partnership.
+</footer>
+
+<script>
+const BUNDLE = {"project": "Epistemic Concordance — Scripture <-> Catechism of Trent (1566) <-> CCC (Bsar 6D XCube)", "license": "GNU-AGPLv3", "trent_witness_sha256": "25c6fd3fedbb7297447ab2472112faa8e6409b9954c5315dbf25e79860656e27", "xcube_slab": {"rats_sha256": "acd839c26a945caaf219981c29a285e9efe2c6d25d5c230fe42954bac014c772", "attestation": "probabilistic_structural", "schema": "bsar.xcube.theology.v1", "license": "GNU-AGPLv3", "adapter": "VaticanOutboundConcordanceAdapter", "pass_convergence_drift": 0, "lyapunov_contractive": true, "counts": {"ccc_nodes": 11, "distinct_verses": 31, "sparse_edges": 36}, "nodes": {"253": {"ccc_id": 253, "pillar": "I_CREED", "topic": "The Dogma of the Holy Trinity (Unity & Tri-Personal Distinction)", "trent_ref_id": "TRENT_P1_ART1_CREATOR", "tradition_lenses": {"catholic": "Reaffirmed verbatim across Nicaea (325), Trent Part I Art. I, and CCC §§ 253–255.", "lutheran": "100% Shared Core (Augsburg Confession Art. I — Das kleine Evangelium rests on Triune self-giving).", "reformed_carm": "100% Shared Core (CARM Trinitarian orthodoxy chart: 1 God in 3 co-equal, co-eternal Persons).", "skeptic_note": "Newman Dossier 1 (Petavius): technical distinction of Persons protects rather than dissolves monotheistic Unity."}, "newman_profile": {"N1_Preservation_of_Type": "ATTESTED (Protects monotheistic Unity via relational distinction)", "N2_Continuity_of_Principles": "ATTESTED (Incarnational revelation vs rationalist reduction)", "N4_Logical_Sequence": "ATTESTED (Baptismal formula + Johannine Logos -> Nicene Homoousios)", "verdict_category": "EQUIVALENT_REAFFIRMED_ACROSS_NICENE_TRADITIONS"}, "ccc_paragraph": "CCC § 253", "clean_room_proposition": "The Trinity is One God in three distinct Persons who do not divide the one divine substance.", "vatican_en_url": "https://www.vatican.va/archive/ENG0015/__P17.HTM", "vatican_latin_url": "https://www.vatican.va/archive/catechismus_lt/p1s2c1p2_lt.htm", "official_print_and_flipbook_url": "https://www.usccb.org/sites/default/files/flipbooks/catechism/", "rights_mode": "CONCORDANCE_SUMMARY_PLUS_OFFICIAL_OUTBOUND_LINK"}, "460": {"ccc_id": 460, "pillar": "I_CREED", "topic": "Participatory Divinization (Theosis — 2 Pet 1:4) vs. Becoming Uncreated Gods", "trent_ref_id": "TRENT_P1_ART1_CREATOR", "tradition_lenses": {"catholic": "CCC § 460 (quoting St. Athanasius De Incarnatione 54:3 & Aquinas): Humans share divine life by grace/adoption, NEVER by becoming independent uncreated gods.", "lutheran": "Union with Christ / Indwelling (Luther's 1514 Christmas Sermon): Real participation in Christ's righteousness and glory while God alone remains Creator.", "reformed_carm": "CARM explicitly contrasts biblical union/glorification (2 Pet 1:4; Rom 8:19–21) against LDS King Follett ontological godhood (Isa 43:10).", "skeptic_note": "Anchors Tab 5's exact razor: why ancient patristic Theosis + cosmic stewardship is Nicene `1`/`?`, while contingent creator-gods is Nicene `0`!"}, "newman_profile": {"N1_Preservation_of_Type": "ATTESTED (Creator/creature ontological boundary strictly preserved via grace-by-adoption)", "N3_Power_of_Assimilation": "ATTESTED (Distinguishes Christian Theosis cleanly from pagan/frontier apotheosis)", "verdict_category": "NICENE_CREATOR_CREATURE_BOUNDARY_ANCHOR"}, "ccc_paragraph": "CCC § 460", "clean_room_proposition": "The Word became flesh to make humans partakers of the divine nature by grace and adoption, without erasing the Creator-creature boundary.", "vatican_en_url": "https://www.vatican.va/archive/ENG0015/__P1J.HTM", "vatican_latin_url": "https://www.vatican.va/archive/catechismus_lt/p1s2c2a3_lt.htm", "official_print_and_flipbook_url": "https://www.usccb.org/sites/default/files/flipbooks/catechism/", "rights_mode": "CONCORDANCE_SUMMARY_PLUS_OFFICIAL_OUTBOUND_LINK"}, "604": {"ccc_id": 604, "pillar": "I_CREED", "topic": "God's Redemptive Initiative & The Over-Solvent Cross (John 3:16 Core)", "trent_ref_id": "TRENT_P1_ART4_SATISFACTION", "tradition_lenses": {"catholic": "Trent (L4269–L4271) & CCC § 604: Christ's satisfaction was not merely equal to our debt, 'but far exceeded them', preceding all human merit.", "lutheran": "100% Heart of Scripture ('Das kleine Evangelium' — Luther's Joyous Exchange: Sovereign Principal absorbs terminal Debit in full).", "reformed_carm": "Strong Shared Core on Christ's substitutionary satisfaction & unmerited divine initiative (carm.org/atonement); debates extent/imputation mechanics.", "skeptic_note": "In 2D Debit/Credit moralism, unilateral debt assumption looks 'too good to be true'; double-entry conservation holds because the Principal pays on His own sheet."}, "newman_profile": {"N1_Preservation_of_Type": "ATTESTED (Kerygmatic gift precedes moral law)", "N6_Conservative_Action_on_Past": "ATTESTED (Conserves divine justice while fulfilling mercy)", "verdict_category": "SHARED_ECUMENICAL_BEDROCK"}, "ccc_paragraph": "CCC § 604", "clean_room_proposition": "In giving His Son for our sins, God manifests that His redemptive plan precedes all human merit and flows from pure love.", "vatican_en_url": "https://www.vatican.va/archive/ENG0015/__P1O.HTM", "vatican_latin_url": "https://www.vatican.va/archive/catechismus_lt/p1s2c2a4_lt.htm", "official_print_and_flipbook_url": "https://www.usccb.org/sites/default/files/flipbooks/catechism/", "rights_mode": "CONCORDANCE_SUMMARY_PLUS_OFFICIAL_OUTBOUND_LINK"}, "639": {"ccc_id": 639, "pillar": "I_CREED", "topic": "The Empty Tomb & Eyewitness Testimony of the Bodily Resurrection", "trent_ref_id": "TRENT_P1_ART5_RESURRECTION", "tradition_lenses": {"catholic": "Trent Art. V (L4498–L4508) & CCC §§ 638–658: Historical bodily resurrection 'according to the Scriptures' is the hinge of Christian faith.", "lutheran": "100% Shared Core: Bodily victory over death & hell; without 1 Cor 15:14, preaching and faith are empty.", "reformed_carm": "100% Shared Core (Matt Slick / CARM Resurrection tables: early 1 Cor 15 creed, empty tomb, hostile Paul conversion, apostolic martyrdom).", "skeptic_note": "Tested directly in the Hume 'Of Miracles' (@PAHoyeck) Psychometric Replicability Lab: literary parallels deduplicated, independent costly channels multiplied."}, "newman_profile": {"N1_Preservation_of_Type": "ATTESTED (Apostolic kerygma identical in 1 Cor 15, Trent, and CCC)", "N7_Chronic_Vigour": "ATTESTED (Athanasius De Incarnatione §§ 27–32 observable phase transition)", "verdict_category": "EQUIVALENT_REAFFIRMED_PLUS_REPLICABILITY_TESTED"}, "ccc_paragraph": "CCC § 639", "clean_room_proposition": "The mystery of Christ's bodily Resurrection is a real historical event attested by the New Testament through the empty tomb and concrete eyewitness encounters.", "vatican_en_url": "https://www.vatican.va/archive/ENG0015/__P1R.HTM", "vatican_latin_url": "https://www.vatican.va/archive/catechismus_lt/p1s2c2a5_lt.htm", "official_print_and_flipbook_url": "https://www.usccb.org/sites/default/files/flipbooks/catechism/", "rights_mode": "CONCORDANCE_SUMMARY_PLUS_OFFICIAL_OUTBOUND_LINK"}, "1031": {"ccc_id": 1031, "pillar": "I_CREED", "topic": "Final Purification (Purgatory) & Prayer for the Dead — Classic Ecumenical Crux", "trent_ref_id": "TRENT_P1_ART5_PURGATORY", "tradition_lenses": {"catholic": "Trent Art. V (L4348–L4353) & CCC §§ 1030–1032: Combines Deuterocanonical 2 Macc 12:46 with Protocanonical 1 Cor 3:15 and ancient liturgical practice.", "lutheran": "Disputed / Rejected (Smalcald Articles Part II Art. II): Rejects temporal satisfaction after death on 66-book canon + sufficiency of John 3:16.", "reformed_carm": "Explicitly Contested on CARM (carm.org/purgatory): Rejects 2 Maccabees as non-canonical and reads 1 Cor 3:15 as testing of ministerial works, not post-mortem cleansing.", "skeptic_note": "Clean demonstration of why our XCube separates `canon_scope` (66 vs 73 books) from `warrant_mode` (inferential vs explicit) so nobody talks past each other!"}, "newman_profile": {"N2_Continuity_of_Principles": "CONTESTED_ACROSS_CANON_BOUNDARY (Sacramental sanctification vs Forensic completeness)", "N5_Anticipation_of_Future": "ATTESTED_IN_LITURGY (Early Christian catacomb prayers & Perpetua)", "verdict_category": "CANON_AND_HERMENEUTICAL_CRUX_PRESERVING_OPPOSING_READINGS"}, "ccc_paragraph": "CCC § 1031", "clean_room_proposition": "Those who die in God's grace and friendship, yet imperfectly purified, undergo purification to achieve the holiness needed to enter heaven.", "vatican_en_url": "https://www.vatican.va/archive/ENG0015/__P2N.HTM", "vatican_latin_url": "https://www.vatican.va/archive/catechismus_lt/p1s2c3a12_lt.htm", "official_print_and_flipbook_url": "https://www.usccb.org/sites/default/files/flipbooks/catechism/", "rights_mode": "CONCORDANCE_SUMMARY_PLUS_OFFICIAL_OUTBOUND_LINK"}, "1213": {"ccc_id": 1213, "pillar": "II_SACRAMENTS", "topic": "Holy Baptism — Doorway of Spiritual Regeneration by Water and the Spirit", "trent_ref_id": "TRENT_P2_BAPTISM", "tradition_lenses": {"catholic": "Trent Part II (L7160+) & CCC § 1213: Instrumental sacrament of regeneration instituted by Christ.", "lutheran": "Strong Sacramental Overlap (Small Catechism on Baptism: 'works forgiveness of sins, rescues from death and the devil' via God's Word bound to water).", "reformed_carm": "Partial Crux: Affirms Trinitarian water baptism as covenantal sign & seal (Westminster 28), while rejecting ex opere operato baptismal regeneration.", "skeptic_note": "Newman Dossier 3 notes Luther retained the ancient sacramental principle on Baptism & Eucharist against rationalist reduction."}, "newman_profile": {"N1_Preservation_of_Type": "ATTESTED (Water + Trinitarian invocation conserved from 1st century)", "N2_Continuity_of_Principles": "ATTESTED (Sacramental mediation through physical matter)", "verdict_category": "CATHOLIC_LUTHERAN_CONVERGENCE_REFORMED_SIGN_SEAL_DISTINCTION"}, "ccc_paragraph": "CCC § 1213", "clean_room_proposition": "Holy Baptism is the foundational sacrament of the Christian life, freeing from sin and regenerating the believer as a child of God.", "vatican_en_url": "https://www.vatican.va/archive/ENG0015/__P3J.HTM", "vatican_latin_url": "https://www.vatican.va/archive/catechismus_lt/p2s2c1a1_lt.htm", "official_print_and_flipbook_url": "https://www.usccb.org/sites/default/files/flipbooks/catechism/", "rights_mode": "CONCORDANCE_SUMMARY_PLUS_OFFICIAL_OUTBOUND_LINK"}, "1374": {"ccc_id": 1374, "pillar": "II_SACRAMENTS", "topic": "The Most Holy Eucharist — Real & Substantial Presence of Christ", "trent_ref_id": "TRENT_P2_EUCHARIST", "tradition_lenses": {"catholic": "Trent Session XIII / Roman Catechism (L8719–L8796) -> Sacrosanctum Concilium -> CCC § 1374: Doctrinal core reaffirmed; liturgical rite revised in 1969.", "lutheran": "High Real-Presence Overlap (Sacramental Union 'in, with, and under' bread and wine; Luther stood on 'This IS my body' at Marburg 1529 while declining Aristotelian transubstantiation).", "reformed_carm": "Explicit Crux on CARM: Rejects bodily transubstantiation & Eucharistic sacrifice; affirms spiritual nourishment by faith (Calvin) or memorial.", "skeptic_note": "Prime showcase of Newman's 'Cable of Independent Strands': Synoptic institution + Pauline 1 Cor 10–11 + Johannine John 6 + Malachi 1:11 + Ignatius of Antioch."}, "newman_profile": {"N1_Preservation_of_Type": "ATTESTED_DOCTRINAL_CORE (Disciplinary/ceremonial shifts tracked separately per Synoptics PLAN.md §5A)", "N3_Power_of_Assimilation": "ATTESTED_OR_CONTESTED (Uses 'substance' to guard literal 'This is My body')", "verdict_category": "EQUIVALENT_DOCTRINE_TRENT_TO_CCC_WITH_REFORMATION_METAPHYSICAL_CRUX"}, "ccc_paragraph": "CCC § 1374", "clean_room_proposition": "In the blessed sacrament of the Eucharist, the body and blood, together with the soul and divinity of Christ, are truly, really, and substantially contained.", "vatican_en_url": "https://www.vatican.va/archive/ENG0015/__P41.HTM", "vatican_latin_url": "https://www.vatican.va/archive/catechismus_lt/p2s2c1a3_lt.htm", "official_print_and_flipbook_url": "https://www.usccb.org/sites/default/files/flipbooks/catechism/", "rights_mode": "CONCORDANCE_SUMMARY_PLUS_OFFICIAL_OUTBOUND_LINK"}, "1996": {"ccc_id": 1996, "pillar": "III_LIFE_IN_CHRIST", "topic": "Justification by God's Free Grace vs. Faith & Works (Rom 3 / Eph 2 / Jas 2)", "trent_ref_id": "TRENT_P1_ART4_SATISFACTION", "tradition_lenses": {"catholic": "Trent Session VI & CCC §§ 1996–2005: Initial justification is 100% unmerited grace (Rom 3:24; Eph 2:8); grace truly transforms and bears fruit in charity (Jas 2:24).", "lutheran": "1999 Joint Declaration on the Doctrine of Justification (JDDJ): High convergence on unmerited grace; Lutheranism guards forensic assurance against anxious merit-counting.", "reformed_carm": "Core Reformation Debate on CARM (carm.org/justification): Distinguishes forensic imputation (Rom 3:28; Eph 2:8–9) strictly from sanctification (Eph 2:10; Jas 2:24 as fruit/evidence of living faith, never ground of justification).", "skeptic_note": "Notice how putting Rom 3:28, Eph 2:8–10, and Jas 2:24 in the SAME 66-book slice reveals the exact lexical distinction ('ground' vs 'transformative union') rather than straw-men!"}, "newman_profile": {"N2_Continuity_of_Principles": "CONTESTED_DEFINITIONAL_SCOPE ('dikaioun' = declare righteous vs make righteous)", "N6_Conservative_Action_on_Past": "ATTESTED (Integrates Paul on unmerited grace + James on living faith)", "verdict_category": "DEFINITIONAL_SCOPE_CRUX_WITH_SHARED_ANTI_PELAGIAN_FLOOR"}, "ccc_paragraph": "CCC § 1996", "clean_room_proposition": "Our justification comes from the grace of God alone as a free, undeserved gift uniting us to Christ's righteousness and renewing the inner person.", "vatican_en_url": "https://www.vatican.va/archive/ENG0015/__P6Z.HTM", "vatican_latin_url": "https://www.vatican.va/archive/catechismus_lt/p3s1c3a2_lt.htm", "official_print_and_flipbook_url": "https://www.usccb.org/sites/default/files/flipbooks/catechism/", "rights_mode": "CONCORDANCE_SUMMARY_PLUS_OFFICIAL_OUTBOUND_LINK"}, "2106": {"ccc_id": 2106, "pillar": "III_LIFE_IN_CHRIST", "topic": "Religious Liberty & Immunity from Civil Coercion (Trent -> Dignitatis Humanae -> CCC)", "trent_ref_id": "TRENT_P3_CMD1", "tradition_lenses": {"catholic": "Hermes Synoptics Hard Case (PLAN.md §5B): Dignitatis Humanae §1–2 distinguishes moral duty toward true religion (First Commandment, unchanged) from civil state coercion; rupture critics cite Quanta Cura (1864).", "lutheran": "Two-Kingdoms Resonance: Sword of civil magistrate cannot coerce inward faith (*fiducia* requires uncoerced conscience).", "reformed_carm": "Westminster Confession Ch. 20 ('God alone is Lord of the conscience') strongly affirms uncoerced conscience in matters of faith.", "skeptic_note": "Sweetbrier Node 0 Invariant: Human dignity forbids coercive override; preserves both continuity reconciliation and 19th-century tension dossier openly."}, "newman_profile": {"N1_Preservation_of_Type": "APPARENT_TENSION_TESTED_BY_JURISDICTION_SCOPE (Moral duty vs Civil police power)", "N2_Continuity_of_Principles": "ATTESTED (Act of faith is intrinsically free by nature)", "verdict_category": "CHANGED_CIVIL_JURISDICTION_APPLICATION_WITH_PRESERVED_MORAL_DUTY"}, "ccc_paragraph": "CCC § 2106", "clean_room_proposition": "Nobody may be forced to act against their convictions in religious matters within just limits, grounded in the dignity of the human person.", "vatican_en_url": "https://www.vatican.va/archive/ENG0015/__P7D.HTM", "vatican_latin_url": "https://www.vatican.va/archive/catechismus_lt/p3s2c1a1_lt.htm", "official_print_and_flipbook_url": "https://www.usccb.org/sites/default/files/flipbooks/catechism/", "rights_mode": "CONCORDANCE_SUMMARY_PLUS_OFFICIAL_OUTBOUND_LINK"}, "2838": {"ccc_id": 2838, "pillar": "IV_PRAYER", "topic": "Fifth Petition of the Our Father — 'Forgive Us Our Trespasses / Debts'", "trent_ref_id": "TRENT_P4_PETITION5_DEBTS", "tradition_lenses": {"catholic": "Trent Part IV (L18902–L18958) & CCC §§ 2838–2845: Divine mercy flows into human hearts only when they refuse to hoard ruthless debt collection against neighbors.", "lutheran": "Small Catechism Fifth Petition: Daily bilateral remission freeing the Christian to forgive neighbors gladly.", "reformed_carm": "100% Shared Core (Heidelberg Q&A 126 / Westminster Shorter Q. 105).", "skeptic_note": "Direct bridge to TWIFT's bilateral `Undo` / `Iqalah` floor: symmetric forgiveness breaks finite-horizon blood-feud defection."}, "newman_profile": {"N1_Preservation_of_Type": "ATTESTED (Identical across Didache 8, Trent Part IV, and CCC)", "N7_Chronic_Vigour": "ATTESTED (Athanasius observable mercy equilibrium)", "verdict_category": "EQUIVALENT_REAFFIRMED_UNIVERSAL_CHRISTIAN_PRAYER"}, "ccc_paragraph": "CCC § 2838", "clean_room_proposition": "In asking the Father to forgive our debts, we confess our insolvency before God's mercy and bind ourselves to forgive our neighbors.", "vatican_en_url": "https://www.vatican.va/archive/ENG0015/__PA6.HTM", "vatican_latin_url": "https://www.vatican.va/archive/catechismus_lt/p4s2a3_lt.htm", "official_print_and_flipbook_url": "https://www.usccb.org/sites/default/files/flipbooks/catechism/", "rights_mode": "CONCORDANCE_SUMMARY_PLUS_OFFICIAL_OUTBOUND_LINK"}, "2842": {"ccc_id": 2842, "pillar": "IV_PRAYER", "topic": "The 'As' of the Fifth Petition — Imitating Divine Mercy in Human Ledger Relations", "trent_ref_id": "TRENT_P4_PETITION5_DEBTS", "tradition_lenses": {"catholic": "CCC § 2842 + Parable of the Unmerciful Servant (Matt 18): Refusing mercy re-locks the ruthless 2D creditor prison.", "lutheran": "100% Shared Core: Neighbor-love is the spontaneous fruit of having our unpayable debt cancelled.", "reformed_carm": "100% Shared Core: Unforgiving spirit falsifies claim of regenerate trust.", "skeptic_note": "Demonstrates XCubes Top-Down Pericope Spreading (`S_W`) of `Matt 6:9–13` across `CCC §§ 2838 & 2842` without inflating cluster count!"}, "newman_profile": {"N1_Preservation_of_Type": "ATTESTED", "N4_Logical_Sequence": "ATTESTED", "verdict_category": "EQUIVALENT_REAFFIRMED_UNIVERSAL_CHRISTIAN_PRAYER"}, "ccc_paragraph": "CCC § 2842", "clean_room_proposition": "This 'as' is unique in Jesus' teaching: outpouring of divine mercy cannot penetrate a heart that closes itself to forgiving its debtor.", "vatican_en_url": "https://www.vatican.va/archive/ENG0015/__PA6.HTM", "vatican_latin_url": "https://www.vatican.va/archive/catechismus_lt/p4s2a3_lt.htm", "official_print_and_flipbook_url": "https://www.usccb.org/sites/default/files/flipbooks/catechism/", "rights_mode": "CONCORDANCE_SUMMARY_PLUS_OFFICIAL_OUTBOUND_LINK"}}, "edges": [{"hilbert_d": 64562, "ccc_id": 253, "pillar": "I_CREED", "verse_ref": "MAT.28.19", "verse_ord": 25, "cluster_id": "CL_TRIUNE_BAPTISM_NAME", "warrant_mode": "DIRECT_QUOTE", "canon_scope": "ECUMENICAL_66_SHARED", "mediator": "DIRECT_SCRIPTURE", "newman_note": "N0_EXPLICIT_KERYGMA", "epistemic_state": "1", "db_q8_8": 2432, "decibans": 9.5, "is_spread_from_pericope": false}, {"hilbert_d": 64601, "ccc_id": 253, "pillar": "I_CREED", "verse_ref": "JHN.1.1-14", "verse_ord": 16, "cluster_id": "CL_JOHANNINE_LOGOS", "warrant_mode": "DEDUCTIVE_PROOF", "canon_scope": "ECUMENICAL_66_SHARED", "mediator": "ATHANASIUS_NICAEA", "newman_note": "N4_LOGICAL_SEQUENCE", "epistemic_state": "1", "db_q8_8": 2304, "decibans": 9.0, "is_spread_from_pericope": false}, {"hilbert_d": 64606, "ccc_id": 253, "pillar": "I_CREED", "verse_ref": "JHN.4.24", "verse_ord": 19, "cluster_id": "CL_DIVINE_INCORPOREALITY", "warrant_mode": "DIRECT_QUOTE", "canon_scope": "ECUMENICAL_66_SHARED", "mediator": "TRENT_ART_I", "newman_note": "N1_PRESERVATION_OF_TYPE", "epistemic_state": "1", "db_q8_8": 2099, "decibans": 8.1992, "is_spread_from_pericope": false}, {"hilbert_d": 65441, "ccc_id": 253, "pillar": "I_CREED", "verse_ref": "GEN.1.1", "verse_ord": 12, "cluster_id": "CL_CREATOR_MONOTHEISM", "warrant_mode": "DIRECT_QUOTE", "canon_scope": "ECUMENICAL_66_SHARED", "mediator": "NICAEA_325", "newman_note": "N1_PRESERVATION_OF_TYPE", "epistemic_state": "1", "db_q8_8": 1280, "decibans": 5.0, "is_spread_from_pericope": false}, {"hilbert_d": 65442, "ccc_id": 253, "pillar": "I_CREED", "verse_ref": "ISA.43.10", "verse_ord": 13, "cluster_id": "CL_CREATOR_MONOTHEISM", "warrant_mode": "DIRECT_QUOTE", "canon_scope": "ECUMENICAL_66_SHARED", "mediator": "NICAEA_325", "newman_note": "N1_PRESERVATION_OF_TYPE", "epistemic_state": "1", "db_q8_8": 2253, "decibans": 8.8008, "is_spread_from_pericope": false}, {"hilbert_d": 86127, "ccc_id": 460, "pillar": "I_CREED", "verse_ref": "2PE.1.4", "verse_ord": 7, "cluster_id": "CL_PARTAKERS_DIVINE_NATURE", "warrant_mode": "DIRECT_QUOTE", "canon_scope": "ECUMENICAL_66_SHARED", "mediator": "ATHANASIUS_DE_INC_54", "newman_note": "N1_PRESERVATION_OF_TYPE", "epistemic_state": "1", "db_q8_8": 2458, "decibans": 9.6016, "is_spread_from_pericope": false}, {"hilbert_d": 86177, "ccc_id": 460, "pillar": "I_CREED", "verse_ref": "ISA.43.10", "verse_ord": 13, "cluster_id": "CL_CREATOR_MONOTHEISM", "warrant_mode": "DEDUCTIVE_PROOF", "canon_scope": "ECUMENICAL_66_SHARED", "mediator": "NICAEA_325", "newman_note": "N6_CONSERVATIVE_ACTION", "epistemic_state": "1", "db_q8_8": 2253, "decibans": 8.8008, "is_spread_from_pericope": false}, {"hilbert_d": 86436, "ccc_id": 460, "pillar": "I_CREED", "verse_ref": "ROM.8.19-21", "verse_ord": 30, "cluster_id": "CL_COSMIC_GLORIFICATION", "warrant_mode": "DEDUCTIVE_PROOF", "canon_scope": "ECUMENICAL_66_SHARED", "mediator": "DIRECT_SCRIPTURE", "newman_note": "N5_ANTICIPATION_OF_FUTURE", "epistemic_state": "1", "db_q8_8": 1997, "decibans": 7.8008, "is_spread_from_pericope": false}, {"hilbert_d": 86512, "ccc_id": 460, "pillar": "I_CREED", "verse_ref": "JHN.1.1-14", "verse_ord": 16, "cluster_id": "CL_JOHANNINE_LOGOS", "warrant_mode": "DEDUCTIVE_PROOF", "canon_scope": "ECUMENICAL_66_SHARED", "mediator": "IRENAEUS_ADV_HAER", "newman_note": "N2_CONTINUITY_OF_PRINCIPLES", "epistemic_state": "1", "db_q8_8": 2304, "decibans": 9.0, "is_spread_from_pericope": false}, {"hilbert_d": 962960, "ccc_id": 604, "pillar": "I_CREED", "verse_ref": "COL.2.14", "verse_ord": 8, "cluster_id": "CL_DEBT_BOND_CANCELLED", "warrant_mode": "DEDUCTIVE_PROOF", "canon_scope": "ECUMENICAL_66_SHARED", "mediator": "TRENT_ART_IV", "newman_note": "N6_CONSERVATIVE_ACTION", "epistemic_state": "1", "db_q8_8": 2176, "decibans": 8.5, "is_spread_from_pericope": false}, {"hilbert_d": 962990, "ccc_id": 604, "pillar": "I_CREED", "verse_ref": "ISA.53.5", "verse_ord": 14, "cluster_id": "CL_SUFFERING_SERVANT", "warrant_mode": "TYPOLOGICAL_FULFILLMENT", "canon_scope": "ECUMENICAL_66_SHARED", "mediator": "DIRECT_SCRIPTURE", "newman_note": "N5_ANTICIPATION_OF_FUTURE", "epistemic_state": "1", "db_q8_8": 1920, "decibans": 7.5, "is_spread_from_pericope": false}, {"hilbert_d": 963153, "ccc_id": 604, "pillar": "I_CREED", "verse_ref": "JHN.3.16", "verse_ord": 17, "cluster_id": "CL_JOHN_3_16_GIFT", "warrant_mode": "DIRECT_QUOTE", "canon_scope": "ECUMENICAL_66_SHARED", "mediator": "DIRECT_SCRIPTURE", "newman_note": "N0_EXPLICIT_KERYGMA", "epistemic_state": "1", "db_q8_8": 2816, "decibans": 11.0, "is_spread_from_pericope": false}, {"hilbert_d": 963233, "ccc_id": 604, "pillar": "I_CREED", "verse_ref": "ROM.5.8", "verse_ord": 29, "cluster_id": "CL_PAUL_WHILE_SINNERS", "warrant_mode": "DIRECT_QUOTE", "canon_scope": "ECUMENICAL_66_SHARED", "mediator": "TRENT_ART_IV", "newman_note": "N0_EXPLICIT_KERYGMA", "epistemic_state": "1", "db_q8_8": 2432, "decibans": 9.5, "is_spread_from_pericope": false}, {"hilbert_d": 965690, "ccc_id": 639, "pillar": "I_CREED", "verse_ref": "MRK.16.1-8", "verse_ord": 27, "cluster_id": "CL_SYNOPTIC_EMPTY_TOMB_WOMEN", "warrant_mode": "DIRECT_QUOTE", "canon_scope": "ECUMENICAL_66_SHARED", "mediator": "DIRECT_SCRIPTURE", "newman_note": "N0_EXPLICIT_KERYGMA", "epistemic_state": "1", "db_q8_8": 2611, "decibans": 10.1992, "is_spread_from_pericope": false}, {"hilbert_d": 965695, "ccc_id": 639, "pillar": "I_CREED", "verse_ref": "MAT.28.1-8", "verse_ord": 24, "cluster_id": "CL_SYNOPTIC_EMPTY_TOMB_WOMEN", "warrant_mode": "DIRECT_QUOTE", "canon_scope": "ECUMENICAL_66_SHARED", "mediator": "DIRECT_SCRIPTURE", "newman_note": "N0_EXPLICIT_KERYGMA", "epistemic_state": "1", "db_q8_8": 2611, "decibans": 10.1992, "is_spread_from_pericope": false}, {"hilbert_d": 966576, "ccc_id": 639, "pillar": "I_CREED", "verse_ref": "GAL.1.13-19", "verse_ord": 11, "cluster_id": "CL_HOSTILE_OUTGROUP_PAUL", "warrant_mode": "DEDUCTIVE_PROOF", "canon_scope": "ECUMENICAL_66_SHARED", "mediator": "ATHANASIUS_DE_INC", "newman_note": "N7_CHRONIC_VIGOUR", "epistemic_state": "1", "db_q8_8": 3840, "decibans": 15.0, "is_spread_from_pericope": false}, {"hilbert_d": 966597, "ccc_id": 639, "pillar": "I_CREED", "verse_ref": "1CO.15.3-8", "verse_ord": 4, "cluster_id": "CL_EARLY_JERUSALEM_KERYGMA", "warrant_mode": "DIRECT_QUOTE", "canon_scope": "ECUMENICAL_66_SHARED", "mediator": "DIRECT_SCRIPTURE", "newman_note": "N0_EXPLICIT_KERYGMA", "epistemic_state": "1", "db_q8_8": 3021, "decibans": 11.8008, "is_spread_from_pericope": false}, {"hilbert_d": 966650, "ccc_id": 639, "pillar": "I_CREED", "verse_ref": "1CO.15.14-17", "verse_ord": 3, "cluster_id": "CL_EARLY_JERUSALEM_KERYGMA", "warrant_mode": "DEDUCTIVE_PROOF", "canon_scope": "ECUMENICAL_66_SHARED", "mediator": "TRENT_ART_V", "newman_note": "N4_LOGICAL_SEQUENCE", "epistemic_state": "1", "db_q8_8": 2688, "decibans": 10.5, "is_spread_from_pericope": false}, {"hilbert_d": 1048619, "ccc_id": 1031, "pillar": "I_CREED", "verse_ref": "2MA.12.46", "verse_ord": 6, "cluster_id": "CL_MACCABEES_PRAYER_DEAD", "warrant_mode": "DIRECT_QUOTE", "canon_scope": "DEUTEROCANON_7_BOOKS", "mediator": "TRENT_SESSION_XXV", "newman_note": "N5_ANTICIPATION_OF_FUTURE", "epistemic_state": "1", "db_q8_8": 2048, "decibans": 8.0, "is_spread_from_pericope": false}, {"hilbert_d": 1048620, "ccc_id": 1031, "pillar": "I_CREED", "verse_ref": "1CO.3.15", "verse_ord": 5, "cluster_id": "CL_PAUL_SAVED_AS_BY_FIRE", "warrant_mode": "DEDUCTIVE_PROOF", "canon_scope": "ECUMENICAL_66_SHARED", "mediator": "FLORENCE_TRENT", "newman_note": "N4_LOGICAL_SEQUENCE", "epistemic_state": "1", "db_q8_8": 1024, "decibans": 4.0, "is_spread_from_pericope": false}, {"hilbert_d": 1068046, "ccc_id": 1213, "pillar": "II_SACRAMENTS", "verse_ref": "TIT.3.5", "verse_ord": 31, "cluster_id": "CL_TITUS_WASHING_REGEN", "warrant_mode": "DIRECT_QUOTE", "canon_scope": "ECUMENICAL_66_SHARED", "mediator": "DIRECT_SCRIPTURE", "newman_note": "N2_CONTINUITY_OF_PRINCIPLES", "epistemic_state": "1", "db_q8_8": 1997, "decibans": 7.8008, "is_spread_from_pericope": false}, {"hilbert_d": 1068082, "ccc_id": 1213, "pillar": "II_SACRAMENTS", "verse_ref": "MAT.28.19", "verse_ord": 25, "cluster_id": "CL_TRIUNE_BAPTISM_NAME", "warrant_mode": "DIRECT_QUOTE", "canon_scope": "ECUMENICAL_66_SHARED", "mediator": "DIDACHE_7", "newman_note": "N1_PRESERVATION_OF_TYPE", "epistemic_state": "1", "db_q8_8": 2304, "decibans": 9.0, "is_spread_from_pericope": false}, {"hilbert_d": 1068125, "ccc_id": 1213, "pillar": "II_SACRAMENTS", "verse_ref": "JHN.3.5", "verse_ord": 18, "cluster_id": "CL_NICODEMUS_WATER_SPIRIT", "warrant_mode": "DIRECT_QUOTE", "canon_scope": "ECUMENICAL_66_SHARED", "mediator": "TRENT_BAPTISM", "newman_note": "N0_EXPLICIT_KERYGMA", "epistemic_state": "1", "db_q8_8": 2176, "decibans": 8.5, "is_spread_from_pericope": false}, {"hilbert_d": 1290583, "ccc_id": 1374, "pillar": "II_SACRAMENTS", "verse_ref": "1CO.10.16", "verse_ord": 1, "cluster_id": "CL_PAUL_EUCHARISTIC_KOINONIA", "warrant_mode": "DEDUCTIVE_PROOF", "canon_scope": "ECUMENICAL_66_SHARED", "mediator": "TRENT_EUCHARIST", "newman_note": "N4_LOGICAL_SEQUENCE", "epistemic_state": "1", "db_q8_8": 2150, "decibans": 8.3984, "is_spread_from_pericope": false}, {"hilbert_d": 1290584, "ccc_id": 1374, "pillar": "II_SACRAMENTS", "verse_ref": "1CO.11.23-29", "verse_ord": 2, "cluster_id": "CL_PAUL_EUCHARISTIC_KOINONIA", "warrant_mode": "DEDUCTIVE_PROOF", "canon_scope": "ECUMENICAL_66_SHARED", "mediator": "SACROSANCTUM_CONCILIUM", "newman_note": "N6_CONSERVATIVE_ACTION", "epistemic_state": "1", "db_q8_8": 2202, "decibans": 8.6016, "is_spread_from_pericope": false}, {"hilbert_d": 1290852, "ccc_id": 1374, "pillar": "II_SACRAMENTS", "verse_ref": "JHN.6.51-56", "verse_ord": 20, "cluster_id": "CL_BREAD_OF_LIFE_DISCOURSE", "warrant_mode": "DIRECT_QUOTE", "canon_scope": "ECUMENICAL_66_SHARED", "mediator": "IGNATIUS_SMYRN_7", "newman_note": "N2_CONTINUITY_OF_PRINCIPLES", "epistemic_state": "1", "db_q8_8": 2304, "decibans": 9.0, "is_spread_from_pericope": false}, {"hilbert_d": 1290855, "ccc_id": 1374, "pillar": "II_SACRAMENTS", "verse_ref": "MAL.1.11", "verse_ord": 21, "cluster_id": "CL_MALACHI_PURE_OFFERING", "warrant_mode": "TYPOLOGICAL_FULFILLMENT", "canon_scope": "ECUMENICAL_66_SHARED", "mediator": "DIDACHE_14_TRENT_XXII", "newman_note": "N5_ANTICIPATION_OF_FUTURE", "epistemic_state": "1", "db_q8_8": 1587, "decibans": 6.1992, "is_spread_from_pericope": false}, {"hilbert_d": 1290859, "ccc_id": 1374, "pillar": "II_SACRAMENTS", "verse_ref": "MAT.26.26-28", "verse_ord": 23, "cluster_id": "CL_LAST_SUPPER_INSTITUTION", "warrant_mode": "DIRECT_QUOTE", "canon_scope": "ECUMENICAL_66_SHARED", "mediator": "TRENT_SESSION_XIII", "newman_note": "N0_EXPLICIT_KERYGMA", "epistemic_state": "1", "db_q8_8": 2355, "decibans": 9.1992, "is_spread_from_pericope": false}, {"hilbert_d": 1396881, "ccc_id": 1996, "pillar": "III_LIFE_IN_CHRIST", "verse_ref": "EPH.2.8-10", "verse_ord": 9, "cluster_id": "CL_EPHESIANS_GRACE_WORKMANSHIP", "warrant_mode": "DIRECT_QUOTE", "canon_scope": "ECUMENICAL_66_SHARED", "mediator": "DIRECT_SCRIPTURE", "newman_note": "N6_CONSERVATIVE_ACTION", "epistemic_state": "1", "db_q8_8": 2611, "decibans": 10.1992, "is_spread_from_pericope": false}, {"hilbert_d": 1396911, "ccc_id": 1996, "pillar": "III_LIFE_IN_CHRIST", "verse_ref": "JAS.2.24", "verse_ord": 15, "cluster_id": "CL_JAMES_LIVING_FAITH", "warrant_mode": "DEDUCTIVE_PROOF", "canon_scope": "ECUMENICAL_66_SHARED", "mediator": "TRENT_SESSION_VI", "newman_note": "N4_LOGICAL_SEQUENCE", "epistemic_state": "1", "db_q8_8": 1920, "decibans": 7.5, "is_spread_from_pericope": false}, {"hilbert_d": 1397152, "ccc_id": 1996, "pillar": "III_LIFE_IN_CHRIST", "verse_ref": "ROM.3.23-28", "verse_ord": 28, "cluster_id": "CL_PAUL_GRACE_WITHOUT_LAW", "warrant_mode": "DIRECT_QUOTE", "canon_scope": "ECUMENICAL_66_SHARED", "mediator": "TRENT_SESSION_VI", "newman_note": "N0_EXPLICIT_KERYGMA", "epistemic_state": "1", "db_q8_8": 2560, "decibans": 10.0, "is_spread_from_pericope": false}, {"hilbert_d": 1397235, "ccc_id": 1996, "pillar": "III_LIFE_IN_CHRIST", "verse_ref": "JHN.3.16", "verse_ord": 17, "cluster_id": "CL_JOHN_3_16_GIFT", "warrant_mode": "DIRECT_QUOTE", "canon_scope": "ECUMENICAL_66_SHARED", "mediator": "DIRECT_SCRIPTURE", "newman_note": "N0_EXPLICIT_KERYGMA", "epistemic_state": "1", "db_q8_8": 2509, "decibans": 9.8008, "is_spread_from_pericope": false}, {"hilbert_d": 15380258, "ccc_id": 2106, "pillar": "III_LIFE_IN_CHRIST", "verse_ref": "EXO.20.2-3", "verse_ord": 10, "cluster_id": "CL_FIRST_COMMANDMENT_MORAL_DUTY", "warrant_mode": "DIRECT_QUOTE", "canon_scope": "ECUMENICAL_66_SHARED", "mediator": "TRENT_CMD_I_DIGNITATIS_HUMANAE_1", "newman_note": "N6_CONSERVATIVE_ACTION", "epistemic_state": "1", "db_q8_8": 1792, "decibans": 7.0, "is_spread_from_pericope": false}, {"hilbert_d": 15706146, "ccc_id": 2842, "pillar": "IV_PRAYER", "verse_ref": "MAT.6.9-13", "verse_ord": 26, "cluster_id": "CL_OUR_FATHER_PERICOPE", "warrant_mode": "PERICOPE_SPREAD", "canon_scope": "ECUMENICAL_66_SHARED", "mediator": "DIDACHE_8_TRENT_PART_IV", "newman_note": "N0_EXPLICIT_KERYGMA", "epistemic_state": "1", "db_q8_8": 1408, "decibans": 5.5, "is_spread_from_pericope": true}, {"hilbert_d": 15706232, "ccc_id": 2842, "pillar": "IV_PRAYER", "verse_ref": "MAT.18.21-35", "verse_ord": 22, "cluster_id": "CL_UNMERCIFUL_SERVANT_PARABLE", "warrant_mode": "MORAL_EXEMPLAR", "canon_scope": "ECUMENICAL_66_SHARED", "mediator": "TRENT_PETITION_5", "newman_note": "N4_LOGICAL_SEQUENCE", "epistemic_state": "1", "db_q8_8": 2099, "decibans": 8.1992, "is_spread_from_pericope": false}, {"hilbert_d": 15706328, "ccc_id": 2838, "pillar": "IV_PRAYER", "verse_ref": "MAT.6.9-13", "verse_ord": 26, "cluster_id": "CL_OUR_FATHER_PERICOPE", "warrant_mode": "PERICOPE_SPREAD", "canon_scope": "ECUMENICAL_66_SHARED", "mediator": "DIDACHE_8_TRENT_PART_IV", "newman_note": "N0_EXPLICIT_KERYGMA", "epistemic_state": "1", "db_q8_8": 1408, "decibans": 5.5, "is_spread_from_pericope": true}], "forward_ccc_to_edge_ids": {"253": [0, 1, 2, 3, 4], "460": [5, 6, 7, 8], "604": [9, 10, 11, 12], "639": [13, 14, 15, 16, 17], "1031": [18, 19], "1213": [20, 21, 22], "1374": [23, 24, 25, 26, 27], "1996": [28, 29, 30, 31], "2106": [32], "2842": [33, 34], "2838": [35]}, "reverse_verse_to_edge_ids": {"MAT.28.19": [0, 21], "JHN.1.1-14": [1, 8], "JHN.4.24": [2], "GEN.1.1": [3], "ISA.43.10": [4, 6], "2PE.1.4": [5], "ROM.8.19-21": [7], "COL.2.14": [9], "ISA.53.5": [10], "JHN.3.16": [11, 31], "ROM.5.8": [12], "MRK.16.1-8": [13], "MAT.28.1-8": [14], "GAL.1.13-19": [15], "1CO.15.3-8": [16], "1CO.15.14-17": [17], "2MA.12.46": [18], "1CO.3.15": [19], "TIT.3.5": [20], "JHN.3.5": [22], "1CO.10.16": [23], "1CO.11.23-29": [24], "JHN.6.51-56": [25], "MAL.1.11": [26], "MAT.26.26-28": [27], "EPH.2.8-10": [28], "JAS.2.24": [29], "ROM.3.23-28": [30], "EXO.20.2-3": [32], "MAT.6.9-13": [33, 35], "MAT.18.21-35": [34]}}, "bible_public_domain": {"GEN.1.1": {"ref": "Genesis 1:1", "canon": "ECUMENICAL_66_SHARED", "drb": "In the beginning God created heaven, and earth.", "kjv": "In the beginning God created the heaven and the earth."}, "EXO.20.2-3": {"ref": "Exodus 20:2–3", "canon": "ECUMENICAL_66_SHARED", "drb": "I am the Lord thy God, who brought thee out of the land of Egypt, out of the house of bondage. Thou shalt not have strange gods before me.", "kjv": "I am the LORD thy God, which have brought thee out of the land of Egypt, out of the house of bondage. Thou shalt have no other gods before me."}, "ISA.53.5": {"ref": "Isaiah 53:5", "canon": "ECUMENICAL_66_SHARED", "drb": "But he was wounded for our iniquities, he was bruised for our sins: the chastisement of our peace was upon him, and by his bruises we are healed.", "kjv": "But he was wounded for our transgressions, he was bruised for our iniquities: the chastisement of our peace was upon him; and with his stripes we are healed."}, "MAL.1.11": {"ref": "Malachi 1:11", "canon": "ECUMENICAL_66_SHARED", "drb": "For from the rising of the sun even to the going down, my name is great among the Gentiles, and in every place there is sacrifice, and there is offered to my name a clean oblation.", "kjv": "For from the rising of the sun even unto the going down of the same my name shall be great among the Gentiles; and in every place incense shall be offered unto my name, and a pure offering."}, "2MA.12.46": {"ref": "2 Maccabees 12:46", "canon": "DEUTEROCANON_7_BOOKS", "drb": "It is therefore a holy and wholesome thought to pray for the dead, that they may be loosed from sins.", "kjv": "[Deuterocanon / KJV Apocrypha] Wherefore he made a reconciliation for the dead, that they might be delivered from sin."}, "MAT.6.9-13": {"ref": "Matthew 6:9–13", "canon": "ECUMENICAL_66_SHARED", "drb": "Thus therefore shall you pray: Our Father who art in heaven, hallowed be thy name. Thy kingdom come. Thy will be done on earth as it is in heaven. Give us this day our supersubstantial bread. And forgive us our debts, as we also forgive our debtors. And lead us not into temptation. But deliver us from evil. Amen.", "kjv": "After this manner therefore pray ye: Our Father which art in heaven, Hallowed be thy name. Thy kingdom come. Thy will be done in earth, as it is in heaven. Give us this day our daily bread. And forgive us our debts, as we forgive our debtors. And lead us not into temptation, but deliver us from evil: For thine is the kingdom, and the power, and the glory, for ever. Amen."}, "MAT.18.21-35": {"ref": "Matthew 18:32–33", "canon": "ECUMENICAL_66_SHARED", "drb": "Wicked servant, I forgave thee all the debt, because thou besoughtest me: Shouldst not thou then have had compassion also on thy fellow servant, even as I had compassion on thee?", "kjv": "O thou wicked servant, I forgave thee all that debt, because thou desiredst me: Shouldest not thou also have had compassion on thy fellowservant, even as I had pity on thee?"}, "MAT.26.26-28": {"ref": "Matthew 26:26–28", "canon": "ECUMENICAL_66_SHARED", "drb": "Take ye, and eat. This is my body. And taking the chalice, he gave thanks, and gave to them, saying: Drink ye all of this. For this is my blood of the new testament, which shall be shed for many unto remission of sins.", "kjv": "Take, eat; this is my body. And he took the cup, and gave thanks, and gave it to them, saying, Drink ye all of it; For this is my blood of the new testament, which is shed for many for the remission of sins."}, "MAT.28.1-8": {"ref": "Matthew 28:5–6", "canon": "ECUMENICAL_66_SHARED", "drb": "Fear not you; for I know that you seek Jesus that was crucified. He is not here, for he is risen, as he said.", "kjv": "Fear not ye: for I know that ye seek Jesus, which was crucified. He is not here: for he is risen, as he said."}, "MAT.28.19": {"ref": "Matthew 28:19", "canon": "ECUMENICAL_66_SHARED", "drb": "Going therefore, teach ye all nations; baptizing them in the name of the Father, and of the Son, and of the Holy Ghost.", "kjv": "Go ye therefore, and teach all nations, baptizing them in the name of the Father, and of the Son, and of the Holy Ghost."}, "MRK.16.1-8": {"ref": "Mark 16:6", "canon": "ECUMENICAL_66_SHARED", "drb": "Be not affrighted; you seek Jesus of Nazareth, who was crucified: he is risen, he is not here, behold the place where they laid him.", "kjv": "Be not affrighted: Ye seek Jesus of Nazareth, which was crucified: he is risen; he is not here: behold the place where they laid him."}, "JHN.1.1-14": {"ref": "John 1:1, 14", "canon": "ECUMENICAL_66_SHARED", "drb": "In the beginning was the Word, and the Word was with God, and the Word was God... And the Word was made flesh, and dwelt among us.", "kjv": "In the beginning was the Word, and the Word was with God, and the Word was God... And the Word was made flesh, and dwelt among us."}, "JHN.3.5": {"ref": "John 3:5", "canon": "ECUMENICAL_66_SHARED", "drb": "Amen, amen I say to thee, unless a man be born again of water and the Holy Ghost, he cannot enter into the kingdom of God.", "kjv": "Verily, verily, I say unto thee, Except a man be born of water and of the Spirit, he cannot enter into the kingdom of God."}, "JHN.3.16": {"ref": "John 3:16", "canon": "ECUMENICAL_66_SHARED", "drb": "For God so loved the world, as to give his only begotten Son; that whosoever believeth in him, may not perish, but may have life everlasting.", "kjv": "For God so loved the world, that he gave his only begotten Son, that whosoever believeth in him should not perish, but have everlasting life."}, "JHN.6.51-56": {"ref": "John 6:51, 55", "canon": "ECUMENICAL_66_SHARED", "drb": "I am the living bread which came down from heaven. If any man eat of this bread, he shall live for ever; and the bread that I will give, is my flesh, for the life of the world... For my flesh is meat indeed: and my blood is drink indeed.", "kjv": "I am the living bread which came down from heaven: if any man eat of this bread, he shall live for ever: and the bread that I will give is my flesh, which I will give for the life of the world... For my flesh is meat indeed, and my blood is drink indeed."}, "ROM.3.23-28": {"ref": "Romans 3:24, 28", "canon": "ECUMENICAL_66_SHARED", "drb": "Being justified freely by his grace, through the redemption, that is in Christ Jesus... For we account a man to be justified by faith, without the works of the law.", "kjv": "Being justified freely by his grace through the redemption that is in Christ Jesus... Therefore we conclude that a man is justified by faith without the deeds of the law."}, "ROM.5.8": {"ref": "Romans 5:8", "canon": "ECUMENICAL_66_SHARED", "drb": "But God commendeth his charity towards us; because when as yet we were sinners, according to the time, Christ died for us.", "kjv": "But God commendeth his love toward us, in that, while we were yet sinners, Christ died for us."}, "1CO.3.15": {"ref": "1 Corinthians 3:15", "canon": "ECUMENICAL_66_SHARED", "drb": "If any man's work burn, he shall suffer loss; but he himself shall be saved, yet so as by fire.", "kjv": "If any man's work shall be burned, he shall suffer loss: but he himself shall be saved; yet so as by fire."}, "1CO.10.16": {"ref": "1 Corinthians 10:16", "canon": "ECUMENICAL_66_SHARED", "drb": "The chalice of benediction, which we bless, is it not the communion of the blood of Christ? And the bread, which we break, is it not the partaking of the body of the Lord?", "kjv": "The cup of blessing which we bless, is it not the communion of the blood of Christ? The bread which we break, is it not the communion of the body of Christ?"}, "1CO.11.23-29": {"ref": "1 Corinthians 11:23–27", "canon": "ECUMENICAL_66_SHARED", "drb": "For I have received of the Lord that which also I delivered unto you, that the Lord Jesus, the same night in which he was betrayed, took bread... Whosoever shall eat this bread, or drink the chalice of the Lord unworthily, shall be guilty of the body and of the blood of the Lord.", "kjv": "For I have received of the Lord that which also I delivered unto you, That the Lord Jesus the same night in which he was betrayed took bread... Wherefore whosoever shall eat this bread, and drink this cup of the Lord, unworthily, shall be guilty of the body and blood of the Lord."}, "1CO.15.3-8": {"ref": "1 Corinthians 15:3–8", "canon": "ECUMENICAL_66_SHARED", "drb": "For I delivered unto you first of all, which I also received: how that Christ died for our sins, according to the scriptures: And that he was buried, and that he rose again the third day, according to the scriptures: And that he was seen by Cephas; and after that by the eleven. Then he was seen by more than five hundred brethren at once... And last of all, he was seen also by me.", "kjv": "For I delivered unto you first of all that which I also received, how that Christ died for our sins according to the scriptures; And that he was buried, and that he rose again the third day according to the scriptures: And that he was seen of Cephas, then of the twelve: After that, he was seen of above five hundred brethren at once... And last of all he was seen of me also."}, "1CO.15.14-17": {"ref": "1 Corinthians 15:14, 17", "canon": "ECUMENICAL_66_SHARED", "drb": "And if Christ be not risen again, then is our preaching vain, and your faith is also vain... And if Christ be not risen again, your faith is vain, for you are yet in your sins.", "kjv": "And if Christ be not risen, then is our preaching vain, and your faith is also vain... And if Christ be not raised, your faith is vain; ye are yet in your sins."}, "GAL.1.13-19": {"ref": "Galatians 1:13, 18–19", "canon": "ECUMENICAL_66_SHARED", "drb": "For you have heard of my conversation in time past in the Jews' religion: how that, beyond measure, I persecuted the church of God, and wasted it... Then, after three years, I went to Jerusalem to see Peter, and I tarried with him fifteen days. But other of the apostles I saw none, saving James the brother of the Lord.", "kjv": "For ye have heard of my conversation in time past in the Jews' religion, how that beyond measure I persecuted the church of God, and wasted it... Then after three years I went up to Jerusalem to see Peter, and abode with him fifteen days. But other of the apostles saw I none, save James the Lord's brother."}, "EPH.2.8-10": {"ref": "Ephesians 2:8–10", "canon": "ECUMENICAL_66_SHARED", "drb": "For by grace you are saved through faith, and that not of yourselves, for it is the gift of God; Not of works, that no man may glory. For we are his workmanship, created in Christ Jesus in good works, which God hath prepared that we should walk in them.", "kjv": "For by grace are ye saved through faith; and that not of yourselves: it is the gift of God: Not of works, lest any man should boast. For we are his workmanship, created in Christ Jesus unto good works, which God hath before ordained that we should walk in them."}, "COL.2.14": {"ref": "Colossians 2:14", "canon": "ECUMENICAL_66_SHARED", "drb": "Blotting out the handwriting of the decree that was against us, which was contrary to us. And he hath taken the same out of the way, fastening it to the cross.", "kjv": "Blotting out the handwriting of ordinances that was against us, which was contrary to us, and took it out of the way, nailing it to his cross."}, "TIT.3.5": {"ref": "Titus 3:5", "canon": "ECUMENICAL_66_SHARED", "drb": "Not by the works of justice, which we have done, but according to his mercy, he saved us, by the laver of regeneration, and renovation of the Holy Ghost.", "kjv": "Not by works of righteousness which we have done, but according to his mercy he saved us, by the washing of regeneration, and renewing of the Holy Ghost."}, "JAS.2.24": {"ref": "James 2:24", "canon": "ECUMENICAL_66_SHARED", "drb": "Do you see that by works a man is justified; and not by faith only?", "kjv": "Ye see then how that by works a man is justified, and not by faith only."}, "2PE.1.4": {"ref": "2 Peter 1:4", "canon": "ECUMENICAL_66_SHARED", "drb": "By whom he hath given us most great and precious promises: that by these you may be made partakers of the divine nature: flying the corruption of that concupiscence which is in the world.", "kjv": "Whereby are given unto us exceeding great and precious promises: that by these ye might be partakers of the divine nature, having escaped the corruption that is in the world through lust."}, "ISA.43.10": {"ref": "Isaiah 43:10", "canon": "ECUMENICAL_66_SHARED", "drb": "You are my witnesses, saith the Lord, and my servant whom I have chosen: that you may know, and believe me, and understand that I myself am. Before me there was no God formed, and after me there shall be none.", "kjv": "Ye are my witnesses, saith the LORD, and my servant whom I have chosen: that ye may know and believe me, and understand that I am he: before me there was no God formed, neither shall there be after me."}, "JHN.4.24": {"ref": "John 4:24", "canon": "ECUMENICAL_66_SHARED", "drb": "God is a spirit; and they that adore him, must adore him in spirit and in truth.", "kjv": "God is a Spirit: and they that worship him must worship him in spirit and in truth."}, "ROM.8.19-21": {"ref": "Romans 8:19–21", "canon": "ECUMENICAL_66_SHARED", "drb": "For the expectation of the creature waiteth for the revelation of the sons of God... Because the creature also itself shall be delivered from the servitude of corruption, into the liberty of the glory of the children of God.", "kjv": "For the earnest expectation of the creature waiteth for the manifestation of the sons of God... Because the creature itself also shall be delivered from the bondage of corruption into the glorious liberty of the children of God."}}, "trent_public_domain": {"TRENT_P1_ART1_CREATOR": {"title": "Part I, Art. I — One God, Trinity & Creation", "source_file": "rc-en.txt (Catechism of the Council of Trent, 1566 — Public Domain)", "source_sha256": "25c6fd3fedbb7297447ab2472112faa8e6409b9954c5315dbf25e79860656e27", "line_range": "L2983–L3028", "editorial_warning": "Divisions/subheadings in the Fordham McHugh-Callan witness were supplied by translators, not the 1566 Manutian original (Synoptics PLAN.md §3).", "verbatim_text": "ARTICLE I : \"I BELIEVE IN GOD, THE FATHER ALMIGHTY, CREATOR OF\nHEAVEN AND EARTH\"\n\nMeaning Of This Article\n\nThe meaning of the above words is this: I believe with certainty, and\nwithout a shadow of doubt profess my belief in God the Father, the First Person of the\nTrinity, who by His omnipotence created from nothing and preserves and governs the heavens\nand the earth and all things which they contain; and not only do I believe in Him from my\nheart and profess this belief with my lips, but with the greatest ardour and piety I tend\ntowards Him, as the supreme and most perfect good.\n\nLet this serve as a brief summary of this first Article. But since\ngreat mysteries lie concealed under almost every word, the pastor must now give them a\nmore careful consideration, in order that, as far as God has permitted, the faithful may\napproach, with fear and trembling, to contemplate the glory of His majesty.\n\n\"I Believe\"\n\nThe word believe does not here mean to think, to suppose, lo be of\nopinion; but, as the Sacred Scriptures teach, it expresses the deepest conviction, by\nwhich the mind gives a firm and unhesitating assent to God revealing His mysterious\ntruths. As far, therefore, as regards use of the word here, he who firmly and without\nhesitation is convinced of anything is said to believe.\n\nFaith Excludes Doubt\n\nThe knowledge derived through faith must not be considered less certain\nbecause its objects are not seen; for the divine light by which we know them, although it\ndoes not render them evident, yet suffers us not to doubt them. For God, who commanded the\nlight to shine out of darkness, hath himself shone in our hearts, that the gospel be not\nhidden to us, as to those that perish.\n\nFaith Excludes Curiosity\n\nFrom what has been said it follows that he who is gifted with this\nheavenly knowledge of faith is free from an inquisitive curiosity. For when God commands\nus to believe He does not propose to us to search into His divine judgments, or inquire\ninto their reason and cause, but demands an unchangeable faith, by which the mind rests\ncontent in the knowledge of eternal truth. And indeed, since we have the testimony of the\nApostle that God is true; and every man a liar, and since it would argue arrogance and\npresumption to disbelieve the word of a grave and sensible man affirming anything as true,\nand to demand that he prove his statements by arguments or witnesses, how rash and foolish\nare those, who, hearing the words of God Himself, demand reasons for His heavenly and\nsaving doctrines? Faith, therefore, must exclude not only all doubt, but all desire for\ndemonstration."}, "TRENT_P1_ART4_SATISFACTION": {"title": "Part I, Art. IV — Fruits of Christ's Passion & Over-Solvent Ransom", "source_file": "rc-en.txt (Catechism of the Council of Trent, 1566 — Public Domain)", "source_sha256": "25c6fd3fedbb7297447ab2472112faa8e6409b9954c5315dbf25e79860656e27", "line_range": "L4236–L4284", "editorial_warning": "Divisions/subheadings in the Fordham McHugh-Callan witness were supplied by translators, not the 1566 Manutian original (Synoptics PLAN.md §3).", "verbatim_text": "Fruits Of Christ's Passion\n\nIt only remains now that the pastor carefully explain the blessings and\nadvantages which flow from the Passion of Christ. In the first place, then, the Passion of\nour Lord was our deliverance from sin; for, as St. John says, He hath loved us, and washed\nus from our sins in his own blood. He hath quickened you together with him, says the\nApostle, forgiving you all offences, blotting out the handwriting of the decree that was\nagainst us, which was contrary to us. And he hath taken the same out of the way, fastening\nit to the cross.\n\nIn the next place He has rescued us from the tyranny of the devil, for\nour Lord Himself says: Now is the judgment of the world; now shall the prance of this\nworld be cast out. And I if I be lifted up from the earth, will draw all things to myself.\n\nAgain He discharged the punishment due to our sins. And as no sacrifice\nmore pleasing and acceptable could have been offered to God, He reconciled us to the\nFather, appeased His wrath, and made Him favourable to us.\n\nFinally, by taking away our sins He opened to us heaven, which was\nclosed by the common sin of mankind. And this the Apostle pointed out when he said: We\nhave confidence in the entering into the holies by the blood of Christ. Nor are we without\na type and figure of this mystery in the Old Law. For those who were prohibited to return\ninto their native country before the death of the high-priest typified that no one,\nhowever just and holy may have been his life, could gain admission into the celestial\ncountry until the eternal High-priest, Christ Jesus, had died, and by His death\nimmediately opened heaven to those who, purified by the Sacraments and gifted with faith,\nhope, and charity, become partakers of His Passion.\n\nChrist’s Passion, -- A Satisfaction, A Sacrifice, A Redemption An\nExample\n\nThe pastor should teach that all these inestimable and divine blessings\nflow to us from the Passion of Christ. First, indeed, because the satisfaction which Jesus\nChrist has in an admirable manner made to God the Father for our sins is full and\ncomplete. The price which He paid for our ransom was not only adequate and equal to our\ndebts, but far exceeded them.\n\nAgain, it (the Passion of Christ) was a sacrifice most acceptable to\nGod, for when offered by His Son on the altar of the cross, it entirely appeased the wrath\nand indignation of the Father. This word (sacrifice) the Apostle uses when he says: Christ\nhath loved us, and hath delivered himself for us, an oblation and a sacrifice to God for\nan odour of sweetness.\n\nFurthermore, it was a redemption, of which the Prince of the Apostles\nsays: You were not redeemed with corruptible things as gold or silver, from your vain\nconversation of the tradition of your fathers: but with the precious blood of Christ, as\nof a lamb unspotted and undefiled. While the Apostle teaches: Christ hath redeemed us from\nthe curse of the law, being made a curse for us."}, "TRENT_P1_ART5_PURGATORY": {"title": "Part I, Art. V — Three Abodes & Purgatorial Cleansing", "source_file": "rc-en.txt (Catechism of the Council of Trent, 1566 — Public Domain)", "source_sha256": "25c6fd3fedbb7297447ab2472112faa8e6409b9954c5315dbf25e79860656e27", "line_range": "L4341–L4360", "editorial_warning": "Divisions/subheadings in the Fordham McHugh-Callan witness were supplied by translators, not the 1566 Manutian original (Synoptics PLAN.md §3).", "verbatim_text": "Different Abodes Called Hell\"\n\nThese abodes are not all of the same nature, for among them is that\nmost loathsome and dark prison in which the souls of the damned are tormented with the\nunclean spirits in eternal and inextinguishable fire. This place is called gehenna, the\nbottomless pit, and is hell strictly so-called.\n\nAmong them is also the fire of purgatory, in which the souls of just\nmen are cleansed by a temporary punishment, in order to be admitted into their eternal\ncountry, into which nothing defiled entereth. The truth of this doctrine, founded, as holy\nCouncils declare,' on Scripture, and confirmed by Apostolic tradition, demands exposition\nfrom the pastor, all the more diligent and frequent, because we live in times when men\nendure not sound doctrine.\n\nLastly, the third kind of abode is that into which the souls of the\njust before the coming of Christ the Lord, were received, and where, without experiencing\nany sort of pain, but supported by the blessed hope of redemption, they enjoyed peaceful\nrepose. To liberate these holy souls, who, in the bosom of Abraham were expecting the\nSaviour, Christ the Lord descended into hell."}, "TRENT_P1_ART5_RESURRECTION": {"title": "Part I, Art. V — The Third Day He Rose Again According to the Scriptures", "source_file": "rc-en.txt (Catechism of the Council of Trent, 1566 — Public Domain)", "source_sha256": "25c6fd3fedbb7297447ab2472112faa8e6409b9954c5315dbf25e79860656e27", "line_range": "L4424–L4518", "editorial_warning": "Divisions/subheadings in the Fordham McHugh-Callan witness were supplied by translators, not the 1566 Manutian original (Synoptics PLAN.md §3).", "verbatim_text": "Second Part of this Article: \"The Third Day He arose again from\nthe Dead\"\n\nWe now come to the second part of the Article, and how indefatigable\nshould be the labours of the pastor in its exposition we learn from these words of the\nApostle: Be mindful that the Lord Jesus Christ is risen again from the dead. This command\nno doubt was addressed not only to Timothy, but to all others who have care of souls.\n\nThe meaning of the Article is this: Christ the Lord expired on the\ncross, on Friday at the ninth hour, and was buried on the evening of the same day by His\ndisciples, who with the permission of the governor, Pilate, laid the body of the Lord,\ntaken down from the cross, in a new tomb, situated in a garden near at hand. Early on the\nmorning of the third day after His death, that is, on Sunday, His soul was reunited to His\nbody, and thus He who was dead during those three days arose, and returned again to life,\nfrom which He had departed when dying.\n\n\"He arose Again\"\n\nBy the word Resurrection, however, we are not merely to understand that\nChrist was raised from the dead, which happened to many others, but that He rose by His\nown power and virtue, a singular prerogative peculiar to Him alone. For it is incompatible\nwith nature and was never given to man to raise himself by his own power, from death to\nlife. This was reserved for the almighty power of God, as we learn from these words of the\nApostle: Although he was crucified through weakness, yet he liveth by the power of God.\nThis divine power, having never been separated, either from His body in the grave, or from\nHis soul in hell, there existed a divine force both within the body, by which it could be\nagain united to the soul, and within the soul, by which it could again return to the body.\nThus He was able by His own power to return to life and rise from the dead.\n\nThis David, filled with the spirit of God, foretold in these words: His\nright hand hath wrought for him salvation, and his arm is holy. Our Lord confirmed this by\nthe divine testimony of His own mouth when He said: I lay down my life that I may take it\nagain . . . and I have power to lay it down: and I have power to take it up again. To the\nJews He also said, in corroboration of His doctrine: Destroy this temple, and in three\ndays I will raise it up. Although the Jews understood Him to have spoken thus of that\nmagnificent Temple built of stone, yet as the Scripture testifies in the same place, he\nspoke of the temple of his body. We sometimes, it is true, read in Scripture that He was\nraised by the Father; but this refers to Him as man, just as those passages on the other\nhand, which say that He rose by His own power relate to Him as God.\n\n\"From the Dead\"\n\nIt is also the peculiar privilege of Christ to have been the first who\nenjoyed this divine prerogative of rising from the dead, for He is called in Scripture the\nfirst-begotten from the dead, and also the first-born of the dead. The Apostle also says:\nChrist is risen from the dead, the first-fruits of them that sleep: for by a man came\ndeath, and by a man the resurrection of the dead. And as in Adam all die, so also in\nChrist all shall be made alive. But every one in his own order: the first-fruits Christ,\nthen they that are of Christ.\n\nThese words of the Apostle are to be understood of a perfect\nresurrection, by which we are raised to an immortal life and are no longer subject to the\nnecessity of dying. In this resurrection Christ the Lord holds the first place; for if we\nspeak of resurrection; that is, of a return to life, subject to the necessity of again\ndying, many were thus raised from the dead before Christ, all of whom, however, were\nrestored to life to die again. But Christ the Lord, having subdued and conquered death, so\narose that He could die no morel according to' this most clear testimony: Christ rising\nagain from the dead, dieth now no more, death shall no more have dominion over him.\n\n\"The Third Day\"\n\nIn explanation of the additional words of the Article, the third day,\nthe pastor should inform the people that they must not think our Lord remained in the\ngrave during the whole of these three days. But as He lay in the sepulchre one full day, a\npart of the preceding and a part of the following day, He is said, with strictest truth,\nto have lain in the grave for three days, and on the third day to have risen again from\nthe dead.\n\nTo prove that He was God He did not delay His Resurrection to the end\nof the world; while, on the other hand, to convince us that He was truly man and really\ndied, He rose not immediately, but on the third day after His death, a space of time\nsufficient to prove the reality of His death.\n\n\"According to the Scriptures\"\n\nHere the Fathers of the first Council of Constantinople added the\nwords, according to the Scriptures, which they took from St. Paul. These words they\nembodied with the Creed, because the same Apostle teaches the absolute necessity of the\nmystery of the Resurrection when he says: If Christ be not risen again, then is our\npreaching vain, and your faith is also vain . . . for you are yet in your sins. Hence,,\nadmiring our belief of this Article St. Augustine says: It is no great thing to believe\nthat Christ died. This the pagans, Jews, and all the wicked believe; in a word, all\nbelieve that Christ died. But that He rose from the dead is the belief of the Christians.\nTo believe that He rose again, this we deem of great moment.\n\nHence it is that our Lord very frequently spoke to His disciples of His\nResurrection, and seldom or never of His Passion without adverting to His Resurrection.\nThus, when He said: The son of man . . . shall be delivered to the Gentiles, and shall be\nmocked, and scourged, and spit upon; and after they have scourged him, they will put him\nto death; He added: and the third day he shall rise again.' Also when the Jews called upon\nHim to give an attestation of the truth of His doctrine by some miraculous sign He said: A\nsign shall not be given to them, but the sign of Jonas the prophet. For as Jonas was in\nthe whales belly three days and three nights: so shall the son of man be in the heart of\nthe earth three days and three nights."}, "TRENT_P2_BAPTISM": {"title": "Part II — The Sacrament of Baptism (Water & Regeneration)", "source_file": "rc-en.txt (Catechism of the Council of Trent, 1566 — Public Domain)", "source_sha256": "25c6fd3fedbb7297447ab2472112faa8e6409b9954c5315dbf25e79860656e27", "line_range": "L7160–L7215", "editorial_warning": "Divisions/subheadings in the Fordham McHugh-Callan witness were supplied by translators, not the 1566 Manutian original (Synoptics PLAN.md §3).", "verbatim_text": "THE SACRAMENT OF BAPTISM\n\nImportance Of Instruction On Baptism\n\nFrom what has been hitherto said on the Sacraments in general, we may\njudge how necessary it is, to a proper understanding of the doctrines of the Christian\nfaith and to the practice of Christian piety, to know what the Catholic Church proposes\nfor our belief on each Sacrament in particular.\n\nWhoever reads the Apostle carefully will unhesitatingly conclude that a\nperfect knowledge of Baptism is particularly necessary to the faithful. For not only\nfrequently, but also in language the most energetic, in language full of the Spirit of\nGod, he renews the recollection of this mystery, declares its divine character, and in it\nplaces before us the death, burial and Resurrection of. our Lord as objects both of our\ncontemplation and imitation.\n\nPastors, therefore, can never think that they have bestowed sufficient\nlabor and attention on the exposition of this Sacrament. Besides the Vigils of Easter and\nPentecost, days on which the Church used to celebrate this Sacrament with the greatest\ndevotion and special solemnity, and on which particularly, according to ancient practice,\nits divine mysteries were to be explained, pastors should also take occasion at other\ntimes to make it the subject of their instructions.\n\nFor this purpose a most convenient opportunity would seem to present\nitself whenever a pastor, being about to administer this Sacrament, finds himself\nsurrounded by a considerable number of the faithful. On such occasions, it is true, his\nexposition cannot embrace everything that regards Baptism; but it will then be much easier\nto develop one or two points when the faithful\n\ncan contemplate with a pious and attentive mind the meaning of those\nthings which they hear and at the same time see it illustrated by the sacred ceremonies of\nBaptism. Each person, reading a lesson of admonition in the person of him who is receiving\nBaptism, will call to mind the promises by which he bound himself to God when he was\nbaptised, and will reflect whether his life and conduct have been such as are promised by\nthe profession of Christianity.\n\nNames of this Sacrament\n\nIn order that the treatment of the subject. may be clear, we must\nexplain the nature and substance of Baptism, premising, however, an explanation of the\nword itself.\n\nThe word baptism, as is well known, is of Greek derivation. Although\nused in Sacred Scripture to express not only that ablution which forms part of the\nSacrament, but also every species of ablution, and sometimes, figuratively, to express\nsufferings; yet it is employed by ecclesiastical writers to designate not every sort of\nbodily ablution, but that which forms part of the Sacrament and is administered with the\nprescribed form of words. In this sense the Apostles very frequently make use of the word\nin accordance with the institution of Christ the Lord.\n\nThis Sacrament the holy Fathers designate also by other names. St.\nAugustine informs us that it was sometimes called the Sacrament of Faith, because by\nreceiving it we profess our faith in all the doctrines of Christianity.\n\nBy others it was termed Illumination, because by the faith which we\nprofess in Baptism the heart is illumined; for as the Apostle also says, alluding to the"}, "TRENT_P2_EUCHARIST": {"title": "Part II — The Sacrament of the Eucharist (Institution & Real Presence)", "source_file": "rc-en.txt (Catechism of the Council of Trent, 1566 — Public Domain)", "source_sha256": "25c6fd3fedbb7297447ab2472112faa8e6409b9954c5315dbf25e79860656e27", "line_range": "L8719–L8796", "editorial_warning": "Divisions/subheadings in the Fordham McHugh-Callan witness were supplied by translators, not the 1566 Manutian original (Synoptics PLAN.md §3).", "verbatim_text": "THE SACRAMENT OF THE EUCHARIST\n\nImportance Of Instruction On The Eucharist\n\nAs of all the sacred mysteries bequeathed to us by our Lord and Saviour\nas most infallible instruments of divine grace, there is none comparable to the most holy\nSacrament of the Eucharist; so, for no crime is there a heavier punishment to be feared\nfrom God than for the unholy or irreligious use by the faithful of that which is full of\nholiness, or rather which contains the very author and source of holiness. This the\nApostle wisely saw, and has openly admonished us of it. For when he had declared the\nenormity of their guilt who discerned not the body of the Lord, he immediately subjoined:\nTherefore are there many infirm and weak among you, and many sleep.\n\nIn order that the faithful, therefore, aware of the divine honours due\nto this heavenly Sacrament, may derive therefrom abundant fruit of grace and escape the\nmost just anger of God, pastors should explain with the greatest diligence all those\nthings which may seem calculated more fully to display its majesty.\n\nInstitution of the Eucharist\n\nIn this matter it will be necessary that pastors, following the example\nof the Apostle Paul, who professes to have delivered to the Corinthians what he had\nreceived from the Lord, first of all explain to the faithful the institution of this\nSacrament.\n\nThat its institution was as follows, is clearly inferred from the\nEvangelist. Our Lord, having loved his own, loved them to the end. As a divine and\nadmirable pledge of this love, knowing that the hour had now come that He should pass from\nthe world to the Father, that He-might not ever at any period be absent from His own, He\naccomplished with inexplicable wisdom that which surpasses all the order and condition of\nnature. For having kept the supper of the Paschal lamb with His disciples, that the figure\nmight yield to the reality, the shadow to the substance, He took bread, and giving thanks\nunto God, He blessed, and brake, and gave to the disciples, and said: \"Take ye and\neat, this is my body which shall be delivered for you; this do for a commemoration of\nme.\" In like manner also, He took the chalice after he had supped, saying: \"This\nchalice is the new testament in my blood; this do, as often as you shall drink it, in\ncommemoration of me\".\n\nMeaning of the Word \"Eucharist\"\n\nWherefore sacred writers, seeing that it was not at all possible that\nthey should manifest by one term the dignity and excellence of this admirable Sacrament,\nendeavoured to express it by many words.\n\nFor sometimes they call it Eucharist, which word we may render either\nby good grace, or by thanksgiving. And rightly, indeed, is it to be called good grace, as\nwell because it first signifies eternal life, concerning which it has been written: The\ngrace of God is eternal life; and also because it contains Christ the Lord, who is true\ngrace and the fountain of all favours.\n\nNo less aptly do we interpret it thanksgiving; inasmuch as when we\nimmolate this purest victim, we give daily unbounded thanks to God for all His kindnesses\ntowards us, and above all for so excellent a gift of His grace, which He grants to us in\nthis Sacrament. This same name, also, is fully in keeping with those things which we read\nwere done by Christ the Lord at the institution of this mystery. For taking bread he brake\nit, and gave thanks. David also, when contemplating the greatness of this mystery, before\nhe pronounced that song: He hath made a remembrance of his wonderful works, being a\nmerciful and gracious Lord, he hath given food to them that fear him, thought that he\nshould first make this act of thanksgiving: His work is praise and magnificence.\n\nOther Names Of This Sacrament\n\nFrequently, also, it is called Sacrifice. Concerning this mystery there\nwill be occasion to speak more at length presently.\n\nIt is called, moreover, communion, the term being evidently borrowed\nfrom that passage of the Apostle where we read: The chalice of benediction which we bless,\nis it not the communion of the blood of Christ? And the bread which we break, is it not\nthe partaking of the body of the Lord? For, as Damascene has explained, this Sacrament\nunites us to Christ, renders us partakers of His flesh and Divinity, reconciles and unites\nus to one another in the same Christ, and forms us, as it were, into one body.\n\nWhence it came to pass, that i. was called also the Sacrament of peace\nand love. We can understand then how unworthy they are of the name of Christian who\ncherish enmities, and how hatred, dissensions and discord should be entirely put away, as\nthe most destructive bane of the faithful, especially since by the daily Sacrifice of our\nreligion, we profess to preserve nothing with more anxious care, than peace and love."}, "TRENT_P3_CMD1": {"title": "Part III — The First Commandment (True Worship & Conscience)", "source_file": "rc-en.txt (Catechism of the Council of Trent, 1566 — Public Domain)", "source_sha256": "25c6fd3fedbb7297447ab2472112faa8e6409b9954c5315dbf25e79860656e27", "line_range": "L13331–L13380", "editorial_warning": "Divisions/subheadings in the Fordham McHugh-Callan witness were supplied by translators, not the 1566 Manutian original (Synoptics PLAN.md §3).", "verbatim_text": "THE FIRST COMMANDMENT : \"I am the lord thy god, who brought thee out of the\nland of Egypt, out of the house of bondage. Thou shalt not have strange gods before me.\nThou shalt not make to thyself a graven thing, nor the likeness of any thing that is in\nheaven above, or in the earth beneath, nor of those things that are in the waters under\nthe earth. Thou shalt not adore them, nor serve them. I am the lord thy god, mighty,\njealous, visiting the iniquity of the fathers upon the children, to the third and fourth\ngeneration of them that hate me, and showing mercy unto thousands of them that love me,\nand keep my commandments.\"\n\n\"I am the Lord thy God\"\n\nThe pastor should use his best endeavours to induce the faithful to\nkeep continually in view these words: I am the Lord thy God. From them they will learn\nthat their Lawgiver is none other than their Creator, by whom they were made and are\npreserved, and that they may truly repeat: He is the Lord our God, and we are the people\nof his pasture and the sheep of his hand. The frequent and earnest inculcation of these\nwords will also serve to induce the faithful more readily to observe the Law and avoid\nsin.\n\n\"Who Brought thee out of the Land of Egypt, out of the House of\nBondage\"\n\nThe next words, who brought thee out of the land of Egypt, out of the\nhouse of bondage, seem to relate solely to the Jews liberated from the bondage of Egypt.\nBut if we consider the meaning of the salvation of the entire human race, those words are\nstill more applicable to Christians, who are liberated by God not from the bondage of\nEgypt, but from the slavery of sin and the powers of darkness, and are translated into the\nkingdom of his beloved Son. Contemplating the greatness of this favour, Jeremias foretold:\nBehold the days come, saith the Lord, when it shall be said no more: The Lord liveth that\nbrought forth. the children of Israel out of the land of Egypt; but: The Lord liveth that\nbrought the children of Israel out of the land of the north and out of all the lands to\nwhich I cast them out; and I will bring them again into their land which gave to their\nfathers. Behold, I send many fishers, saith the Lord, and they shall fish them, etc. And,\nindeed, our most indulgent Father has gathered together, through His beloved Son, His\nchildren that were dispersed, that being made free from sin and made the servants of\njustice, we may serve before him in holiness and justice all our days.'\n\nAgainst every temptation, therefore, the faithful should arm themselves\nwith these words of the Apostle as with a shield: Shall we who are dead to sin live any\nlonger therein? We are no longer our own, we are His who died and rose again for us. He is\nthe Lord our God who has purchased us for Himself at the price of His blood. Shall we then\nbe any longer capable of sinning against the Lord our God, and crucifying Him again? Being\nmade truly free, and with that liberty wherewith Christ has made us free, let us, as we\nheretofore yielded our members to serve injustice, henceforward yield them to serve\njustice to sanctification.\n\n\"Thou shalt not have Strange Gods before Me\"\n\nThe pastor should teach that the first part of the Decalogue contains\nour duties towards God; the second part, our duties towards our neighbour. The reason (for"}, "TRENT_P4_PETITION5_DEBTS": {"title": "Part IV — Fifth Petition: Forgive Us Our Debts, As We Forgive", "source_file": "rc-en.txt (Catechism of the Council of Trent, 1566 — Public Domain)", "source_sha256": "25c6fd3fedbb7297447ab2472112faa8e6409b9954c5315dbf25e79860656e27", "line_range": "L18902–L18958", "editorial_warning": "Divisions/subheadings in the Fordham McHugh-Callan witness were supplied by translators, not the 1566 Manutian original (Synoptics PLAN.md §3).", "verbatim_text": "THE FIFTH PETITION OF THE LORD'S PRAYER : \"And forgive us our\ndebts, as we forgive our debtors\"\n\nThe Importance Of Explaining This Petition\n\nSo many are the things which display at once God's infinite power and\nHis equally infinite wisdom and goodness, that wheresoever we turn our eyes or direct our\nthoughts, we meet with the most certain signs of omnipotence and benignity. And yet there\nis truly nothing that more eloquently proclaims His supreme love and admirable charity\ntowards us, than the inexplicable mystery of the Passion of Jesus Christ, whence springs\nthat never-failing fountain to wash away the defilements of sin. (It is this fountain) in\nwhich, under the guidance and bounty of God, we desire to be merged and purified, when we\nbeg of Him to forgive us our debts.\n\nThis Petition contains a sort of summary of those benefits with which\nthe human race has been enriched through Jesus Christ. This Isaias taught when he said:\nThe iniquity of the house of Jacob shall be forgiven; and this is all the fruit, that the\nsin thereof should be taken away. David also shows this, proclaiming those blessed who\ncould partake of that salutary fruit: Blessed are they whose iniquities are forgiven.\n\nThe pastor, therefore, should study and explain accurately and\ndiligently the meaning of this Petition, which, we perceive, is so important to the\nattainment of salvation.\n\nDifference Between This And The Preceding Petitions\n\nIn this Petition we enter on a new manner of praying. For hitherto we\nasked of God not only eternal and spiritual goods, but also transient and temporal\nadvantages; whereas, we now ask to be freed from the evils of the soul and of the body, of\nthis life and of the life to come.\n\nDispositions with which this petition should be Offered\n\nSince, however, to obtain what we ask we must pray in a becoming\nmanner, it appears expedient to explain the disposition with which this prayer should be\noffered to God.\n\nAcknowledgment Of Sin\n\nThe pastor, then, should admonish the faithful, that he who comes to\noffer this Petition must first acknowledge, and next feel sorrow and compunction for his\nsins. He must also be firmly convinced that to sinners, thus disposed and prepared, God is\nwilling to grant pardon. This confidence is necessary to sinners, lest perhaps the bitter\nremembrance and acknowledgment of their sins should be followed by that despair of pardon,\nwhich of old seized the mind of Cain and of Judas, both of whom looked on God solely as an\navenger and punisher, forgetting that He is also mild and merciful.\n\nIn this Petition, therefore, we ought to be so disposed, that,\nacknowledging our sins in the bitterness of our souls, we may fly to God as to a Father,\nnot as to a Judge, imploring Him to deal with us not according to His justice, but\naccording to His mercy.\n\nWe shall be easily induced to acknowledge our sins if we listen to God\nHimself admonishing us through the Sacred Scriptures in this regard. Thus we read in\nDavid: They are all gone aside; they are become unprofitable together; there is none that\ndoeth good, no not one. Solomon speaks to the same purpose: There is no just man upon\nearth, that doth good, and sinneth not. To this subject apply also these words: Who can"}}, "resurrection_replicability_lab": {"hoyeck_hume_note": "Phil Hoyeck (@PAHoyeck) rightly notes Hume's 'Of Miracles' (1748) is NOT dumb circularity—it is a base-rate vs. witness false-positive weigh-off. Formalizing Hume's exact weigh-off with Bayes & Price (1763) and modern psychometric replication hygiene blocks apologist pseudo-replication (collapsing Matthew+Mark into 1 cluster) while proving why 5 genuinely independent costly/hostile channels (+60.8 dB cable) overcome even a harsh 1-in-1,000 (-30.0 dB) Humean prior.", "clean_single_mechanism_skeptic": {"crux_id": "CRUX_RESURRECTION_VS_HUME_SEC_X", "rubric_sha256": "bb8dc65239019a35e4965563d6e9ba238b77a3036b95e989011a3f8bd1b6906e", "prior_probability": 0.001, "prior_decibans": -29.996, "raw_channel_count": 6, "independent_cluster_count": 5, "pseudoreplication_blocked": ["CH2B_MATTHEW_PARALLEL"], "empirical_cable_decibans": 61.0586, "ad_hoc_patches": {"hypothesis": 0, "alternative": 0, "net_mdl_adjustment_decibans": 0.0}, "posterior_decibans": 31.0625, "posterior_probability": 0.999218, "cluster_breakdown": [{"cluster_id": "CL_EARLY_JERUSALEM_KERYGMA", "primary_channel": "CH1_CREED_1COR15", "title": "Pre-Pauline Aramaic Creedal Formula (Dated within ~2–5 yrs of Crucifixion)", "locus": "1 Cor 15:3–7; Gal 1:18–19", "incentive_profile": "COSTLY_NEGATIVE_PAYOFF", "db_q8_8": 3035, "decibans": 11.8555, "merged_parallels": ["CH1_CREED_1COR15"]}, {"cluster_id": "CL_SYNOPTIC_EMPTY_TOMB_WOMEN", "primary_channel": "CH2_MARK_EMPTY_TOMB", "title": "Empty Tomb Attested First by Women Witnesses (Markan Core)", "locus": "Mark 16:1–8", "incentive_profile": "EMBARRASSMENT_CRITERION", "db_q8_8": 2627, "decibans": 10.2617, "merged_parallels": ["CH2_MARK_EMPTY_TOMB", "CH2B_MATTHEW_PARALLEL"]}, {"cluster_id": "CL_HOSTILE_OUTGROUP_PAUL", "primary_channel": "CH3_HOSTILE_PAUL", "title": "Abrupt Conversion of Hostile Persecutor Saul of Tarsus", "locus": "Gal 1:13–24; Phil 3:4–10; 1 Cor 9:1", "incentive_profile": "HOSTILE_CONVERT", "db_q8_8": 3853, "decibans": 15.0508, "merged_parallels": ["CH3_HOSTILE_PAUL"]}, {"cluster_id": "CL_FAMILY_SKEPTIC_JAMES", "primary_channel": "CH4_SKEPTICAL_JAMES", "title": "Conversion & Martyrdom of Skeptical Brother James (Attested in Paul + Josephus Ant. 20.200)", "locus": "John 7:5; Mark 3:21; 1 Cor 15:7; Josephus Ant. 20.200", "incentive_profile": "HOSTILE_CONVERT", "db_q8_8": 3302, "decibans": 12.8984, "merged_parallels": ["CH4_SKEPTICAL_JAMES"]}, {"cluster_id": "CL_ATHANASIUS_PHASE_TRANSITION", "primary_channel": "CH5_ATHANASIUS_EQUILIBRIUM_SHIFT", "title": "Athanasius Longitudinal Phase Transition (Breaking Finite-Horizon Mortal Defection)", "locus": "De Incarnatione §§ 27–32; Pliny Ep. 10.96", "incentive_profile": "LONGITUDINAL_PHASE_SHIFT", "db_q8_8": 2814, "decibans": 10.9922, "merged_parallels": ["CH5_ATHANASIUS_EQUILIBRIUM_SHIFT"]}], "attestation": "probabilistic_structural"}, "patchwork_harking_skeptic_3_patches": {"crux_id": "CRUX_RESURRECTION_VS_HUME_SEC_X", "rubric_sha256": "bb8dc65239019a35e4965563d6e9ba238b77a3036b95e989011a3f8bd1b6906e", "prior_probability": 0.001, "prior_decibans": -29.996, "raw_channel_count": 6, "independent_cluster_count": 5, "pseudoreplication_blocked": ["CH2B_MATTHEW_PARALLEL"], "empirical_cable_decibans": 61.0586, "ad_hoc_patches": {"hypothesis": 0, "alternative": 3, "net_mdl_adjustment_decibans": 15.0}, "posterior_decibans": 46.0625, "posterior_probability": 0.999975, "cluster_breakdown": [{"cluster_id": "CL_EARLY_JERUSALEM_KERYGMA", "primary_channel": "CH1_CREED_1COR15", "title": "Pre-Pauline Aramaic Creedal Formula (Dated within ~2–5 yrs of Crucifixion)", "locus": "1 Cor 15:3–7; Gal 1:18–19", "incentive_profile": "COSTLY_NEGATIVE_PAYOFF", "db_q8_8": 3035, "decibans": 11.8555, "merged_parallels": ["CH1_CREED_1COR15"]}, {"cluster_id": "CL_SYNOPTIC_EMPTY_TOMB_WOMEN", "primary_channel": "CH2_MARK_EMPTY_TOMB", "title": "Empty Tomb Attested First by Women Witnesses (Markan Core)", "locus": "Mark 16:1–8", "incentive_profile": "EMBARRASSMENT_CRITERION", "db_q8_8": 2627, "decibans": 10.2617, "merged_parallels": ["CH2_MARK_EMPTY_TOMB", "CH2B_MATTHEW_PARALLEL"]}, {"cluster_id": "CL_HOSTILE_OUTGROUP_PAUL", "primary_channel": "CH3_HOSTILE_PAUL", "title": "Abrupt Conversion of Hostile Persecutor Saul of Tarsus", "locus": "Gal 1:13–24; Phil 3:4–10; 1 Cor 9:1", "incentive_profile": "HOSTILE_CONVERT", "db_q8_8": 3853, "decibans": 15.0508, "merged_parallels": ["CH3_HOSTILE_PAUL"]}, {"cluster_id": "CL_FAMILY_SKEPTIC_JAMES", "primary_channel": "CH4_SKEPTICAL_JAMES", "title": "Conversion & Martyrdom of Skeptical Brother James (Attested in Paul + Josephus Ant. 20.200)", "locus": "John 7:5; Mark 3:21; 1 Cor 15:7; Josephus Ant. 20.200", "incentive_profile": "HOSTILE_CONVERT", "db_q8_8": 3302, "decibans": 12.8984, "merged_parallels": ["CH4_SKEPTICAL_JAMES"]}, {"cluster_id": "CL_ATHANASIUS_PHASE_TRANSITION", "primary_channel": "CH5_ATHANASIUS_EQUILIBRIUM_SHIFT", "title": "Athanasius Longitudinal Phase Transition (Breaking Finite-Horizon Mortal Defection)", "locus": "De Incarnatione §§ 27–32; Pliny Ep. 10.96", "incentive_profile": "LONGITUDINAL_PHASE_SHIFT", "db_q8_8": 2814, "decibans": 10.9922, "merged_parallels": ["CH5_ATHANASIUS_EQUILIBRIUM_SHIFT"]}], "attestation": "probabilistic_structural"}}, "nicene_cosmology_boundary": {"framing_note": "Read as 19th-century American frontier literature, Mormon cosmology remixes several of Antiquity's boldest philosophical impulses—Stoic materialism, Platonic/Origenist pre-existence, Irenaean/Athanasian Theosis, and Renaissance cosmic plurality—with can-do homesteading optimism. Using Carroll's 4-valued lattice, we cleanly separate what ALL Nicene Christians (Catholic, Lutheran, and Reformed/CARM) rule out (`0`), what Nicene theology freely permits as open cosmic speculation (`?`), and what Nicene orthodoxy ALREADY affirms in cleaner Creator-preserving form (`1`).", "propositions": [{"id": "COSM_1_INHABITED_WORLDS", "state": "?", "verdict_badge": "? PERMISSIBLE NICENE SPECULATION (Theologoumenon)", "frontier_motif": "Countless inhabited worlds across space ('worlds without number', Moses 1:33).", "antiquity_predecessor": "Cardinal Nicholas of Cusa (De Docta Ignorantia, 1440), Medieval Aristotelians after 1277, C.S. Lewis's Space Trilogy, Vatican Observatory.", "nicene_rule": "100% compatible with the Nicene Creed PROVIDED every world is created ex nihilo by the One Triune God (`Maker of heaven and earth, of all things visible and invisible`, CCC § 296) rather than spawned by contingent sky-ancestors.", "anchors": "Gen 1:1; Col 1:16; CCC §§ 290–296"}, {"id": "COSM_2_PARTICIPATORY_THEOSIS", "state": "1", "verdict_badge": "1 NICENE ATTESTED (Grace-By-Adoption, Never Species-Replacement)", "frontier_motif": "Human destiny as glorious cosmic co-heirs rather than passive harp-playing ghosts.", "antiquity_predecessor": "St. Irenaeus, St. Athanasius (De Incarnatione 54:3), 2 Peter 1:4 ('partakers of the divine nature').", "nicene_rule": "Nicene orthodoxy ALREADY affirms real glorification, cosmic co-reigning with Christ (Rom 8:19–21; Rev 22:5), and participatory Theosis by grace (CCC § 460)—while strictly forbidding erasing the uncreated Creator / finite creature distinction (Isa 43:10).", "anchors": "2 Pet 1:4; Rom 8:17–21; Isa 43:10; CCC § 460"}, {"id": "COSM_3_EMBODIED_NEW_CREATION", "state": "1", "verdict_badge": "1 NICENE ATTESTED (Physical Resurrection & Creative New Earth)", "frontier_motif": "Tangible, active, embodied eternal life building, exploring, and delighting in real matter.", "antiquity_predecessor": "Anti-Gnostic Patristics (Tertullian, Irenaeus, Augustine City of God Bk. XXII) vs. Platonic disembodied escapism.", "nicene_rule": "Gnosticism despised matter; the Nicene Creed ends with 'the resurrection of the body and the life of the world to come' (`Isa 65:17`, `Rev 21:24–26`, `Trent Art. XI`, `CCC §§ 1042–1050`). Creative embodied work & sub-creation in the New Creation is 100% orthodox!", "anchors": "1 Cor 15:42–44; Rom 8:21; Rev 21:24; CCC § 1047"}, {"id": "COSM_4_UNEVALANGELIZED_HOPE", "state": "?", "verdict_badge": "1 / ? NICENE MERCY FLOOR (Minus Proxy Ritual Mechanics)", "frontier_motif": "Refusal to believe unbaptized frontier family members who never heard the Gospel are damned by sheer geographic bad luck.", "antiquity_predecessor": "1 Peter 3:19 / 4:6 (Christ's proclamation to the dead), Justin Martyr, Roman Catechism Art. V, CCC §§ 633, 1260.", "nicene_rule": "Proxy baptisms for the dead (misreading Paul's ad-hominem in 1 Cor 15:29) are rejected (`0`), BUT the underlying moral instinct is already honored inside Nicene orthodoxy: God is not bound by His sacraments (CCC § 1257) and judges no one guilty for invincible ignorance.", "anchors": "1 Pet 3:19; Trent Art. V; CCC §§ 1257–1261"}, {"id": "COSM_5_CONTINGENT_FATHER_INFINITE_REGRESS", "state": "0", "verdict_badge": "0 HARD NICENE CONTRADICTION (Violates Divine Aseity & Monotheism)", "frontier_motif": "King Follett Discourse (1844): 'God himself was once as we are now, and is an exalted man' + corporeal Father of flesh and bone (D&C 130:22).", "antiquity_predecessor": "Stoic corporealism + Greco-Roman heroic apotheosis (Euhemerism).", "nicene_rule": "Directly contradicts Catholic, Lutheran, and Reformed/CARM orthodoxy (`One God, the Father Almighty`, `Before me there was no God formed, neither shall there be after me` [Isa 43:10], `God is spirit` [John 4:24], `I AM WHO I AM` [Exod 3:14]). An infinite regress of contingent planet-gods explains zero contingent existence.", "anchors": "Exod 3:14; Isa 43:10; John 4:24; CCC §§ 212, 253"}, {"id": "COSM_6_PREMORTAL_SOULS_UNCREATED_MATTER", "state": "0", "verdict_badge": "0 HARD NICENE CONTRADICTION (Violates Creatio ex Nihilo)", "frontier_motif": "Pre-mortal human intelligences co-eternal with God + creation as merely organizing pre-existing matter (Book of Abraham 3–4).", "antiquity_predecessor": "Plato's Timaeus (Demiurge shaping pre-existing chaos) + Origen's pre-existence of human souls (ruled out at Constantinople II, 553 AD).", "nicene_rule": "Nicene Christianity insists on Creatio ex Nihilo (`visible and invisible`, Col 1:16; Heb 11:3; 2 Macc 7:28; CCC §§ 296, 366): God is not a cosmic carpenter working inside a pre-existing universe—He is the transcendent Author of space, time, matter, and every individual soul.", "anchors": "Gen 1:1; John 1:3; Col 1:16; CCC §§ 296, 366"}]}, "outbound_ministry_directory": {"vatican_ccc_official": "https://www.vatican.va/archive/ENG0015/_INDEX.HTM", "usccb_print_and_licensed_ccc": "https://www.usccb.org/beliefs-and-teachings/what-we-believe/catechism/catechism-of-the-catholic-church", "lutheran_book_of_concord": "https://bookofconcord.org/", "reformed_carm_apologetics": "https://carm.org/"}, "bundle_sha256": "b6b43432c9560f54c19fac585b78c4b4aaba378baf482d599884f891dbd0c35b"};
+let currentCCC = "604";
+
+function switchTab(name) {
+  document.querySelectorAll('.tabs .tab-btn').forEach((b, idx) => {
+    const map = ['ccc', 'verse', 'rpipe', 'hume', 'cosm'];
+    b.classList.toggle('active', map[idx] === name);
+  });
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+}
+
+function initApp() {
+  const slab = BUNDLE.xcube_slab;
+  document.getElementById('meta-rats').textContent =
+    `Bsar Slab SHA-256: ${slab.rats_sha256.slice(0, 16)}… (${slab.counts.ccc_nodes} Nodes · ${slab.counts.sparse_edges} Hilbert Edges)`;
+
+  const sidebar = document.getElementById('ccc-sidebar');
+  const nodeIds = Object.keys(slab.nodes).sort((a, b) => Number(a) - Number(b));
+  sidebar.innerHTML = nodeIds.map(id => {
+    const n = slab.nodes[id];
+    return `<button class="node-item ${id === currentCCC ? 'active' : ''}" id="nav-ccc-${id}" onclick="selectCCC('${id}')">
+      <strong>CCC § ${id} — ${escapeHtml(n.topic)}</strong>
+      <small>${escapeHtml(n.pillar)}</small>
+    </button>`;
+  }).join('');
+
+  const vSel = document.getElementById('verse-selector');
+  const vKeys = Object.keys(slab.reverse_verse_to_edge_ids).sort();
+  vSel.innerHTML = vKeys.map(vk => {
+    const b = BUNDLE.bible_public_domain[vk] || { ref: vk, canon: '' };
+    return `<option value="${vk}" ${vk === 'JHN.3.16' ? 'selected' : ''}>${escapeHtml(b.ref)} [${vk}] (${escapeHtml(b.canon)})</option>`;
+  }).join('');
+
+  renderActiveCCC();
+  renderReverseVerse();
+  runRPipe();
+  renderHumeLab();
+  renderCosmologyLab();
+}
+
+function escapeHtml(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function selectCCC(id) {
+  currentCCC = String(id);
+  document.querySelectorAll('.node-item').forEach(el => el.classList.remove('active'));
+  const btn = document.getElementById('nav-ccc-' + currentCCC);
+  if (btn) btn.classList.add('active');
+  renderActiveCCC();
+}
+
+function computeDeduplicatedCableDb(edges) {
+  const clusters = {};
+  edges.forEach(e => {
+    const cid = e.cluster_id;
+    clusters[cid] = Math.max(clusters[cid] ?? -32768, e.db_q8_8);
+  });
+  const sumQ8 = Object.values(clusters).reduce((a, b) => a + b, 0);
+  return {
+    decibans: (sumQ8 / 256.0).toFixed(2),
+    clusterCount: Object.keys(clusters).length
+  };
+}
+
+function renderActiveCCC() {
+  const slab = BUNDLE.xcube_slab;
+  const node = slab.nodes[currentCCC];
+  const ver = document.getElementById('bible-ver').value;
+  const canonFilter = document.getElementById('canon-filter').value;
+  const elimMed = document.getElementById('eliminate-mediator').checked;
+
+  let edges = (slab.forward_ccc_to_edge_ids[currentCCC] || []).map(i => slab.edges[i]);
+  if (canonFilter !== 'ALL') {
+    edges = edges.filter(e => e.canon_scope === canonFilter);
+  }
+
+  if (elimMed) {
+    const byVerse = {};
+    edges.forEach(e => {
+      if (!byVerse[e.verse_ref]) {
+        byVerse[e.verse_ref] = { ...e, mediator: '* (∃m Projected)', mediators_list: [e.mediator] };
+      } else {
+        byVerse[e.verse_ref].mediators_list.push(e.mediator);
+        byVerse[e.verse_ref].db_q8_8 = Math.max(byVerse[e.verse_ref].db_q8_8, e.db_q8_8);
+      }
+    });
+    edges = Object.values(byVerse);
+  }
+
+  const cable = computeDeduplicatedCableDb(edges);
+  const trent = BUNDLE.trent_public_domain[node.trent_ref_id];
+
+  const versesHtml = edges.length === 0
+    ? `<p style="color:var(--burgundy)"><strong>0 edges under current Canon filter!</strong> (Switch Canon Filter back to 73-Book to see Deuterocanonical witnesses.)</p>`
+    : edges.map(e => {
+        const b = BUNDLE.bible_public_domain[e.verse_ref] || { ref: e.verse_ref, drb: '', kjv: '', canon: e.canon_scope };
+        const canonBadge = b.canon === 'ECUMENICAL_66_SHARED'
+          ? `<span class="badge b-shared">66-Book Shared Core</span>`
+          : `<span class="badge b-deut">7-Book Deuterocanon</span>`;
+        const spreadBadge = e.is_spread_from_pericope
+          ? `<span class="badge b-spread">XCubes Spread (S_W)</span>` : '';
+        const medLabel = elimMed
+          ? `<code>∃m</code> Projected (click to note hidden mediators: ${escapeHtml((e.mediators_list || []).join(', '))})`
+          : `Mediator: <code>${escapeHtml(e.mediator)}</code>`;
+        return `<div class="verse-box">
+          <div>
+            <strong>${escapeHtml(b.ref)}</strong>
+            ${canonBadge}
+            <span class="badge b-db">+${(e.db_q8_8 / 256.0).toFixed(2)} dB (Q8.8: ${e.db_q8_8})</span>
+            ${spreadBadge}
+          </div>
+          <p style="margin:.4rem 0">"${escapeHtml(b[ver])}"</p>
+          <small style="color:var(--muted);font-family:system-ui,sans-serif">
+            Cluster: <code>${escapeHtml(e.cluster_id)}</code> · Mode: <code>${escapeHtml(e.warrant_mode)}</code> · Newman: <code>${escapeHtml(e.newman_note)}</code> · ${medLabel}
+          </small>
+        </div>`;
+      }).join('');
+
+  const newmanRows = Object.entries(node.newman_profile || {}).map(([k, v]) =>
+    `<tr><td><code>${escapeHtml(k)}</code></td><td>${escapeHtml(v)}</td></tr>`
+  ).join('');
+
+  const L = node.tradition_lenses || {};
+  document.getElementById('ccc-detail').innerHTML = `
+    <div class="card">
+      <span class="badge b-db">Newman Convergent Cable: +${cable.decibans} dB (${cable.clusterCount} Independent Clusters from ${edges.length} Edges)</span>
+      <h2 style="margin:.45rem 0 .25rem 0">CCC § ${node.ccc_id} — ${escapeHtml(node.topic)}</h2>
+      <p style="margin:.3rem 0"><strong>Clean-Room Atomic Proposition:</strong> ${escapeHtml(node.clean_room_proposition)}</p>
+      <div class="out-links">
+        <a class="btn-link" href="${escapeHtml(node.vatican_en_url)}" target="_blank" rel="noopener">Read Verbatim on Vatican.va (EN) ↗</a>
+        <a class="btn-link alt" href="${escapeHtml(node.vatican_latin_url)}" target="_blank" rel="noopener">Normative Latin Editio Typica ↗</a>
+        <a class="btn-link luth" href="${escapeHtml(node.official_print_and_flipbook_url)}" target="_blank" rel="noopener">Official USCCB Flipbook / Buy Print ↗</a>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Supporting Scripture Strands (${ver === 'drb' ? 'Douay-Rheims 1899' : 'King James Version 1769'} — Public Domain)</h3>
+      ${versesHtml}
+    </div>
+
+    <div class="card">
+      <h3>Cross-Referenced 1566 Catechism of the Council of Trent (Public Domain · Byte-Pinned)</h3>
+      <p style="margin:0 0 .45rem 0;font-family:system-ui,sans-serif;font-size:.82rem;color:var(--muted)">
+        <strong>${escapeHtml(trent.title)}</strong> · Pin: <code>${escapeHtml(trent.line_range)}</code> in <code>rc-en.txt</code> (SHA-256: <code>${trent.source_sha256.slice(0, 14)}…</code>)<br>
+        <em>Note: ${escapeHtml(trent.editorial_warning)}</em>
+      </p>
+      <div class="trent-box">${escapeHtml(trent.verbatim_text)}</div>
+    </div>
+
+    <div class="card">
+      <h3>Four-Way Honest Theological &amp; Epistemic Lens (Zero Straw-Men)</h3>
+      <div class="lenses">
+        <div class="lens-card"><strong>Catholic (Trent 1566 → CCC)</strong><p>${escapeHtml(L.catholic)}</p></div>
+        <div class="lens-card"><strong>Lutheran (Concord / John 3:16)</strong><p>${escapeHtml(L.lutheran)}</p><a href="https://bookofconcord.org/" target="_blank" rel="noopener">BookOfConcord.org ↗</a></div>
+        <div class="lens-card"><strong>Reformed / CARM (66-Book Core)</strong><p>${escapeHtml(L.reformed_carm)}</p><a href="https://carm.org/" target="_blank" rel="noopener">CARM.org Reference ↗</a></div>
+        <div class="lens-card"><strong>Epistemic / Skeptic Audit</strong><p>${escapeHtml(L.skeptic_note)}</p></div>
+      </div>
+      <h4 style="margin:1rem 0 .4rem 0;font-family:system-ui,sans-serif">Cardinal Newman Non-Collapsed Profile (Hermes Synoptics Protocol)</h4>
+      <table><tbody>${newmanRows}</tbody></table>
+    </div>
+  `;
+}
+
+function renderReverseVerse() {
+  const vk = document.getElementById('verse-selector').value;
+  const slab = BUNDLE.xcube_slab;
+  const b = BUNDLE.bible_public_domain[vk];
+  const edgeIds = slab.reverse_verse_to_edge_ids[vk] || [];
+  const edges = edgeIds.map(i => slab.edges[i]);
+
+  const cards = edges.map(e => {
+    const n = slab.nodes[String(e.ccc_id)];
+    const t = BUNDLE.trent_public_domain[n.trent_ref_id];
+    return `<div class="card">
+      <span class="badge b-db">CCC § ${n.ccc_id}</span>
+      <span class="badge b-shared">${escapeHtml(e.warrant_mode)} (+${(e.db_q8_8/256).toFixed(2)} dB)</span>
+      <h3 style="margin:.4rem 0">${escapeHtml(n.topic)}</h3>
+      <p>${escapeHtml(n.clean_room_proposition)}</p>
+      <p style="font-family:system-ui,sans-serif;font-size:.83rem;color:var(--muted)">
+        <strong>1566 Catechism of Trent Parallel:</strong> ${escapeHtml(t.title)} (<code>${escapeHtml(t.line_range)}</code>) · Mediator: <code>${escapeHtml(e.mediator)}</code>
+      </p>
+      <button class="tab-btn" onclick="selectCCC('${n.ccc_id}');switchTab('ccc')">Inspect Full CCC § ${n.ccc_id} + Trent Dossier →</button>
+    </div>`;
+  }).join('');
+
+  document.getElementById('verse-detail').innerHTML = `
+    <div class="card">
+      <h2>${escapeHtml(b.ref)} <span class="badge ${b.canon === 'ECUMENICAL_66_SHARED' ? 'b-shared' : 'b-deut'}">${escapeHtml(b.canon)}</span></h2>
+      <p><strong>Douay-Rheims (1899):</strong> "${escapeHtml(b.drb)}"</p>
+      <p><strong>King James (1769):</strong> "${escapeHtml(b.kjv)}"</p>
+    </div>
+    <h3>Supported Catechism Statements (${edges.length} Hilbert-Indexed Edges)</h3>
+    ${cards}
+  `;
+}
+
+function runRPipe() {
+  const p = document.getElementById('r-pillar').value;
+  const c = document.getElementById('r-canon').value;
+  const g = document.getElementById('r-group').value;
+
+  const filters = [];
+  if (p !== 'ALL') filters.push(`pillar == "${p}"`);
+  if (c !== 'ALL') filters.push(`canon_scope == "${c}"`);
+  const filterCode = filters.length ? `
+  filter(${filters.join(', ')}) |>` : '';
+
+  document.getElementById('r-code-preview').textContent =
+`ccc_trent_xcube |> ${filterCode}
+  inner_join(bible_pd, by = "verse_ref") |>
+  rollup_slice(
+    axes = c("${g}"),
+    agg  = newman_cable_q8_8(dedup_by = "cluster_id")
+  ) |>
+  select(${g}, raw_edges, independent_clusters, cable_decibans, verses)`;
+
+  let rows = BUNDLE.xcube_slab.edges.slice();
+  if (p !== 'ALL') rows = rows.filter(r => r.pillar === p);
+  if (c !== 'ALL') rows = rows.filter(r => r.canon_scope === c);
+
+  const buckets = {};
+  rows.forEach(r => {
+    const key = String(r[g]);
+    if (!buckets[key]) buckets[key] = [];
+    buckets[key].push(r);
+  });
+
+  const trs = Object.keys(buckets).sort().map(k => {
+    const items = buckets[k];
+    const cab = computeDeduplicatedCableDb(items);
+    const verses = [...new Set(items.map(x => x.verse_ref))].join(', ');
+    const label = g === 'ccc_id' ? `CCC § ${k} (${BUNDLE.xcube_slab.nodes[k].topic})` : k;
+    return `<tr>
+      <td><strong>${escapeHtml(label)}</strong></td>
+      <td>${items.length}</td>
+      <td>${cab.clusterCount}</td>
+      <td><strong>+${cab.decibans} dB</strong></td>
+      <td><code>${escapeHtml(verses)}</code></td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('r-table-out').innerHTML = `
+    <table>
+      <thead><tr><th>Slice Key (<code>${escapeHtml(g)}</code>)</th><th>Raw Edges</th><th>Deduplicated Clusters</th><th>Newman Cable (Q8.8 dB)</th><th>Supporting Scripture Verses</th></tr></thead>
+      <tbody>${trs}</tbody>
+    </table>`;
+}
+
+function renderHumeLab() {
+  const lab = BUNDLE.resurrection_replicability_lab;
+  document.getElementById('hume-intro').textContent = lab.hoyeck_hume_note;
+
+  const logPrior = parseFloat(document.getElementById('hume-prior-log').value);
+  const p0 = Math.pow(10, logPrior);
+  const patches = parseInt(document.getElementById('hume-patches').value, 10);
+
+  const priorDb = 10 * Math.log10(p0 / (1 - p0));
+  const base = lab.clean_single_mechanism_skeptic;
+  const cableDb = base.empirical_cable_decibans;
+  const mdlDb = 5.0 * patches;
+  const postDb = priorDb + cableDb + mdlDb;
+  const postOdds = Math.pow(10, postDb / 10.0);
+  const postProb = postOdds / (1 + postOdds);
+
+  document.getElementById('hume-prior-label').textContent =
+    `P(H) = ${(p0 * 100).toFixed(4)}% (${priorDb.toFixed(1)} dB)`;
+
+  document.getElementById('hume-scoreboard').innerHTML = `
+    <div class="lenses" style="margin-bottom:1rem">
+      <div class="lens-card">
+        <strong>1. Humean Prior (<code>t = 0</code>)</strong>
+        <div style="font-size:1.35rem;font-weight:800;color:var(--burgundy)">${priorDb.toFixed(2)} dB</div>
+        <small>Cromwell-bounded starting skepticism</small>
+      </div>
+      <div class="lens-card">
+        <strong>2. Deduplicated Witness Cable</strong>
+        <div style="font-size:1.35rem;font-weight:800;color:var(--pine)">+${cableDb.toFixed(2)} dB</div>
+        <small>${base.independent_cluster_count} independent clusters (${base.pseudoreplication_blocked.length} Synoptic duplicate auto-collapsed!)</small>
+      </div>
+      <div class="lens-card">
+        <strong>3. Anti-HARKing MDL Adjustment</strong>
+        <div style="font-size:1.35rem;font-weight:800;color:var(--violet)">+${mdlDb.toFixed(2)} dB</div>
+        <small>${patches} post-hoc naturalistic rescue epicycles penalized at 5 dB/patch</small>
+      </div>
+      <div class="lens-card">
+        <strong>4. Posterior Probability</strong>
+        <div style="font-size:1.35rem;font-weight:800;color:var(--pine)">${(postProb * 100).toFixed(3)}% (${postDb >= 0 ? '+' : ''}${postDb.toFixed(2)} dB)</div>
+        <small>Rubric SHA-256 locked: <code>${base.rubric_sha256.slice(0, 12)}…</code></small>
+      </div>
+    </div>
+  `;
+
+  const chRows = base.cluster_breakdown.map(c => `
+    <tr>
+      <td><strong>${escapeHtml(c.title)}</strong><br><small>Merged parallels: <code>${escapeHtml(c.merged_parallels.join(', '))}</code></small></td>
+      <td><code>${escapeHtml(c.locus)}</code></td>
+      <td><span class="badge b-shared">${escapeHtml(c.incentive_profile)}</span></td>
+      <td><strong>+${c.decibans.toFixed(2)} dB</strong></td>
+    </tr>
+  `).join('');
+
+  document.getElementById('hume-channels').innerHTML = `
+    <h3>Pre-Registered Independent Evidentiary Clusters (Pseudo-Replication Blocked)</h3>
+    <table>
+      <thead><tr><th>Independent Cluster</th><th>Primary Sources</th><th>Psychometric Incentive Filter</th><th>Weight (Q8.8 dB)</th></tr></thead>
+      <tbody>${chRows}</tbody>
+    </table>
+  `;
+}
+
+function renderCosmologyLab() {
+  const cosm = BUNDLE.nicene_cosmology_boundary;
+  document.getElementById('cosm-intro').textContent = cosm.framing_note;
+  const f = document.getElementById('cosm-filter').value;
+
+  let items = cosm.propositions.slice();
+  if (f === 'SAFE_OR_ATTESTED') {
+    items = items.filter(p => p.state === '1' || p.state === '?');
+  } else if (f === '0') {
+    items = items.filter(p => p.state === '0');
+  }
+
+  document.getElementById('cosm-cards').innerHTML = items.map(p => {
+    const badgeClass = p.state === '1' ? 'b-shared' : (p.state === '?' ? 'b-db' : 'b-deut');
+    const borderCol = p.state === '0' ? 'var(--burgundy)' : (p.state === '1' ? 'var(--pine)' : 'var(--navy)');
+    return `<div class="card" style="border-left:5px solid ${borderCol}">
+      <span class="badge ${badgeClass}">${escapeHtml(p.verdict_badge)}</span>
+      <h3 style="margin:.45rem 0">${escapeHtml(p.frontier_motif)}</h3>
+      <p style="margin:.35rem 0"><strong>Antiquity / Classical Predecessor:</strong> ${escapeHtml(p.antiquity_predecessor)}</p>
+      <p style="margin:.35rem 0"><strong>Nicene Creed &amp; Scripture Razor:</strong> ${escapeHtml(p.nicene_rule)}</p>
+      <small style="color:var(--muted);font-family:system-ui,sans-serif"><strong>Primary Anchors:</strong> <code>${escapeHtml(p.anchors)}</code></small>
+    </div>`;
+  }).join('');
+}
+
+initApp();
+</script>
+</body>
+</html>

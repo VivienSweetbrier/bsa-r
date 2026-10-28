@@ -1,0 +1,5 @@
+chore_id,title,naive_tokens,bsar_tokens,tokens_saved,reduction_pct
+CHORE_1_CORPUS_5Q,1.13 MB Corpus 5-Query Cross-Reference (`rc-en.txt`),1267655,1847,1265808,99.854
+CHORE_2_TRANSCRIPT_AUDIT,Multi-Agent `transcript.jsonl` Telemetry & `/compact` Slice,95217,236,94981,99.752
+CHORE_3_PORCH_ZD_FIREWALL,100-Step Pre-API Guardrail / Bloat Filter (`Q8.8` Zero-Divisor Gate),250000,0,250000,100.0
+CHORE_4_AST_CACHE_AND_BOXKITE,Tool-DAG Structural Memoization (`64B` Pathion) & `7`-Box-Kite Escape,882000,378000,504000,57.14

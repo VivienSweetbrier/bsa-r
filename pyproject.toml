@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bsar"
+version = "0.1.0"
+description = "🅱💲🅰-R: Hypercubic Compiler — 3-Pass Hilbert XCube Assembler, R Pipe Verbs, and 64-Byte Q8.8 32D Cayley-Dickson Expense Engine"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "AGPL-3.0-or-later" }
+dependencies = []
+
+[project.scripts]
+bsar = "bsar.cli:main"

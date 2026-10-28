@@ -1,0 +1,377 @@
+{
+  "report_sha256": "6b05a0cd396758930f5dad5f76b7b22d452806feb1730895cf2d75eb73b37a25",
+  "compiler": "🅱💲🅰-R: Hypercubic Compiler v0.1.0",
+  "attestation": "probabilistic_structural",
+  "tokenizer_engine": "tiktoken:o200k_base",
+  "headline_summary": {
+    "total_naive_tokens_per_suite": 2494872,
+    "total_bsar_tokens_per_suite": 380083,
+    "total_tokens_saved_per_suite": 2114789,
+    "overall_token_reduction_pct": 84.77,
+    "state_vector_bytes": 64,
+    "s32_sign_lut_bytes": 128,
+    "sedenion_box_kites": 7,
+    "sedenion_assessors": 42,
+    "sedenion_annihilation_edges": 168
+  },
+  "chores": {
+    "chore1": {
+      "chore_id": "CHORE_1_CORPUS_5Q",
+      "title": "1.13 MB Corpus 5-Query Cross-Reference (`rc-en.txt`)",
+      "source": "rc-en.txt (1,134,681 bytes)",
+      "rats_sha256": "85648a2e0428b0388fc7c24c646c6291584f962811f6b1f4887b4296f101d5d2",
+      "naive_input_tokens": 1267655,
+      "bsar_input_tokens": 1847,
+      "tokens_saved": 1265808,
+      "token_reduction_pct": 99.854,
+      "compile_once_ms": 100.34,
+      "avg_slice_query_us": 974.44
+    },
+    "chore2": {
+      "chore_id": "CHORE_2_TRANSCRIPT_AUDIT",
+      "title": "Multi-Agent `transcript.jsonl` Telemetry & `/compact` Slice",
+      "source": "transcript.jsonl (313,410 bytes)",
+      "rats_sha256": "5dafc7a6749332a7b937487b76561a3c9b3b5de1a23858823b667eabb0da9183",
+      "naive_input_tokens": 95217,
+      "bsar_input_tokens": 236,
+      "tokens_saved": 94981,
+      "token_reduction_pct": 99.752,
+      "total_cpu_ms": 82.56,
+      "compact_preview": "source | step_type | tool_name | raw_cells | sum_float\n--- | --- | --- | --- | ---\nMODEL | GENERIC | NO_TOOL | 79 | 0.0\nMODEL | PLANNER_RESPONSE | NO_TOOL | 5 | 9.28125\nMODEL | PLANNER_RESPONSE | edit_file | 14 | 27.34375\nMODEL | PLANNER_RESPONSE | invoke_subagent | 3 | 12.210938\nMODEL | PLANNER_RESPONSE | manage_subagents | 2 | 5.023438\nMODEL | PLANNER_RESPONSE | read_file | 25 | 17.773438\nMODEL | PLANNER_RESPONSE | run_command | 24 | 28.46875\nMODEL | PLANNER_RESPONSE | search_web | 4 | 6.011719\nMODEL | PLANNER_RESPONSE | send_message | 1 | 4.070312\nMODEL | PLANNER_RESPONSE | write_file | 7 | 47.9375\nSYSTEM | SYSTEM_MESSAGE | NO_TOOL | 5 | 0.0\nUSER_EXPLICIT | USER_INPUT | NO_TOOL | 6 | 0.0"
+    },
+    "chore3": {
+      "chore_id": "CHORE_3_PORCH_ZD_FIREWALL",
+      "title": "100-Step Pre-API Guardrail / Bloat Filter (`Q8.8` Zero-Divisor Gate)",
+      "state_register_bytes": 64,
+      "s32_lut_bytes": 128,
+      "total_kernel_bytes": 192,
+      "dense_fp32_32x32_router_bytes": 4096,
+      "parameter_memory_compression_ratio": 64.0,
+      "native_32d_sand_mandala_exact_zero": true,
+      "sedenion_box_kite_pure_bloat_exact_zero": true,
+      "distributive_signal_invariance_64b_exact": true,
+      "avg_gate_latency_us": 30.14,
+      "naive_input_tokens": 250000,
+      "bsar_input_tokens": 0,
+      "tokens_saved": 250000,
+      "token_reduction_pct": 100.0
+    },
+    "chore4": {
+      "chore_id": "CHORE_4_AST_CACHE_AND_BOXKITE",
+      "title": "Tool-DAG Structural Memoization (`64B` Pathion) & `7`-Box-Kite Escape",
+      "cold_trees": 80,
+      "exact_repeat_cache_hits": 80,
+      "bsar_regroup_detection_rate_pct": 100.0,
+      "bag_of_vectors_regroup_detection_rate_pct": 0.0,
+      "bsar_alternativity_depth_detection_rate_pct": 100.0,
+      "bag_of_vectors_alternativity_detection_rate_pct": 0.0,
+      "seven_box_kite_exact_zero_escapes": "7/7",
+      "cpu_fold_240_trees_ms": 285.37,
+      "naive_input_tokens": 882000,
+      "bsar_input_tokens": 378000,
+      "tokens_saved": 504000,
+      "token_reduction_pct": 57.14
+    }
+  },
+  "box_kite_catalog": {
+    "active_assessor_count": 42,
+    "directed_annihilation_edges": 168,
+    "box_kite_count": 7,
+    "box_kites": [
+      {
+        "box_kite_id": 1,
+        "vertex_count": 6,
+        "assessors": [
+          [
+            1,
+            10
+          ],
+          [
+            2,
+            9
+          ],
+          [
+            4,
+            15
+          ],
+          [
+            5,
+            14
+          ],
+          [
+            6,
+            13
+          ],
+          [
+            7,
+            12
+          ]
+        ],
+        "canonical_zero_divisor_pair": {
+          "left_blade": [
+            1,
+            10,
+            1
+          ],
+          "right_blade": [
+            4,
+            15,
+            -1
+          ]
+        }
+      },
+      {
+        "box_kite_id": 2,
+        "vertex_count": 6,
+        "assessors": [
+          [
+            1,
+            11
+          ],
+          [
+            3,
+            9
+          ],
+          [
+            4,
+            14
+          ],
+          [
+            5,
+            15
+          ],
+          [
+            6,
+            12
+          ],
+          [
+            7,
+            13
+          ]
+        ],
+        "canonical_zero_divisor_pair": {
+          "left_blade": [
+            1,
+            11,
+            1
+          ],
+          "right_blade": [
+            4,
+            14,
+            1
+          ]
+        }
+      },
+      {
+        "box_kite_id": 3,
+        "vertex_count": 6,
+        "assessors": [
+          [
+            1,
+            12
+          ],
+          [
+            2,
+            15
+          ],
+          [
+            3,
+            14
+          ],
+          [
+            4,
+            9
+          ],
+          [
+            6,
+            11
+          ],
+          [
+            7,
+            10
+          ]
+        ],
+        "canonical_zero_divisor_pair": {
+          "left_blade": [
+            1,
+            12,
+            1
+          ],
+          "right_blade": [
+            2,
+            15,
+            1
+          ]
+        }
+      },
+      {
+        "box_kite_id": 4,
+        "vertex_count": 6,
+        "assessors": [
+          [
+            1,
+            13
+          ],
+          [
+            2,
+            14
+          ],
+          [
+            3,
+            15
+          ],
+          [
+            5,
+            9
+          ],
+          [
+            6,
+            10
+          ],
+          [
+            7,
+            11
+          ]
+        ],
+        "canonical_zero_divisor_pair": {
+          "left_blade": [
+            1,
+            13,
+            1
+          ],
+          "right_blade": [
+            2,
+            14,
+            -1
+          ]
+        }
+      },
+      {
+        "box_kite_id": 5,
+        "vertex_count": 6,
+        "assessors": [
+          [
+            1,
+            14
+          ],
+          [
+            2,
+            13
+          ],
+          [
+            3,
+            12
+          ],
+          [
+            4,
+            11
+          ],
+          [
+            5,
+            10
+          ],
+          [
+            6,
+            9
+          ]
+        ],
+        "canonical_zero_divisor_pair": {
+          "left_blade": [
+            1,
+            14,
+            1
+          ],
+          "right_blade": [
+            2,
+            13,
+            1
+          ]
+        }
+      },
+      {
+        "box_kite_id": 6,
+        "vertex_count": 6,
+        "assessors": [
+          [
+            1,
+            15
+          ],
+          [
+            2,
+            12
+          ],
+          [
+            3,
+            13
+          ],
+          [
+            4,
+            10
+          ],
+          [
+            5,
+            11
+          ],
+          [
+            7,
+            9
+          ]
+        ],
+        "canonical_zero_divisor_pair": {
+          "left_blade": [
+            1,
+            15,
+            1
+          ],
+          "right_blade": [
+            2,
+            12,
+            -1
+          ]
+        }
+      },
+      {
+        "box_kite_id": 7,
+        "vertex_count": 6,
+        "assessors": [
+          [
+            2,
+            11
+          ],
+          [
+            3,
+            10
+          ],
+          [
+            4,
+            13
+          ],
+          [
+            5,
+            12
+          ],
+          [
+            6,
+            15
+          ],
+          [
+            7,
+            14
+          ]
+        ],
+        "canonical_zero_divisor_pair": {
+          "left_blade": [
+            2,
+            11,
+            1
+          ],
+          "right_blade": [
+            4,
+            13,
+            -1
+          ]
+        }
+      }
+    ]
+  }
+}
