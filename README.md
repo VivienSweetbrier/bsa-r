@@ -86,6 +86,24 @@ python -m bsar bench --out-dir docs/compiler-hud
 Rscript r/validate_bsar_cd.R docs/compiler-hud/cerebral_valley_metrics.csv
 ```
 
+## Lineage, Provenance & Developer Attribution (`Axis 5: GENESIS` — "Everyone Gets Money")
+
+Just as **Eleven-Entry Bookkeeping** requires every entry's provenance chain (`Axis 5`) to walk all the way back to `GENESIS` without amnesia, **`🅱💲🅰-R` (`bsar`)** honors the complete 42-year 65c816 assembler & mathematical lineage whose multipass architecture inspired our **`🅰` (Asar 3-Pass Hilbert Slab Assembler)** layer—and allocates a dedicated **6.0% Upstream Lineage & Toolsmith Royalty Pool** on **One Big Consortium Split Sheet #001 (Navier-Stokes Option B)**:
+
+1. **Bill Mensch & The Western Design Center (`WDC 65816 Macro Assembler`, 1984):** Designed the 16-bit **W65C816S** microprocessor (`SEP`/`REP` variable-width registers and 24-bit bank addressing) and its original reference assembler in Mesa, Arizona—the silicon `GENESIS` of both the Apple IIgs and the Super Nintendo.
+2. **Glen Bredon / Roger Wagner Publishing (`Merlin 8/16` & `Merlin 16+`, 1986) & Mike Westerfield / The Byte Works (`ORCA/M`, 1986):** Created the foundational 65c816 macro assemblers on the **Apple IIgs** (`APW`), pioneering multi-pass 16-bit label/bank sizing and powering the very first wave of 1990–1992 Super Famicom / SNES commercial game studios before MS-DOS cross-assemblers existed.
+3. **Intelligent Systems & Sony NEWS (`IS-SFX`, 1989–1990):** Built the official Kyoto hardware cross-assembler toolchain used by Nintendo EAD to assemble *Super Mario World* (`1990`).
+4. **Norman Yen (`Minus` / *1000 Miles [Tricks]*) (`SNES Assembler`, `TRASM` — *Tricks Assembler*, & `x816`, 1993–1997):** Wrote *SNES Assembler*, **`TRASM`** (in Turbo Pascal for MS-DOS), and **`x816`**—the true 1990s MS-DOS community `GENESIS` of 65c816 cross-assemblers for the SNES demoscene and ROM hacking (`Sprite Tool`'s original assembler!).
+5. **byuu / Near (`xkas` — *cross-knight assembler*, 2004–2010):** Created **`xkas`** (`v0.01` $\to$ `v0.06` $\to$ `v0.14`) to replace `TRASM`/`x816` with direct in-place `.org` / `lorom` / `freedata` ROM patching and multipass (`Pass 0` label discovery $\to$ `Pass 1` bank/address sizing $\to$ `Pass 2` binary emission) for JRPG translations and SMW hacking *(royalty share dedicated to Near's memorial preservation & mental-health causes)*.
+6. **`Trashkas` (`TRASM` $\to$ `xkas` / `Asar` Syntax Converter):** The classic SMW ROM-hacking batch converter (`TRASM` + `xkas` = `Trashkas`) that translated legacy 1990s `TRASM` (`dcb`, old local labels) and `xkas v0.06` sprite/patch `.asm` syntax into modern `xkas`/`Asar` syntax—literally a real-world **Axis 9 (`definition_version`)** drift translator!
+7. **Alcaro / Sir Walrus (`Asar` — *"A SNES Assembler"*, 2011–present):** Designed and created **`Asar`** (`https://github.com/RPGHacker/asar`) as the clean, fast, 3-pass successor to `xkas`, introducing strict multi-pass label convergence checks (so pass-to-pass label drift is caught rather than silently corrupting banks) and expression evaluation under the **GNU LGPL / GPL** family.
+8. **RPGHacker, randomdude999, KungFuFurby, Lui37, p4plus2, Thomas & the SMWCentral `Asar` Maintainers:** Maintained, hardened, and expanded `Asar` (`v1.50` $\to$ `v1.91+` / `v2.0`) across decades of community ROM development, freespace (`freecode`/`freedata`) allocation, and deterministic symbol export.
+9. **Robert de Marrais (2000–2007):** Discovered and cataloged the **7 Octahedral Box-Kites (`42` assessors, `168` zero-divisor annihilation edges)** in 16D Sedenions and 32D Pathions (`arXiv:math/0011260`), which power our **`🅱` & `💲`** 64-byte `Q8.8` L1-cache-line zero-divisor gates.
+10. **Ross Ihaka, Robert Gentleman, Hadley Wickham & the R Core / Tidyverse Team (`R Foundation`):** Created the **R language** and the copy-on-modify functional pipe (`|>` / `dplyr`) semantics that inspire our **`-R`** hypercube slicing verbs.
+11. **t🅾pher dugu🅰y *(Christopher Ryan Duguay)* & the Sweetbrier Augmented Intelligence Lab (2026):** Generalized the `WDC` $\to$ `Merlin 16 / ORCA/M` $\to$ `TRASM` $\to$ `xkas` $\to$ `Trashkas` $\to$ `Asar` 3-pass deterministic ROM assembler chain (`A-sar` $\to$ `B-sar`) from 24-bit LoROM/SA-1 memory banks to **N-Dimensional Hilbert-Curve Sparse Hypercubes (`bsar`)** and **64-byte `Q8.8` Pathion registers** under **GNU AGPLv3**.
+
+---
+
 ## License
 
 Licensed under the **GNU Affero General Public License v3.0 (`AGPL-3.0-or-later`)** — see [LICENSE](./LICENSE).

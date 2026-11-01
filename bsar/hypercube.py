@@ -4,6 +4,19 @@ N-DIMENSIONAL HYPERCUBIC COMPILER & R-VERB PIPE ENGINE (`bsar.hypercube`)
 License: GNU AGPLv3
 Attestation: probabilistic_structural
 
+Architectural Provenance & Attribution Chain (Axis 5 -> GENESIS — "Everyone Gets Money" on Split Sheet #001):
+- `WDC 65816 Macro Assembler` (Bill Mensch / Western Design Center, 1984): 16-bit W65C816S silicon & reference assembler GENESIS.
+- `Merlin 8/16` (Glen Bredon, 1986) & `ORCA/M` (Mike Westerfield / The Byte Works, 1986): Apple IIgs 65c816 multi-pass macro assemblers used on early 1990-1992 Super Famicom / SNES devkits.
+- `IS-SFX` / Sony NEWS Cross-Assemblers (Intelligent Systems / Nintendo EAD, 1989-1990): Super Mario World (1990) studio toolchain.
+- `SNES Assembler`, `TRASM` (Tricks Assembler), & `x816` (Norman Yen / Minus, 1993-1997): The 1990s MS-DOS 65c816 cross-assembler GENESIS.
+- `xkas` (byuu / Near, 2004-2010): Multipass 65c816 in-place ROM patch-assembler paradigm.
+- `Trashkas`: Classic SMW `TRASM` -> `xkas`/`Asar` batch syntax drift translator (Axis 9 definition_version bridge).
+- `Asar` (Alcaro, RPGHacker, randomdude999, KungFuFurby & SMWCentral Asar Maintainers):
+  3-pass deterministic assembler architecture & zero pass-to-pass label drift invariant (`A-sar` -> `B-sar`).
+- Robert de Marrais: 16D Sedenion & 32D Pathion Box-Kite zero-divisor geometry (`bsar.cd_q88`).
+- R Core & Tidyverse Team: Copy-on-modify functional pipe (`|>`) data-frame verbs.
+- t🅾pher dugu🅰y (Christopher Ryan Duguay): N-D Hilbert CSR/CSC hypercube generalization.
+
 Generalizes `Bsar` across ANY agent or data-science chore:
 1. Pass 0: Lua-style ragged dynamic associative frames (`LuaDynamicRecord`) + interval spreading.
 2. Pass 1: N-dimensional Hilbert curve locality ordering + multi-axis O(1) inverted CSR/CSC indices.

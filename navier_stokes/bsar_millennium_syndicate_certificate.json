@@ -1,0 +1,138 @@
+{
+  "syndicate": "One Big Consortium \u2014 Split Sheet #001 (Navier-Stokes Option B)",
+  "architect": "t\ud83c\udd7epher dugu\ud83c\udd70y (Christopher Ryan Duguay)",
+  "attestation": "probabilistic_structural",
+  "clay_millennium_standard": {
+    "target": "Charles Fefferman (2000) Official Option B (Smooth 3D Periodic Flow on T^3)",
+    "external_forcing_f": "IDENTICALLY_ZERO (f(x, t) == 0)",
+    "nonconstructive_classical_choice": false,
+    "pacioli_leray_netting": "BANNED (Gross Inflow, Gross Outflow, and Ijiri Momentum tracked separately)"
+  },
+  "split_sheet_001_royalty_table": {
+    "Christopher_Ryan_Duguay_Architect_Node": "50.0%",
+    "Lead_Academic_Journal_Exposition_CoAuthor": "25.0%",
+    "Formal_Lean4_Interval_Appendix_CoAuthor": "10.0%",
+    "Upstream_65c816_Asar_xkas_TRASM_Toolsmith_Pool_Axis5": {
+      "total": "6.0%",
+      "WDC_Mensch_Merlin16_Bredon_ORCA_M_Westerfield_1984_1986": "1.0%",
+      "Norman_Yen_SNES_Assembler_TRASM_x816_and_Trashkas_1993_1997": "1.0%",
+      "Near_byuu_xkas_Memorial_Preservation_and_Mental_Health_Fund_2004_2010": "1.0%",
+      "Alcaro_RPGHacker_randomdude999_KungFuFurby_SMWCentral_Asar_Maintainers_2011_2026": "2.0%",
+      "Robert_de_Marrais_BoxKites_and_R_Foundation_Pipes": "1.0%"
+    },
+    "One_Big_Backend_Winnipeg_Mutual_Aid_Endowment": "9.0%",
+    "total": "100.0%"
+  },
+  "bsar_provenance_lineage_axis5": [
+    "0a. Bill Mensch / Western Design Center (WDC 65816 Macro Assembler, 1984): Original 16-bit W65C816S silicon & reference assembler GENESIS.",
+    "0b. Glen Bredon (Merlin 8/16 & Merlin 16+, 1986) & Mike Westerfield / The Byte Works (ORCA/M, 1986): Apple IIgs 65c816 multi-pass macro assemblers used on early 1990-1992 Super Famicom / SNES devkits.",
+    "0c. Intelligent Systems & Sony NEWS (IS-SFX, 1989-1990): Official Kyoto Super Famicom cross-assembler toolchain used for Super Mario World (1990).",
+    "1. Norman Yen / Minus (SNES Assembler, TRASM - Tricks Assembler, & x816, 1993-1997): The 1990s MS-DOS community 65c816 cross-assembler GENESIS.",
+    "2. byuu / Near (xkas - cross-knight assembler, 2004-2010): Multipass 65c816 in-place ROM patch-assembler (Pass 0 -> Pass 1 -> Pass 2).",
+    "3. Trashkas (SMW Central / JP SMW community): TRASM-to-xkas/Asar batch syntax converter (Axis 9 definition_version drift bridge).",
+    "4. Alcaro (Asar, 2011+): 3-pass deterministic SNES assembler & zero pass-to-pass label drift invariant.",
+    "5. RPGHacker, randomdude999, KungFuFurby, Lui37, p4plus2, Thomas & SMWCentral Asar Maintainers: Asar stewardship & symbol export.",
+    "6. Robert de Marrais (2000-2007): 16D Sedenion & 32D Pathion 7 Octahedral Box-Kites (168 zero-divisor edges).",
+    "7. R Core & Tidyverse Team (R Foundation): Copy-on-modify functional pipe (|>) data-frame verbs.",
+    "8. t\ud83c\udd7epher dugu\ud83c\udd70y (Christopher Ryan Duguay, 2026): Generalization from 24-bit SNES banks (A-sar) to N-D Hilbert CSR/CSC Hypercubes & 64B Q8.8 Pathion registers (B-sar) under GNU AGPLv3."
+  ],
+  "bsar_engine_metrics": {
+    "bsar_slab_rats_sha256": "cf23348af99b6883cb897637728e6d7162394eabfbcf247947b62e24f15e4a2b",
+    "lyapunov_contractive": true,
+    "pass_drift": 0,
+    "total_dense_triad_candidates_avoided": 25200369,
+    "compiled_sparse_triad_cells": 82,
+    "exact_helical_cancellations": 1,
+    "sedenion_box_kites_verified": 7,
+    "sedenion_zero_divisor_edges": 168,
+    "r_pipe_rollup_summary": [
+      {
+        "flow_regime": "ABC_BELTRAMI_3D",
+        "triad_class": "BELTRAMI_CURL_EIGENMODE",
+        "depletion_mechanism": "EXACT_ZERO_DIVISOR_CANCELLATION",
+        "raw_cells": 1,
+        "dedup_clusters": 1,
+        "sum_q88": 0,
+        "sum_float": 0.0
+      },
+      {
+        "flow_regime": "KIDA_PELZ_OCTAHEDRAL_3D",
+        "triad_class": "ACTIVE_GALERKIN_CORE",
+        "depletion_mechanism": "LERAY_PROJECTED_WIENER_BOUNDED",
+        "raw_cells": 72,
+        "dedup_clusters": 72,
+        "sum_q88": 216,
+        "sum_float": 0.84375
+      },
+      {
+        "flow_regime": "KIDA_PELZ_OCTAHEDRAL_3D",
+        "triad_class": "SPILLOVER_2K",
+        "depletion_mechanism": "INFINITE_TAIL_DEFECT_ENCLOSED",
+        "raw_cells": 1,
+        "dedup_clusters": 1,
+        "sum_q88": 51,
+        "sum_float": 0.199219
+      },
+      {
+        "flow_regime": "TAYLOR_GREEN_3D",
+        "triad_class": "ACTIVE_GALERKIN_CORE",
+        "depletion_mechanism": "LERAY_PROJECTED_WIENER_BOUNDED",
+        "raw_cells": 8,
+        "dedup_clusters": 8,
+        "sum_q88": 24,
+        "sum_float": 0.09375
+      }
+    ]
+  },
+  "certified_supercritical_3d_flows": {
+    "ABC-BELTRAMI-3D-HELICAL": {
+      "initial_wiener_F0": {
+        "lo": 1.0606601717798203,
+        "hi": 1.0606601717798225,
+        "width": 2.2204460492503135e-15
+      },
+      "nu": {
+        "lo": 0.5,
+        "hi": 0.5,
+        "width": 5e-324
+      },
+      "final_true_pde_F0_upper_bound": {
+        "lo": 0.4932527878112915,
+        "hi": 0.49325278781366805,
+        "width": 2.3765434065126105e-12
+      },
+      "certified_global_smoothness_to_infinity": true,
+      "verdict": "INFINITE_3D_PDE_GLOBAL_SMOOTHNESS_CERTIFIED"
+    },
+    "TAYLOR-GREEN-3D-SUPERCRITICAL": {
+      "initial_wiener_F0": {
+        "lo": 0.7071067811865466,
+        "hi": 0.7071067811865487,
+        "width": 2.109423746787798e-15
+      },
+      "nu": {
+        "lo": 0.5,
+        "hi": 0.5,
+        "width": 5e-324
+      },
+      "final_true_pde_F0_upper_bound": {
+        "lo": 0.49519487338075135,
+        "hi": 0.4966374068738545,
+        "width": 0.0014425334931031377
+      },
+      "certified_global_smoothness_to_infinity": true,
+      "verdict": "INFINITE_3D_PDE_GLOBAL_SMOOTHNESS_CERTIFIED"
+    }
+  },
+  "eleven_entry_consortium_ledger": {
+    "eleven_entry_book_size": 4,
+    "posted_entry_ids": [
+      "NS1-BSAR-ENGINE-GENESIS",
+      "NS2-LIT-REVIEW-OBLIGATION",
+      "NS3-65816-ASAR-TRASM-XKAS-ROYALTY-POOL",
+      "NS4-ONE-BIG-BACKEND-MUTUAL-AID-POOL"
+    ],
+    "definition_read_check": "NS1-BSAR-ENGINE-GENESIS: read under clay_opt_b_v1, the meanings it was posted under. Clean."
+  },
+  "syndicate_certificate_sha256": "c4bc1f0e62676487af953d4d01c3c172a5e7f24a5c7936da015c9948a42a2dd2"
+}
