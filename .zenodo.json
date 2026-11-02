@@ -1,0 +1,35 @@
+{
+  "title": "BSA-R x Eleven-Entry Bookkeeping: Three-Pass Sparse Hypercubes, Constructive Lean 4 Moving Viscous Ceiling Proofs, and Supercritical 3D Navier-Stokes Interval Certificates",
+  "upload_type": "software",
+  "description": "Open-source R 4.6.1, Python 3, Z3, and constructive Lean 4.35.0 (Classical.choice == False) verification suite and research manuscript for supercritical unforced 3D Navier-Stokes flows on T^3 (Clay Option B setting, f == 0) and Olga Ladyzhenskaya (1967) shear-thickening dyadic cascades, governed by One Big Consortium Split Sheet #001 (GNU AGPLv3).",
+  "creators": [
+    {
+      "name": "Duguay, Christopher \"Topher\"",
+      "affiliation": "University of Manitoba & Sweetbrier Augmented Intelligence Lab, Winnipeg, MB, Canada"
+    }
+  ],
+  "license": "agpl-3.0-or-later",
+  "keywords": [
+    "3D Navier-Stokes equations",
+    "computer-assisted proof",
+    "interval arithmetic",
+    "Lean 4",
+    "R language",
+    "sparse hypercube",
+    "Cayley-Dickson sedenions",
+    "Ladyzhenskaya viscosity",
+    "Wiener algebra"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://sweetbrier.si/navier",
+      "relation": "isSupplementTo",
+      "scheme": "url"
+    },
+    {
+      "identifier": "https://github.com/VivienSweetbrier/bsa-r",
+      "relation": "isSupplementTo",
+      "scheme": "url"
+    }
+  ]
+}
