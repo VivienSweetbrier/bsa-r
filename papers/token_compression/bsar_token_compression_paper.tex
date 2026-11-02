@@ -1,0 +1,461 @@
+\documentclass[11pt]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage[colorlinks=true,linkcolor=blue!60!black,citecolor=blue!60!black,urlcolor=blue!60!black]{hyperref}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+
+\lstset{
+  basicstyle=\ttfamily\footnotesize,
+  backgroundcolor=\color{gray!8},
+  frame=single,
+  rulecolor=\color{gray!40},
+  breaklines=true,
+  columns=fullflexible,
+  keepspaces=true,
+  showstringspaces=false
+}
+
+\title{\textbf{Deterministic Pre-Context Compression for Multi-Agent Language Model Pipelines via Three-Pass Hilbert Sparse Hypercubes and 64-Byte Fixed-Point Cayley--Dickson Zero-Divisor Algebra}}
+
+\author{
+  Christopher ``Topher'' Duguay (\href{https://orcid.org/0009-0006-8693-6839}{\texttt{0009-0006-8693-6839}})\\
+  \small University of Manitoba, Winnipeg, MB, Canada\\
+  \small \texttt{umdugua2@myumanitoba.ca} \quad|\quad \url{https://doi.org/10.5281/zenodo.23873219}
+}
+
+\date{November 2, 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Multi-agent large language model (LLM) pipelines incur linear $\mathcal{O}(L)$ input-token billing and quadratic $\mathcal{O}(L^2)$ self-attention and key-value (KV) cache overhead when streaming raw reference corpora and JSON Lines (\texttt{JSONL}) execution trajectories into neural context windows, compounded by invoking secondary neural judge models for structural admission filtering and re-executing uncached tool-call subtrees. We introduce the \textbf{\texttt{BSA-R} Three-Pass Hilbert Sparse Hypercube Compiler}, a zero-dependency CPU compilation and relational slicing engine paired with \texttt{64-byte} \texttt{Q8.8} fixed-point \texttt{16D} Sedenion and \texttt{32D} Pathion Cayley--Dickson registers. Each \texttt{PathionQ88} state vector packs $32$ signed 16-bit fixed-point lanes ($2^{-8}$ scale) into a single $64$-byte CPU L1 cache line alongside a $128$-byte bit-packed exclusive-OR (\texttt{XOR}) basis sign lookup table (\texttt{S32}), enabling: (i) a \emph{Pre-Context Zero-Divisor Admission Gate} that annihilates redundant boilerplate channels to literal zero ($G_{\mathrm{adm}} \odot_{8.8} v_{\mathrm{dup}} = 0 \in \mathbb{Z}^{32}$) with bit-exact distributive signal preservation and zero floating-point drift; (ii) \emph{Non-Associative \texttt{32D} Pathion AST Memoization} exploiting broken associativity and broken alternativity at dimension $2^k \ge 16$ to detect re-parenthesized and depth-shifted abstract syntax trees (ASTs) missed by commutative bag-of-vectors caches; and (iii) three-pass $N$-dimensional Hilbert space-filling curve compressed sparse row/column (\texttt{CSR/CSC}) hypercube compilation queried through immutable copy-on-modify Base \texttt{R 4.6.1} functional pipes (\texttt{|>}). Evaluated with exact \texttt{tiktoken:o200k\_base} tokenization across four production workspace chores, \texttt{BSA-R} reduces total suite input volume by $84.60\%$ ($6.49\times$), from $2{,}467{,}118$ to $380{,}027$ tokens, achieving a $99.87\%$ ($782.0\times$) reduction across corpus cross-referencing, trajectory telemetry, and pre-context admission chores ($1{,}585{,}118 \to 2{,}027$ tokens) and executing zero-divisor admission checks in $35.12~\mu\mathrm{s}$ on CPU at $0$ LLM token cost. Longitudinal re-evaluation on an expanded multi-agent trajectory ($+40.1\%$ byte growth) increases suite-wide compression to $84.77\%$ ($2{,}494{,}872 \to 380{,}083$ tokens; $30.14~\mu\mathrm{s}$ gate latency), cross-validated bit-for-bit in Base \texttt{R 4.6.1}.
+\end{abstract}
+
+\section{Introduction and Related Work}\label{sec:intro}
+
+Modern multi-agent software engineering, scientific auditing, and document concordance harnesses routinely treat the Transformer context window~\cite{vaswani2017attention} as a general-purpose relational execution engine. In a typical workflow, an orchestrator serializes megabyte-scale primary corpora or hundreds of kilobytes of multi-agent \texttt{JSONL} interaction logs directly into prompt text to perform multi-attribute filtering, cross-table joins, or telemetry aggregation. Simultaneously, control-plane harnesses frequently invoke auxiliary ``LLM-as-a-judge'' calls on every reasoning step to filter prompt boilerplate or enforce structural guardrails, and issue $5\times$--$10\times$ stochastic temperature retries whenever a tool-calling agent enters a repetitive execution basin.
+
+This architectural pattern creates severe computational and epistemic bottlenecks across both the data plane and the control plane:
+\begin{enumerate}
+  \item \textbf{Prefill Complexity and KV-Cache Footprint:} Standard causal self-attention over a sequence of length $L$ requires $\mathcal{O}(L^2 d)$ arithmetic operations during prefill and $\mathcal{O}(L)$ high-bandwidth GPU memory for KV-cache storage~\cite{vaswani2017attention}. Hardware-aware attention kernels such as \texttt{FlashAttention}~\cite{dao2022flashattention} eliminate intermediate $\mathcal{O}(L^2)$ HBM materializations via SRAM tiling, and virtualized block allocators such as \texttt{PagedAttention}~\cite{kwon2023vllm} eliminate KV-cache memory fragmentation. However, both operate \emph{downstream} of tokenization: when $99\%$ of an injected $250{,}000$-token prompt consists of rows irrelevant to a structured query, exact GPU attention still computes quadratic interactions over every unpruned token and bills the caller for the entire $\mathcal{O}(L)$ input payload.
+  \item \textbf{Pre-Compression Inference Overhead and Epistemic Fragility in Neural Pruning:} Perplexity-driven token pruning methods such as \texttt{LLMLingua}~\cite{jiang2023llmlingua} and \texttt{LongLLMLingua}~\cite{jiang2024longllmlingua} run a smaller auxiliary causal language model over the raw prompt to estimate token-level self-information prior to forwarding compressed text to a frontier model. While effective for natural-language prose summarization, neural prompt pruning still incurs $\mathcal{O}(L)$ neural forward passes before compression, lacks cryptographic provenance receipts, and introduces a non-zero probability of deleting exact line identifiers, numerical weights, or schema delimiters required for deterministic auditing.
+  \item \textbf{Associative Collapse in Dense Retrieval and Embedding Caches:} Retrieval-augmented generation (RAG)~\cite{lewis2020rag} bounds prompt length by retrieving top-$k$ dense embedding chunks via inner-product similarity. Yet dense vector similarity cannot execute exact relational group-by roll-ups, anti-echo cluster deduplication, or existential middle-term projections~\cite{codd1970relational,gray1997datacube}. Worse, when mean-pooled or summed vector embeddings are used as semantic memoization keys for agent tool-call trees, vector addition is both commutative ($A + B = B + A$) and associative ($(A + B) + C = A + (B + C)$), rendering such caches blind to argument transpositions and parenthetical execution-order spoofs.
+\end{enumerate}
+
+To eliminate redundant token transmission before any neural API or GPU prefill is invoked, we draw on three mature domains outside neural sequence modeling: sparse tensor compilation, space-filling multidimensional indexing, and deterministic fixed-point systems programming. In high-performance scientific computing, the Tensor Algebra Compiler (\texttt{TACO})~\cite{kjolstad2017taco} and sparse matrix libraries in \texttt{R}~\cite{ihaka1996r,bates2000matrix} store only nonzero support coordinates in compressed sparse row and column (\texttt{CSR/CSC}) formats, while $N$-dimensional Hilbert space-filling curves~\cite{hilbert1891,moon2001hilbert} map multidimensional integer coordinates onto one-dimensional contiguous arrays with strong spatial locality. In parallel, multipass 16-bit \texttt{W65C816S} macro assemblers---culminating in \texttt{Asar}---resolve sparse memory-bank allocations in three deterministic passes (Pass~0 symbol discovery $\to$ Pass~1 layout sizing $\to$ Pass~2 zero-drift convergence verification) while representing physical quantities in 16-bit signed \texttt{Q8.8} fixed-point integers ($2^{-8}$ resolution) to prevent IEEE-754 floating-point rounding drift~\cite{goldberg1991float}.
+
+\paragraph{Contributions.} We synthesize these principles in the \textbf{\texttt{BSA-R} Three-Pass Hilbert Sparse Hypercube Compiler} (\texttt{bsar}), making four technical contributions:
+\begin{enumerate}
+  \item \textbf{Single-Cache-Line \texttt{Q8.8} Cayley--Dickson Zero-Divisor Kernel (Section~\ref{sec:algebra}):} We formalize \texttt{PathionQ88}, a $64$-byte ($32 \times \mathtt{int16}$) fixed-point representation of \texttt{16D} Sedenions and \texttt{32D} Pathions~\cite{dickson1919,schafer1954,moreno1998,demarrais2000,demarrais2002} paired with a $128$-byte bit-packed \texttt{XOR} sign lookup table (\texttt{S32}), occupying $192\text{ bytes}$ ($3$ CPU L1 cache lines, $64\times$ smaller than a $4{,}096$-byte dense \texttt{FP32} $32\times 32$ routing matrix). We prove that our \emph{Pre-Context Zero-Divisor Admission Gate} annihilates paired boilerplate blades to $64$ literal \texttt{0x00} bytes while preserving orthogonal task signal bit-for-bit, and supplies $7$ octahedral Box-Kite zero-divisor escape operators replacing blind temperature retries.
+  \item \textbf{Non-Associative and Non-Alternative \texttt{32D} Pathion AST Memoization (Section~\ref{sec:ast}):} Because Cayley--Dickson algebras of dimension $2^k \ge 16$ break commutativity, associativity, and alternativity~\cite{schafer1954}, recursive left-to-right \texttt{PathionQ88} tree folding yields a $64$-byte structural memoization key that distinguishes both parenthetical regroupings $((A, B), C) \neq (A, (B, C))$ and repeated-leaf depth shifts $((B, B), C) \neq (B, (B, C))$ with $100.0\%$ empirical accuracy across $240$ tool-call ASTs.
+  \item \textbf{Three-Pass Hilbert \texttt{CSR/CSC} Hypercube Compiler and Base \texttt{R} Functional Pipe Algebra (Section~\ref{sec:hypercube}):} Using Lua-inspired dynamic ragged records (\texttt{LuaDynamicRecord})~\cite{ierusalimschy1996lua}, \texttt{BSA-R} compiles sparse multi-axis corpora and \texttt{JSONL} logs in three passes with a strict Pass-2 cardinality lock ($\Delta_{\mathrm{pass}} = 0$) and canonical \texttt{SHA-256} provenance seal, exposing $\mathcal{O}(1)$-indexed relational verbs (\texttt{filter\_eq}, \texttt{inner\_join}, Carrollian existential axis elimination \texttt{eliminate\_axis}, and anti-echo \texttt{rollup\_slice}) interoperable with Base \texttt{R 4.6.1} pipes (\texttt{|>})~\cite{ihaka1996r,wickham2019tidyverse}.
+  \item \textbf{Reproducible \texttt{o200k\_base} Empirical Audit (Section~\ref{sec:eval}):} Across four real workspace chores tokenized with \texttt{tiktoken:o200k\_base}, \texttt{BSA-R} eliminates $84.60\%$--$84.77\%$ of suite-wide input tokens ($99.87\%$ / $782\times$ on data, telemetry, and admission chores) with microsecond-to-millisecond CPU latency and independent Base \texttt{R 4.6.1} verification.
+\end{enumerate}
+
+\section{Mathematical Preliminaries: \texttt{Q8.8} \texttt{16D}/\texttt{32D} Zero-Divisor Gates and Non-Associative AST Hashing}\label{sec:algebra}
+
+\subsection{The Cayley--Dickson Doubling Tower and \texttt{64-Byte} \texttt{PathionQ88} Registers}
+
+Let $\mathbb{A}_0 = \mathbb{R}$, and for each integer $k \ge 1$ define the $2^k$-dimensional real Cayley--Dickson algebra $\mathbb{A}_k = \mathbb{A}_{k-1} \oplus \mathbb{A}_{k-1}$ via recursive involution (conjugation) and bilinear multiplication~\cite{dickson1919,schafer1954}:
+\begin{equation}\label{eq:cd_rec}
+  (a, b)^* := (a^*, -b), \qquad (a, b)(c, d) := \bigl(ac - d^* b,\; da + b c^*\bigr), \qquad a,b,c,d \in \mathbb{A}_{k-1},
+\end{equation}
+with $x^* = x$ on $\mathbb{A}_0$. Each doubling sacrifices an algebraic symmetry: $\mathbb{A}_1 = \mathbb{C}$ loses total ordering; $\mathbb{A}_2 = \mathbb{H}$ (quaternions) loses commutativity; $\mathbb{A}_3 = \mathbb{O}$ (octonions) loses associativity while remaining alternative ($x(xy) = (xx)y$ and $(yx)x = y(xx)$); and for $k \ge 4$---specifically the \texttt{16D} Sedenions $\mathbb{S} = \mathbb{A}_4$ and \texttt{32D} Pathions $\mathbb{P} = \mathbb{A}_5$---the algebra loses both alternativity and the division-ring property, acquiring structured manifolds of nontrivial zero divisors~\cite{schafer1954,moreno1998,demarrais2000,demarrais2002}.
+
+IEEE-754 binary32/binary64 floating-point arithmetic is non-associative under addition and sensitive to FMA contraction and SIMD reduction order across CPU microarchitectures~\cite{goldberg1991float}, which can perturb exact zero-divisor phase cancellation into small nonzero residuals ($\sim 10^{-16}$). To guarantee cross-platform bit-exactness across Python, \texttt{R}, WebAssembly, and embedded pipelines while fitting a complete \texttt{32D} hypercomplex vector inside a single $64$-byte CPU L1 cache line, we quantize $\mathbb{A}_5$ over signed 16-bit \texttt{Q8.8} fixed-point integers.
+
+\begin{definition}[\texttt{64-Byte} \texttt{PathionQ88} Register]\label{def:pathion_q88}
+Let $Q_{\min} = -32768$, $Q_{\max} = 32767$, and unit scale $Q_1 = 256$ ($2^{-8} = 0.00390625$ step resolution, dynamic range $[-128.0000, +127.9961]$). A \texttt{PathionQ88} element is an immutable 32-tuple
+\begin{equation}
+  x = (x_0, x_1, \dots, x_{31}) \in \mathcal{Q}_{8.8}^{32} := [Q_{\min}, Q_{\max}]_{\mathbb{Z}}^{32},
+\end{equation}
+serialized in little-endian two's-complement format (\texttt{struct.pack("<32h", *x)}) as exactly $32 \times 2 = 64\text{ bytes}$ ($1$ standard L1 cache line). Real scalars $\alpha \in \mathbb{R}$ lift into \texttt{Q8.8} via $\mathrm{q88}(\alpha) := \max\!\bigl(Q_{\min}, \min(Q_{\max}, \lfloor \alpha Q_1 + 0.5 \rfloor)\bigr)$ (using round-to-nearest), with canonical basis elements $E_i^{(s)} := s\, e_i \in \mathcal{Q}_{8.8}^{32}$ ($s = Q_1$ by default). Notice that any \texttt{16D} Sedenion embeds isomorphically into the lower $16$ lanes $(x_0, \dots, x_{15}, 0, \dots, 0) \in \mathcal{Q}_{8.8}^{32}$.
+\end{definition}
+
+\begin{proposition}[Bitwise \texttt{XOR} Basis Product and $128$-Byte Sign Table \texttt{S32}]\label{prop:xor_lut}
+Let $\{e_0, e_1, \dots, e_{31}\}$ denote the canonical basis of $\mathbb{A}_5$ generated by~\eqref{eq:cd_rec}. For all $0 \le i, j < 32$,
+\begin{equation}\label{eq:xor_basis}
+  e_i e_j = S_{i,j}\, e_{i \oplus j}, \qquad S_{i,j} \in \{-1, +1\},
+\end{equation}
+where $\oplus$ denotes bitwise exclusive-OR on 5-bit indices. Encoding $S_{i,j}$ as single bits $b_{32i + j} = \mathbb{I}[S_{i,j} = -1]$ packs the entire $32 \times 32 = 1{,}024$-entry multiplication table into $1{,}024\text{ bits} = 128\text{ bytes}$ ($2$ CPU L1 cache lines). Defining the sign-symmetric fixed-point shift $\mathcal{T}_{256} : \mathbb{Z} \to [Q_{\min}, Q_{\max}]_{\mathbb{Z}}$ by
+\begin{equation}\label{eq:trunc_256}
+  \mathcal{T}_{256}(a) := \begin{cases}
+    0, & a = 0, \\
+    \min\!\bigl(Q_{\max},\, \lfloor (a + 128) / 256 \rfloor\bigr), & a > 0, \\
+    \max\!\bigl(Q_{\min},\, -\lfloor (-a + 128) / 256 \rfloor\bigr), & a < 0,
+  \end{cases}
+\end{equation}
+the \texttt{Q8.8} Pathion product $x \odot_{8.8} y \in \mathcal{Q}_{8.8}^{32}$ has $k$-th lane ($0 \le k < 32$):
+\begin{equation}\label{eq:cd_mult_q88}
+  (x \odot_{8.8} y)_k = \mathcal{T}_{256}\!\left(\sum_{i=0}^{31} S_{i, i \oplus k}\, x_i\, y_{i \oplus k}\right) = \mathcal{T}_{256}\!\left(\sum_{(i,j) : i \oplus j = k} S_{i,j}\, x_i\, y_j\right).
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+Equation~\eqref{eq:xor_basis} follows by induction on the doubling step $k$ in~\eqref{eq:cd_rec}: splitting 5-bit indices into most-significant half-bit and 4-bit offset maps each block product $(ac, -d^*b, da, bc^*)$ onto $(i \oplus j)$ with unit sign $\pm 1$. Because $j \mapsto i \oplus j$ is a bijection on $\{0,\dots,31\}$ for every fixed $i$, substituting $j = i \oplus k$ collects all pairs contributing to $e_k$ into the exact 64-bit integer accumulator $\mathrm{acc}_k = \sum_{i=0}^{31} S_{i, i \oplus k} x_i y_{i \oplus k}$ prior to a single symmetric rounding shift $\mathcal{T}_{256}(\mathrm{acc}_k)$.
+\end{proof}
+
+Notably, whereas a dense $32 \times 32$ single-precision (\texttt{FP32}) linear router requires $32 \times 32 \times 4 = 4{,}096\text{ bytes}$, a \texttt{PathionQ88} state register requires $64\text{ bytes}$ ($64.0\times$ state compression) and the combined register-plus-\texttt{S32} kernel occupies $64 + 128 = 192\text{ bytes}$ ($3$ L1 cache lines). Moreover, active-lane sparse iteration ($\{i : x_i \neq 0\} \times \{j : y_j \neq 0\}$ in \texttt{cd\_mult\_q88}) reduces sparse blade multiplications to $4$ integer multiply-accumulates.
+
+\subsection{Box-Kite Zero-Divisor Geometry and the Pre-Context Admission Gate}
+
+Following Moreno~\cite{moreno1998} and de~Marrais~\cite{demarrais2000,demarrais2002}, a primitive \emph{assessor} in the \texttt{16D} Sedenion subalgebra $\mathbb{S} \subset \mathbb{P}$ is a 2-plane spanned by $(e_i, e_j)$ where $i \in \{1,\dots,7\}$ is an octonion imaginary index and $j \in \{8,\dots,15\}$ is a sedenion imaginary index excluding the pure octonion-doubling partner $j = i \oplus 8$ (since $e_i$ and $e_{i \oplus 8}$ span an associative quaternion subalgebra free of zero divisors). There are therefore $7 \times (8 - 2) = 42$ primitive assessors (as $j = 8 = e_8$ also pairs only trivially). Two unit diagonal blades $u = e_i + e_j$ and $v = e_k + \sigma e_l$ ($\sigma \in \{-1, +1\}$, $i \neq k$) annihilate ($u \cdot v = 0$) if and only if their cross-terms land on identical \texttt{XOR} target lanes with opposite signs:
+\begin{equation}\label{eq:zd_cond}
+  i \oplus k = j \oplus l, \qquad S_{i,k} + \sigma S_{j,l} = 0, \qquad \sigma S_{i,l} + S_{j,k} = 0.
+\end{equation}
+
+Exhaustive constructive evaluation of~\eqref{eq:zd_cond} over \texttt{S32} (\texttt{enumerate\_sedenion\_box\_kites} in \texttt{bsar/cd\_q88.py} and \texttt{validate\_bsar\_cd.R}) yields \textbf{$42$ active assessors} linked by \textbf{$168$ directed zero-divisor annihilation edges} (matching the order of the Klein quartic automorphism group $|\mathrm{PSL}(2,7)| = 168$), which decompose into \textbf{$7$ connected octahedral components} (\emph{Box-Kites}) of $6$ assessor vertices each. Extending to \texttt{32D} Pathions ($\mathbb{P} = \mathbb{A}_5$) preserves all $7$ embedded Sedenion Box-Kites while introducing higher-dimensional ``Sand Mandala'' zero divisors~\cite{demarrais2002}, such as $(e_1 + e_{18})(e_4 - e_{23}) = 0$.
+
+\begin{theorem}[Exact \texttt{Q8.8} Bloat Annihilation and Distributive Signal Invariance]\label{thm:admission_gate}
+Let $(i, j)$ and $(k, l, \sigma)$ be any canonical Box-Kite zero-divisor partner pair satisfying~\eqref{eq:zd_cond} with $1 \le i, k \le 7$, $9 \le j, l \le 15$, and $j \neq i \oplus 8$, $l \neq k \oplus 8$ (for instance, Box-Kite~\#1: $(i, j) = (1, 10)$ and $(k, l, \sigma) = (4, 15, -1)$). Define the Pre-Context Zero-Divisor Admission Gate (\texttt{PorchZeroDivisorGate}) operator $G_{\mathrm{adm}} := Q_1(e_i + e_j) \in \mathcal{Q}_{8.8}^{32}$. For any scalar task signal amplitude $q_s \in [-16383, 16383]_{\mathbb{Z}}$ placed on the real identity lane $s = q_s e_0$ and any redundant/duplicate boilerplate amplitude $q_b \in [Q_{\min}, Q_{\max}]_{\mathbb{Z}}$ placed on the partner blade $v_{\mathrm{dup}} = q_b(e_k + \sigma e_l)$:
+\begin{enumerate}
+  \item \textbf{Exact 64-Byte Annihilation:} $G_{\mathrm{adm}} \odot_{8.8} v_{\mathrm{dup}} = (0, 0, \dots, 0) \in \mathbb{Z}^{32}$.
+  \item \textbf{Bit-Exact Distributive Signal Invariance:} Provided $|q_s| \le Q_{\max}$,
+  \begin{equation}\label{eq:signal_invariance}
+    G_{\mathrm{adm}} \odot_{8.8} (s + v_{\mathrm{dup}}) = G_{\mathrm{adm}} \odot_{8.8} s = q_s(e_i + e_j) \in \mathcal{Q}_{8.8}^{32},
+  \end{equation}
+  so the filtered $64$-byte output is bit-for-bit invariant to $q_b$ across its entire dynamic range.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+In~\eqref{eq:cd_mult_q88}, multiplying $G_{\mathrm{adm}} = Q_1(e_i + e_j)$ by $s + v_{\mathrm{dup}} = q_s e_0 + q_b(e_k + \sigma e_l)$ produces unshifted integer accumulators supported on at most four target indices:
+\begin{itemize}
+  \item Target lanes $i \oplus 0 = i$ and $j \oplus 0 = j$ receive $Q_1 S_{i,0} q_s = 256 q_s$ and $Q_1 S_{j,0} q_s = 256 q_s$ because $S_{m,0} = +1$ for all $m$.
+  \item Target lane $t_1 := i \oplus k = j \oplus l$ receives $Q_1 q_b (S_{i,k} + \sigma S_{j,l}) = 0$ by~\eqref{eq:zd_cond}.
+  \item Target lane $t_2 := i \oplus l = j \oplus k$ receives $Q_1 q_b (\sigma S_{i,l} + S_{j,k}) = 0$ by~\eqref{eq:zd_cond}.
+\end{itemize}
+Because $S_{i,k} + \sigma S_{j,l} = 0$ and $\sigma S_{i,l} + S_{j,k} = 0$ hold over $\mathbb{Z}$, the $v_{\mathrm{dup}}$ contribution cancels identically in the unshifted integer accumulators prior to applying $\mathcal{T}_{256}$ (and moreover $\{t_1, t_2\} \cap \{i, j\} = \emptyset$ since $k, l \neq 0$ and $l \notin \{0, i \oplus j\}$). Setting $q_s = 0$ gives $\mathrm{acc}_m = 0$ for all $m \in \{0,\dots,31\}$, and since $\mathcal{T}_{256}(0) = 0$, $G_{\mathrm{adm}} \odot_{8.8} v_{\mathrm{dup}} = 0 \in \mathbb{Z}^{32}$. For general $|q_s| \le Q_{\max}$, $\mathrm{acc}_i = \mathrm{acc}_j = 256 q_s$ and $\mathrm{acc}_m = 0$ otherwise, whence $\mathcal{T}_{256}(256 q_s) = q_s$, establishing~\eqref{eq:signal_invariance}.
+\end{proof}
+
+To guarantee strict operational reversibility, \texttt{filter\_with\_clutch} caches the raw pre-gate $64$-byte frame alongside the post-gate output (\texttt{clutch\_rollback\_64b}), allowing zero-loss audit inspection while eliminating $2{,}500$-token neural guardrail invocations per step. Furthermore, iterating over all $7$ Box-Kites yields $7$ mutually distinct deterministic zero-divisor escape operators ($z_m \odot_{8.8} w_m = 0$, $m = 1,\dots,7$), replacing $5\times$ blind stochastic LLM temperature retries with a single orthogonal basin hop when an agent loop stalls.
+
+\subsection{Non-Associative \texttt{32D} Pathion AST Memoization}\label{sec:ast}
+
+Consider an agent orchestrator executing composite tool-call DAGs or expression ASTs such as $T_{\mathrm{left}} = ((A, B), C)$ versus $T_{\mathrm{right}} = (A, (B, C))$, or repeated-tool depth variants $U_{\mathrm{left}} = ((B, B), C)$ versus $U_{\mathrm{right}} = (B, (B, C))$. An additive bag-of-embeddings baseline $\Sigma_{\mathrm{bag}}(T) = \sum_{\tau \in \mathrm{leaves}(T)} \psi(\tau)$ satisfies both commutativity and associativity, causing $\Sigma_{\mathrm{bag}}(T_{\mathrm{left}}) \equiv \Sigma_{\mathrm{bag}}(T_{\mathrm{right}})$ and $\Sigma_{\mathrm{bag}}(U_{\mathrm{left}}) \equiv \Sigma_{\mathrm{bag}}(U_{\mathrm{right}})$ (false-positive cache collisions that return stale results from a differently ordered execution plan). Even non-commutative quaternion ($\mathbb{H}$) folding fails on $T_{\mathrm{left}}$ vs.\ $T_{\mathrm{right}}$ because $\mathbb{H}$ is associative, and octonion ($\mathbb{O}$) folding fails on $U_{\mathrm{left}}$ vs.\ $U_{\mathrm{right}}$ because $\mathbb{O}$ is alternative: $(b \cdot b) \cdot c = b \cdot (b \cdot c)$ for all $b, c \in \mathbb{O}$~\cite{schafer1954}.
+
+In \texttt{BSA-R}, each leaf symbol $\tau \in \Sigma^*$ is lifted into a full-support \texttt{32D} \texttt{PathionQ88} vector (\texttt{leaf\_token\_to\_pathion\_q88}) using the 32-byte \texttt{SHA-256} digest $(d_0, \dots, d_{31}) = \mathrm{SHA256}(\tau)$~\cite{merkle1988digital}:
+\begin{equation}\label{eq:leaf_lift}
+  \tilde{c}_r(\tau) = \begin{cases}
+    2(d_r - 128), & d_r \neq 128, \\
+    +64, & d_r = 128 \text{ and } r \text{ even}, \\
+    -64, & d_r = 128 \text{ and } r \text{ odd},
+  \end{cases}
+  \qquad \psi(\tau) = \mathcal{N}_\infty\bigl(\tilde{c}(\tau)\bigr),
+\end{equation}
+where the integer $L_\infty$ peak normalizer $\mathcal{N}_\infty(x)_r := \mathrm{round}\bigl(Q_1 x_r / \max_m |x_m|\bigr)$ (for $x \neq 0$) keeps every intermediate fold bounded at peak magnitude $Q_1 = 256$, preventing both 16-bit integer overflow and multi-depth underflow to zero. An internal AST tuple $T = (T_1, T_2, \dots, T_m)$ ($m \ge 2$) is folded left-to-right via \texttt{fold\_ast\_q88}:
+\begin{equation}\label{eq:ast_fold}
+  \Phi(\tau) := \psi(\tau), \qquad \Phi\bigl((T_1, \dots, T_m)\bigr) := \mathcal{N}_\infty\!\Bigl(\cdots \mathcal{N}_\infty\bigl(\Phi(T_1) \odot_{8.8} \Phi(T_2)\bigr) \cdots \odot_{8.8} \Phi(T_m)\Bigr).
+\end{equation}
+Because $\psi(\tau)$ populates all $32$ Pathion coordinates with nonzero signed entries ($|\tilde{c}_r| \ge 2$), non-commutativity ($A \odot_{8.8} B \neq B \odot_{8.8} A$), non-associativity ($[A, B, C]_{8.8} := (A \odot_{8.8} B) \odot_{8.8} C - A \odot_{8.8} (B \odot_{8.8} C) \neq 0$), and broken alternativity ($(B \odot_{8.8} B) \odot_{8.8} C \neq B \odot_{8.8} (B \odot_{8.8} C)$) engage simultaneously at every interior node, yielding a compact $64$-byte structural cache key.
+
+\section{Three-Pass Hilbert \texttt{CSR/CSC} Hypercube Compilation and \texttt{R} Pipe Algebra}\label{sec:hypercube}
+
+\subsection{Three-Pass Assembler Architecture (\texttt{Pass 0} $\to$ \texttt{Pass 1} $\to$ \texttt{Pass 2})}
+
+Let $\mathcal{A} = (A_1, \dots, A_D)$ be an ordered $D$-tuple of discrete relational or epistemic axes. Naive multidimensional array materialization allocates $\prod_{d=1}^D |V_d|$ cells, which becomes prohibitive on sparse multi-agent logs and cross-referenced text corpora. Generalizing the three-pass symbol-resolution pipeline of \texttt{Asar} and \texttt{TACO}'s sparse level formats~\cite{kjolstad2017taco}, \texttt{BsaRHypercubeCompiler} executes three deterministic CPU passes:
+
+\begin{enumerate}
+  \item \textbf{Pass 0 (Dynamic Ragged Support Discovery via \texttt{LuaDynamicRecord}):} Modeled on Lua's minimal associative table representation~\cite{ierusalimschy1996lua}, each input entity $r$ instantiates a \texttt{LuaDynamicRecord} holding arbitrary key-value metadata \texttt{attrs} and only its attested sparse coordinate cells $c \in \mathcal{E}_r$. Each cell carries axis values $(c[A_1], \dots, c[A_D])$, quantized weight $w_{8.8} = \mathrm{q88}(w)$, anti-echo provenance identifier \texttt{cluster\_id}, and a four-valued epistemic state $\mathrm{state}(c) \in \{0, 1, ?, *\}$ (\texttt{CONTRADICTED\_ZERO}, \texttt{ATTESTED\_ONE}, \texttt{OPEN\_UNKNOWN}, \texttt{PROJECTED\_STAR}). Iterating over sorted record identifiers computes each record's $64$-byte \texttt{PathionQ88} attribute-AST fingerprint and collects active axis vocabularies $V_d$ with sorted ordinal bijections $\omega_d : V_d \to \{0, \dots, |V_d| - 1\}$. Each cell is assigned an $N$-dimensional Hilbert key~\cite{hilbert1891,moon2001hilbert} $h(c) = H_D\bigl(\omega_1(c[A_1]), \dots, \omega_D(c[A_D])\bigr)$ by folding pairwise 2D Hilbert indices $H_2 : \{0,\dots,2^{16}-1\}^2 \to \mathbb{Z}_{\ge 0}$ on a $65{,}536 \times 65{,}536$ power-of-two grid.
+  \item \textbf{Pass 1 (Hilbert Locality Ordering and Multi-Axis \texttt{CSR/CSC} Inverted Indices):} The sparse cell array $\mathcal{E}^{(0)}$ is sorted by the total lexicographic key
+  \begin{equation}
+    \kappa(c) := \bigl(h(c),\; (c[A_1], \dots, c[A_D]),\; c[\mathtt{record\_id}]\bigr),
+  \end{equation}
+  yielding the contiguous Hilbert-ordered slab $\mathcal{E}^{(1)} = (c_0, c_1, \dots, c_{M-1})$. A single linear sweep over $\mathcal{E}^{(1)}$ populates per-axis inverted posting lists $I_d(v) = \{idx \in \{0,\dots,M-1\} : c_{idx}[A_d] = v\}$ for every $d \in \{1,\dots,D\}$ and $v \in V_d$, equivalent to compressed sparse row/column (\texttt{CSR/CSC}) offset-index tables across all $D$ hypercube modes simultaneously.
+  \item \textbf{Pass 2 (Zero-Drift Convergence Lock and Cryptographic \texttt{SHA-256} Seal):} Pass~2 enforces the multipass cardinality invariant
+  \begin{equation}\label{eq:pass_drift}
+    \Delta_{\mathrm{pass}} := \bigl||\mathcal{E}^{(1)}| - |\mathcal{E}^{(0)}|\bigr| = 0,
+  \end{equation}
+  aborting compilation if $\Delta_{\mathrm{pass}} \neq 0$, records the exact count of avoided empty Cartesian cells $\prod_{d=1}^D \max(1, |V_d|) - M$, and seals the canonically sorted JSON hypercube under a deterministic digest \texttt{rats\_sha256}.
+\end{enumerate}
+
+\subsection{Copy-on-Modify Relational Pipe Algebra and Carrollian Projection}
+
+Queries against a compiled slab execute through an immutable copy-on-modify pipeline \texttt{RPipe} (mirroring Base \texttt{R}'s native \texttt{|>} operator and \texttt{dplyr} relational verbs~\cite{ihaka1996r,wickham2019tidyverse}):
+\begin{equation}\label{eq:pipe_chain}
+  \mathcal{S} \;\texttt{|>} \; \mathtt{filter\_eq} \;\texttt{|>} \; \mathtt{inner\_join} \;\texttt{|>} \; \mathtt{eliminate\_axis} \;\texttt{|>} \; \mathtt{rollup\_slice} \;\texttt{|>} \; \mathtt{to\_compact\_prompt\_table}.
+\end{equation}
+Four algebraic properties distinguish~\eqref{eq:pipe_chain} from ad-hoc text chunking:
+\begin{itemize}
+  \item \textbf{$\mathcal{O}(1)$-Indexed Multi-Axis Selection (\texttt{filter\_eq}):} Given equality constraints $\{A_d = v_d\}_{d \in Q}$ on a compiled slab, \texttt{filter\_eq} intersects the precomputed Pass-1 posting sets $\bigcap_{d \in Q} I_d(v_d)$ directly without scanning unrelated corpus blocks, materializing only matching cells in sorted Hilbert order.
+  \item \textbf{Keyed Relational Enrichment (\texttt{inner\_join}):} Joins sparse cells against external dictionary tables on a shared key without mutating upstream frames.
+  \item \textbf{Carrollian Existential Middle-Term Projection (\texttt{eliminate\_axis}, $\exists m$):} Inspired by Lewis Carroll's biliteral and triliteral diagram elimination of syllogistic middle terms, eliminating axis $A_m$ over retained key axes $K \subset \mathcal{A} \setminus \{A_m\}$ groups cells by $\pi_K(c)$, marks $c'[A_m] \leftarrow \text{\texttt{"*"}}$ (\texttt{PROJECTED\_STAR}), aggregates the eliminated coordinate witnesses into a lossless audit list $\mathtt{expanded\_}A_m = [v_1, v_2, \dots]$ (preserving full operational reversibility), and computes the tropical max-weight envelope $w'_{8.8}(g) = \max_{c : \pi_K(c) = g} w_{8.8}(c)$.
+  \item \textbf{Anti-Echo Integer \texttt{Q8.8} OLAP Roll-Up (\texttt{rollup\_slice}):} Standard OLAP \texttt{GROUP BY SUM}~\cite{gray1997datacube} over agent logs or cross-referenced corpora suffers from ``citation echo'' when an interval spread or multi-step retry emits multiple cells sharing a single underlying provenance cluster. Within each group tuple $g$ over axes $G \subseteq \mathcal{A}$, \texttt{rollup\_slice} filters to attested cells ($\mathrm{state}(c) = \text{\texttt{"1"}}$), deduplicates within each \texttt{cluster\_id} $\gamma$ via $w^*(g, \gamma) = \max_{c \in g,\, \mathrm{cid}(c)=\gamma} w_{8.8}(c)$, sums $W_{8.8}(g) = \sum_{\gamma} w^*(g, \gamma)$ in exact integers (eliminating floating-point summation-order non-determinism), and emits compact Markdown/TSV slices via \texttt{to\_compact\_prompt\_table}.
+\end{itemize}
+
+Listing~\ref{lst:r_verbs} illustrates the corresponding zero-dependency Base \texttt{R 4.6.1} implementation of the \texttt{Q8.8} \texttt{32D} Pathion product and expense-auditing pipe verb (\texttt{r/validate\_bsar\_cd.R} and \texttt{r/cayley\_dickson\_verbs.R}).
+
+\begin{lstlisting}[language=R,caption={Base \texttt{R 4.6.1} \texttt{Q8.8} \texttt{32D} Pathion \texttt{XOR} product and functional pipe audit (\texttt{r/validate\_bsar\_cd.R}, \texttt{r/cayley\_dickson\_verbs.R}).},label={lst:r_verbs}]
+trunc_q88 <- function(acc) {
+  ifelse(acc == 0L, 0L,
+    ifelse(acc > 0L, bitwShiftR(acc + 128L, 8L), -bitwShiftR((-acc) + 128L, 8L)))
+}
+
+cd_mult_q88 <- function(x, y) {
+  vapply(0:31, function(k) {
+    j <- bitwXor(0:31, k) + 1L
+    acc <- sum(as.integer(x) * as.integer(y[j]) * S32[cbind(1:32, j)])
+    as.integer(trunc_q88(acc))
+  }, integer(1))
+}
+
+# Verify native 32D Pathion zero divisor (e_1 + e_18) * (e_4 - e_23) == 0 in Q8.8:
+u32 <- e_basis(1L) + e_basis(18L)
+v32 <- e_basis(4L) - e_basis(23L)
+stopifnot(all(cd_mult_q88(u32, v32) == 0L))
+\end{lstlisting}
+
+\section{Empirical Evaluation on \texttt{o200k\_base} Workloads}\label{sec:eval}
+
+\subsection{Benchmark Suite and Experimental Protocol}
+
+We evaluate \texttt{BSA-R} using the reproducible benchmark harness \texttt{bsar/chore\_bench.py} on a standard Windows x86-64 workstation running Python~3.14 and Base \texttt{R 4.6.1}, measuring exact Byte-Pair Encoding (BPE) token counts via OpenAI's production \texttt{tiktoken:o200k\_base} tokenizer across four representative multi-agent workloads:
+\begin{enumerate}
+  \item \textbf{Chore 1 (\texttt{CHORE\_1\_CORPUS\_5Q} --- $1.13\text{ MB}$ Primary Corpus 5-Query Cross-Reference):} Analytical lookup across a $1{,}134{,}681$-byte ($20{,}061$-line, $253{,}531$-\texttt{o200k\_base}-token) English doctrinal reference corpus (\texttt{rc-en.txt}). A naive full-context agent harness streams the raw corpus across $5$ analytical topic queries ($5 \times 253{,}531 = 1{,}267{,}655$ input tokens). \texttt{BSA-R} segments the text into $250$-line blocks indexed over $D = 3$ axes (\texttt{pillar}, \texttt{topic\_tag}, \texttt{chunk\_band}), compiles a three-pass Hilbert slab once, and executes \texttt{filter\_eq |> eliminate\_axis("chunk\_band") |> to\_compact\_prompt\_table(max\_rows=8)} per query.
+  \item \textbf{Chore 2 (\texttt{CHORE\_2\_TRANSCRIPT\_AUDIT} --- Multi-Agent \texttt{transcript.jsonl} Telemetry and Compaction):} Observability and token-spend rollup over a real multi-agent execution log (\texttt{transcript.jsonl}) indexed over $D = 4$ axes (\texttt{source}, \texttt{step\_type}, \texttt{tool\_name}, \texttt{status}) with step output kilotokens stored in \texttt{Q8.8}. We evaluate \emph{two} exported longitudinal snapshots of this live workspace trajectory: \textbf{Snapshot~A} (\texttt{dist/cerebral\_valley\_benchmark.json}, $223{,}758\text{ bytes}$, $67{,}463$ raw tokens) and \textbf{Snapshot~B} (\texttt{docs/compiler-hud/cerebral\_valley\_benchmark.json}, $313{,}410\text{ bytes}$, $95{,}217$ raw tokens after $+40.1\%$ trajectory growth).
+  \item \textbf{Chore 3 (\texttt{CHORE\_3\_PORCH\_ZD\_FIREWALL} --- 100-Step Pre-Context Zero-Divisor Admission Gate):} Evaluates $100$ agent control-plane steps in which a standard harness invokes a $2{,}500$-token LLM guardrail/filter prompt per step ($250{,}000$ tokens total) versus \texttt{PorchZeroDivisorGate} ($1{,}000$ timed \texttt{Q8.8} iterations on mixed signal $\alpha = 3.25$ and boilerplate $\beta = 9.75$).
+  \item \textbf{Chore 4 (\texttt{CHORE\_4\_AST\_CACHE\_AND\_BOXKITE} --- 240-AST \texttt{64-Byte} Pathion Memoization and 7-Box-Kite Escape):} Evaluates $80$ cold canonical 3-leaf tool-call ASTs $((a, b_i), c)$, $80$ exact repeat invocations, $40$ parenthetically regrouped adversarial ASTs $(a, (b_i, c))$, and $40$ repeated-leaf depth-shifted ASTs $((b_i, b_i), c)$ vs.\ $(b_i, (b_i, c))$, plus $10$ stuck episodes ($4{,}200$ tokens/call; $160 + 10 \times 5 = 210$ naive LLM calls vs.\ $80 + 10 \times 1 = 90$ \texttt{BSA-R} calls).
+\end{enumerate}
+
+\subsection{Token Compression, CPU Latency, and Longitudinal Trajectory Scaling}
+
+Table~\ref{tab:main_bench} reports the complete token and latency measurements for baseline Snapshot~A (\texttt{dist/cerebral\_valley\_benchmark.json}, report \texttt{SHA-256: 33a75058dc0bd469a09ef46101f2e2c58732ff27e24817a147858c56d9066234}). Across all four chores, \texttt{BSA-R} reduces input token consumption by \textbf{$84.60\%$ ($6.49\times$)}, saving $2{,}087{,}091$ \texttt{o200k\_base} tokens per suite run. On Chores~1--3---where structured selection, trajectory aggregation, and pre-context admission replace raw context stuffing and LLM judge calls entirely---\texttt{BSA-R} compresses $1{,}585{,}118$ naive tokens down to $2{,}027$ tokens, a \textbf{$99.872\%$ ($782.0\times$) reduction}.
+
+\begin{table}[htbp]
+\centering
+\caption{Empirical \texttt{tiktoken:o200k\_base} token compression and CPU execution latency on baseline Snapshot~A (\texttt{dist/cerebral\_valley\_benchmark.json}, \texttt{SHA-256: 33a75058...}).}\label{tab:main_bench}
+\vspace{4pt}
+\small
+\begin{tabular}{@{}lrrrrl@{}}
+\toprule
+Workspace Chore & Naive Tokens & \texttt{BSA-R} Tokens & Tokens Saved & Reduction (Factor) & CPU Latency \\
+\midrule
+1. Corpus 5-Query Slice (\texttt{1.13 MB}) & $1{,}267{,}655$ & $1{,}847$ & $1{,}265{,}808$ & $99.854\%$ ($686.3\times$) & $112.71\text{ ms}$ compile; $1{,}027.10~\mu\text{s}$/slice \\
+2. Trajectory Audit (\texttt{223.8 KB JSONL}) & $67{,}463$ & $180$ & $67{,}283$ & $99.733\%$ ($374.8\times$) & $62.60\text{ ms}$ total (3-pass + rollup) \\
+3. 100-Step \texttt{Q8.8} Admission Gate & $250{,}000$ & $0$ & $250{,}000$ & $100.000\%$ ($\infty$) & $35.12~\mu\text{s}$/gate ($0$ LLM tokens) \\
+\midrule
+\emph{Subtotal (Chores 1--3: Data/Log/Gate)} & \emph{$1{,}585{,}118$} & \emph{$2{,}027$} & \emph{$1{,}583{,}091$} & \emph{$99.872\%$ ($782.0\times$)} & \emph{$< 0.18\text{ s}$ cumulative CPU} \\
+4. 240-AST Cache \& 7-Box-Kite Escape & $882{,}000$ & $378{,}000$ & $504{,}000$ & $57.143\%$ ($2.33\times$) & $319.52\text{ ms}$ / $240$ ASTs ($1.33\text{ ms}$/AST) \\
+\midrule
+\textbf{Total 4-Chore Suite (Snapshot A)} & $\mathbf{2{,}467{,}118}$ & $\mathbf{380{,}027}$ & $\mathbf{2{,}087{,}091}$ & $\mathbf{84.60\%}$ ($\mathbf{6.49\times}$) & \textbf{Sub-second pure CPU} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Table~\ref{tab:longitudinal} compares Snapshot~A (\texttt{dist/}) against expanded Snapshot~B (\texttt{docs/compiler-hud/cerebral\_valley\_benchmark.json}, report \texttt{SHA-256: 6b05a0cd396758930f5dad5f76b7b22d452806feb1730895cf2d75eb73b37a25}). As the live multi-agent \texttt{transcript.jsonl} file grew by $+40.1\%$ in size ($223{,}758 \to 313{,}410\text{ bytes}$; $67{,}463 \to 95{,}217$ naive tokens), the compiled \texttt{BSA-R} \texttt{rollup\_slice} output expanded by only $+3$ distinct tool-signature rows ($9 \to 12$ rows; $180 \to 236$ tokens, $+56$ tokens), improving Chore~2 compression from $99.733\%$ ($374.8\times$) to $99.752\%$ ($403.5\times$) and increasing overall 4-chore compression from $84.60\%$ to \textbf{$84.77\%$ ($6.56\times$, $2{,}114{,}789$ tokens saved)} with a $30.14~\mu\mathrm{s}$ mean zero-divisor gate latency.
+
+\begin{table}[htbp]
+\centering
+\caption{Longitudinal multi-agent trajectory scaling between Snapshot~A (\texttt{dist/}) and Snapshot~B (\texttt{docs/compiler-hud/}), verified identically by \texttt{r/validate\_bsar\_cd.R} under Base \texttt{R 4.6.1}.}\label{tab:longitudinal}
+\vspace{4pt}
+\small
+\begin{tabular}{@{}lrr@{}}
+\toprule
+Metric / Verification Invariant & Snapshot A (\texttt{dist/}) & Snapshot B (\texttt{docs/compiler-hud/}) \\
+\midrule
+Report \texttt{SHA-256} Prefix & \texttt{33a75058dc0bd469...} & \texttt{6b05a0cd39675893...} \\
+Chore 2 \texttt{transcript.jsonl} Size & $223{,}758\text{ bytes}$ & $313{,}410\text{ bytes}$ ($+40.07\%$) \\
+Chore 2 Slab \texttt{rats\_sha256} Prefix & \texttt{faada4e5a3016783...} & \texttt{5dafc7a6749332a7...} \\
+Chore 2 Naive $\to$ \texttt{BSA-R} Tokens & $67{,}463 \to 180$ ($-99.733\%$) & $95{,}217 \to 236$ ($-99.752\%$) \\
+Chore 1 Compile / Avg.\ Slice Latency & $112.71\text{ ms}$ / $1{,}027.10~\mu\text{s}$ & $100.34\text{ ms}$ / $974.44~\mu\text{s}$ \\
+Chore 3 Zero-Divisor Gate Latency & $35.12~\mu\text{s}$ ($0$ tokens) & $30.14~\mu\text{s}$ ($0$ tokens) \\
+Chore 4 240-AST Fold Latency & $319.52\text{ ms}$ ($1.33\text{ ms}$/AST) & $285.37\text{ ms}$ ($1.19\text{ ms}$/AST) \\
+Chores 1--3 Data/Log/Gate Tokens & $1{,}585{,}118 \to 2{,}027$ ($782.0\times$) & $1{,}612{,}872 \to 2{,}083$ ($774.3\times$) \\
+\textbf{Suite Total Naive $\to$ \texttt{BSA-R} Tokens} & $\mathbf{2{,}467{,}118 \to 380{,}027}$ ($\mathbf{-84.60\%}$) & $\mathbf{2{,}494{,}872 \to 380{,}083}$ ($\mathbf{-84.77\%}$) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Adversarial AST Spoof Detection, Asymptotic Complexity, and \texttt{R 4.6.1} Audit}
+
+Table~\ref{tab:ast_eval} contrasts our $64$-byte \texttt{PathionQ88} AST folder against the associative/commutative bag-of-vectors baseline across Chore~4's adversarial tree benchmarks, while Table~\ref{tab:complexity} summarizes asymptotic time, memory, pre-compression neural cost, and epistemic guarantees across competing context-management paradigms.
+
+\begin{table}[htbp]
+\centering
+\caption{Structural AST memoization and adversarial spoof detection on Chore~4 ($240$ trees).}\label{tab:ast_eval}
+\vspace{4pt}
+\small
+\begin{tabular}{@{}lcc@{}}
+\toprule
+Evaluation Criterion & Associative Bag-of-Vectors & \texttt{32D PathionQ88} ($64\text{ B}$) \\
+\midrule
+Exact Repeat Cache Hit Rate ($80$ identical ASTs) & Unsafe (collides on permutations) & $80 / 80$ ($100.0\%$ safe hits) \\
+Non-Associative Regrouping $((A,B),C)$ vs.\ $(A,(B,C))$ ($40$ pairs) & $0.0\%$ detected ($0/40$) & $\mathbf{100.0\%}$ detected ($40/40$) \\
+Broken Alternativity $((B,B),C)$ vs.\ $(B,(B,C))$ ($40$ pairs) & $0.0\%$ detected ($0/40$) & $\mathbf{100.0\%}$ detected ($40/40$) \\
+Stuck-Loop Basin Escape ($7$ Sedenion Box-Kites) & $5\times$ blind temperature retries & $\mathbf{7 / 7}$ exact $64\text{ B}$ zero divisors \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Asymptotic complexity and provenance comparison for context length $L$, sparse support $M \ll L$, sliced output $K \ll M$, and query count $Q$.}\label{tab:complexity}
+\vspace{4pt}
+\footnotesize
+\begin{tabular}{@{}lllll@{}}
+\toprule
+Paradigm & Pre-API Cost & LLM Prefill & Cache / Index Space & Provenance \& Exactness \\
+\midrule
+Naive Full-Context~\cite{vaswani2017attention} & $\mathcal{O}(1)$ & $\mathcal{O}(Q L^2 d)$ & $\mathcal{O}(Q L)$ KV-cache & Exact raw text; prohibitive cost \\
+Attention IO / Paged KV~\cite{dao2022flashattention,kwon2023vllm} & $\mathcal{O}(1)$ & $\mathcal{O}(Q L^2 d)$ FLOPs & $\mathcal{O}(L)$ HBM (tiled) & Exact attention; $0\%$ API token cut \\
+Dense Vector RAG~\cite{lewis2020rag} & $\mathcal{O}(L)$ GPU embed & $\mathcal{O}(Q K^2 d)$ & $\mathcal{O}(L d_{\mathrm{emb}})$ FP32 & Approximate top-$k$; no OLAP rollups \\
+Neural Pruning (\texttt{LLMLingua})~\cite{jiang2023llmlingua} & $\mathcal{O}(Q L)$ aux.\ LLM & $\mathcal{O}(Q K^2 d)$ & Auxiliary LLM weights & Probabilistic token drop; no \texttt{SHA-256} \\
+\textbf{\texttt{BSA-R} (Ours)} & $\mathcal{O}(M \log M)$ CPU once & $\mathcal{O}(Q K^2 d)$ & $\mathcal{O}(M D) + 192\text{ B}$ L1 & \textbf{Bit-exact \texttt{Q8.8} + \texttt{SHA-256} + $\Delta_{\mathrm{pass}}=0$} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Executing the standalone zero-dependency cross-validator \texttt{Rscript r/validate\_bsar\_cd.R} under \texttt{R 4.6.1} independently reconstructs \texttt{S32} from~\eqref{eq:cd_rec}, verifies $(e_1 + e_{18}) \odot_{8.8} (e_4 - e_{23}) = 0 \in \mathbb{Z}^{32}$ across all $32$ lanes, confirms \texttt{Assessors = 42} and \texttt{Edges = 168}, and reproduces both \texttt{Suite Reduction = 84.60\% (2467118 -> 380027 tokens)} on \texttt{dist/cerebral\_valley\_metrics.csv} and \texttt{Suite Reduction = 84.77\% (2494872 -> 380083 tokens)} on \texttt{docs/compiler-hud/cerebral\_valley\_metrics.csv}.
+
+\section{Limitations, Broader Impact, Reproducibility, and Acknowledgements}\label{sec:conclusion}
+
+\paragraph{Limitations and Scope Boundaries.} Three explicit scope conditions govern \texttt{BSA-R}:
+\begin{enumerate}
+  \item \emph{Complementary Role to Downstream Neural Reasoning:} \texttt{BSA-R} deterministically executes multi-axis selection, relational joins, existential middle-term elimination, anti-echo aggregation, pre-context boilerplate cancellation, and exact AST caching on CPU, but open-ended abstractive prose synthesis and semantic entailment over the resulting compact slices ($180$--$1{,}847$ tokens) still require downstream LLM inference.
+  \item \emph{Signed \texttt{Q8.8} Dynamic Range:} Because each 16-bit \texttt{Q8.8} lane spans $[-128.0000, +127.9961]$ at $2^{-8}$ precision, raw unscaled counters exceeding $32{,}767$ clamp if inserted directly into a single lane; applications must either pre-scale wide-range quantities into natural units (such as kilotokens \texttt{out\_tok / 1000.0} in Chore~2), accumulate roll-ups in widenable host integers (\texttt{sum\_q88} in \texttt{rollup\_slice}), or apply $L_\infty$ peak normalization (\texttt{normalize\_linf\_q88} in deep AST folds).
+  \item \emph{Structural Axis Extraction:} Compiling a \texttt{LuaDynamicRecord} hypercube presupposes deterministic structural anchors (JSON keys, document section headers, or AST nodes); wholly unsegmented raw OCR streams require upstream lexical chunking prior to Pass~0 registration.
+\end{enumerate}
+
+\paragraph{Broader Impact.} Shifting relational filtering, trajectory compaction, structural guardrail admission, and tool-DAG caching from GPU-hosted neural inference to a $192$-byte L1-cache-resident CPU kernel reduces cloud API token consumption by $6.5\times$ overall and $782\times$ on data and telemetry workloads. Beyond direct financial savings for academic laboratories and small engineering teams, eliminating millions of redundant prefill tokens proportionally reduces datacenter HBM bandwidth contention and energy expenditure while replacing opaque neural prompt mutations with cryptographically auditable \texttt{SHA-256} hypercube receipts.
+
+\paragraph{Reproducibility Statement.} The complete \texttt{BSA-R} Python package (\texttt{bsar/cd\_q88.py}, \texttt{bsar/hypercube.py}, \texttt{bsar/chore\_bench.py}), Base \texttt{R 4.6.1} verification scripts (\texttt{r/cayley\_dickson\_verbs.R}, \texttt{r/validate\_bsar\_cd.R}), unit test suites, and exported \texttt{JSON}/\texttt{CSV} benchmark artifacts require zero external runtime dependencies (with optional \texttt{tiktoken} support for exact \texttt{o200k\_base} verification), are released under the GNU Affero General Public License v3.0 (\texttt{AGPL-3.0-or-later}), and are permanently archived on CERN Zenodo at \texttt{doi:10.5281/zenodo.23873219}~\cite{duguay2026zenodo}.
+
+\paragraph{Acknowledgements.} The three-pass deterministic compilation and \texttt{Q8.8} fixed-point architecture of \texttt{BSA-R} builds directly upon the 1984--2026 \texttt{W65C816S} multipass assembler and hypercomplex algebra lineage. The author gratefully acknowledges the foundational engineering contributions of Bill Mensch and The Western Design Center (\texttt{WDC 65816 Macro Assembler}, 1984); Glen Bredon (\texttt{Merlin 8/16}, 1986) and Mike Westerfield / The Byte Works (\texttt{ORCA/M}, 1986); Intelligent Systems and Sony NEWS (\texttt{IS-SFX}, 1989--1990); Norman Yen (\texttt{SNES Assembler}, \texttt{TRASM}, and \texttt{x816}, 1993--1997); Near / byuu (\texttt{xkas}, 2004--2010); the \texttt{Trashkas} syntax-drift translator; and Alcaro together with RPGHacker, randomdude999, KungFuFurby, Lui37, p4plus2, Thomas, and the SMWCentral \texttt{Asar} maintainers (2011--present), whose three-pass zero-label-drift assembler invariant inspired Pass~0--Pass~2 of \texttt{BsaRHypercubeCompiler}. We likewise acknowledge Robert P.~C.\ de~Marrais for cataloging the \texttt{16D} Sedenion and \texttt{32D} Pathion Box-Kite zero-divisor structures, and Ross Ihaka, Robert Gentleman, Hadley Wickham, the R Core Team, and the R Foundation for the copy-on-modify functional data-frame paradigm.
+
+\begin{thebibliography}{99}
+
+\bibitem{bates2000matrix}
+D.~Bates, M.~Maechler, and M.~Jagan,
+\emph{\texttt{Matrix}: Sparse and Dense Matrix Classes and Methods},
+CRAN: Contributed Packages, The R Foundation, 2000, \texttt{doi:10.32614/CRAN.package.Matrix}.
+
+\bibitem{codd1970relational}
+E.~F. Codd,
+A relational model of data for large shared data banks,
+\emph{Commun.\ ACM}, \textbf{13}(6):377--387, 1970, \texttt{doi:10.1145/362384.362685}.
+
+\bibitem{dao2022flashattention}
+T.~Dao, D.~Y. Fu, S.~Ermon, A.~Rudra, and C.~R\'e,
+FlashAttention: Fast and memory-efficient exact attention with IO-awareness,
+in \emph{Advances in Neural Information Processing Systems (NeurIPS)}, vol.~35, pp.~16344--16359, 2022, \texttt{arXiv:2205.14135}.
+
+\bibitem{demarrais2000}
+R.~P.~C. de~Marrais,
+The 42 assessors and the Box-Kites they fly: Diagonal axis-pair systems of zero-divisors in the Sedenions' 16 dimensions,
+\texttt{arXiv:math/0011260}, 2000.
+
+\bibitem{demarrais2002}
+R.~P.~C. de~Marrais,
+Flying higher than a Box-Kite: Kite-chain middens, Sand Mandalas, and zero-divisor patterns in $2^n$-ions beyond the Sedenions,
+\texttt{arXiv:math/0207003}, 2002.
+
+\bibitem{dickson1919}
+L.~E. Dickson,
+On quaternions and their generalization and the history of the eight square theorem,
+\emph{Ann.\ of Math.\ (2)}, \textbf{20}(3):155--171, 1919, \texttt{doi:10.2307/1967865}.
+
+\bibitem{duguay2026zenodo}
+C.~Duguay,
+\emph{\texttt{BSA-R} $\times$ Eleven-Entry Bookkeeping: Three-Pass Sparse Hypercubes, Constructive \texttt{Lean 4} Moving Viscous Ceiling Proofs, and Supercritical 3D Navier--Stokes Interval Certificates} (Version 1.0.0),
+CERN Zenodo, 2026, \texttt{doi:10.5281/zenodo.23873219}.
+
+\bibitem{goldberg1991float}
+D.~Goldberg,
+What every computer scientist should know about floating-point arithmetic,
+\emph{ACM Comput.\ Surv.}, \textbf{23}(1):5--48, 1991, \texttt{doi:10.1145/103162.103163}.
+
+\bibitem{gray1997datacube}
+J.~Gray, S.~Chaudhuri, A.~Bosworth, A.~Layman, D.~Reichart, M.~Venkatrao, F.~Pellow, and H.~Pirahesh,
+Data cube: A relational aggregation operator generalizing group-by, cross-tab, and sub-totals,
+\emph{Data Min.\ Knowl.\ Discov.}, \textbf{1}(1):29--53, 1997, \texttt{doi:10.1023/A:1009726021843}.
+
+\bibitem{hilbert1891}
+D.~Hilbert,
+Ueber die stetige Abbildung einer Linie auf ein Fl\"achenst\"uck,
+\emph{Math.\ Ann.}, \textbf{38}(3):459--460, 1891, \texttt{doi:10.1007/BF01199431}.
+
+\bibitem{ierusalimschy1996lua}
+R.~Ierusalimschy, L.~H. de~Figueiredo, and W.~Celes~Filho,
+Lua---An extensible extension language,
+\emph{Softw.\ Pract.\ Exper.}, \textbf{26}(6):635--652, 1996, \texttt{doi:10.1002/(SICI)1097-024X(199606)26:6<635::AID-SPE26>3.0.CO;2-P}.
+
+\bibitem{ihaka1996r}
+R.~Ihaka and R.~Gentleman,
+R: A language for data analysis and graphics,
+\emph{J.\ Comput.\ Graph.\ Stat.}, \textbf{5}(3):299--314, 1996, \texttt{doi:10.1080/10618600.1996.10474713}.
+
+\bibitem{jiang2023llmlingua}
+H.~Jiang, Q.~Wu, C.-Y. Lin, Y.~Yang, and L.~Qiu,
+LLMLingua: Compressing prompts for accelerated inference of large language models,
+in \emph{Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing (EMNLP)}, pp.~13358--13376, Association for Computational Linguistics, 2023, \texttt{doi:10.18653/v1/2023.emnlp-main.825}.
+
+\bibitem{jiang2024longllmlingua}
+H.~Jiang, Q.~Wu, X.~Luo, D.~Li, C.-Y. Lin, Y.~Yang, and L.~Qiu,
+LongLLMLingua: Accelerating and enhancing LLMs in long context scenarios via prompt compression,
+in \emph{Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers)}, pp.~1658--1677, Association for Computational Linguistics, 2024, \texttt{doi:10.18653/v1/2024.acl-long.91}.
+
+\bibitem{kjolstad2017taco}
+F.~Kjolstad, S.~Kamil, S.~Chou, D.~Lugato, and S.~Amarasinghe,
+The tensor algebra compiler,
+\emph{Proc.\ ACM Program.\ Lang.}, \textbf{1}(OOPSLA):77:1--77:29, 2017, \texttt{doi:10.1145/3133901}.
+
+\bibitem{kwon2023vllm}
+W.~Kwon, Z.~Li, S.~Zhuang, Y.~Sheng, L.~Zheng, C.~H. Yu, J.~Gonzalez, H.~Zhang, and I.~Stoica,
+Efficient memory management for large language model serving with PagedAttention,
+in \emph{Proceedings of the 29th Symposium on Operating Systems Principles (SOSP '23)}, pp.~611--626, ACM, 2023, \texttt{doi:10.1145/3600006.3613165}.
+
+\bibitem{lewis2020rag}
+P.~Lewis, E.~Perez, A.~Piktus, F.~Petroni, V.~Karpukhin, N.~Goyal, H.~K\"uttler, M.~Lewis, W.-t. Yih, T.~Rockt\"aschel, S.~Riedel, and D.~Kiela,
+Retrieval-augmented generation for knowledge-intensive NLP tasks,
+in \emph{Advances in Neural Information Processing Systems (NeurIPS)}, vol.~33, pp.~9459--9474, 2020, \texttt{arXiv:2005.11401}.
+
+\bibitem{merkle1988digital}
+R.~C. Merkle,
+A digital signature based on a conventional encryption function,
+in \emph{Advances in Cryptology --- CRYPTO '87}, Lecture Notes in Computer Science, vol.~293, pp.~369--378, Springer, 1988, \texttt{doi:10.1007/3-540-48184-2\_32}.
+
+\bibitem{moon2001hilbert}
+B.~Moon, H.~V. Jagadish, C.~Faloutsos, and J.~H. Saltz,
+Analysis of the clustering properties of the Hilbert space-filling curve,
+\emph{IEEE Trans.\ Knowl.\ Data Eng.}, \textbf{13}(1):124--141, 2001, \texttt{doi:10.1109/69.908985}.
+
+\bibitem{moreno1998}
+R.~G. Moreno,
+The zero divisors of the Cayley--Dickson algebras over the real numbers,
+\emph{Bol.\ Soc.\ Mat.\ Mexicana (3)}, \textbf{4}(1):13--28, 1998, \texttt{arXiv:q-alg/9710013}.
+
+\bibitem{schafer1954}
+R.~D. Schafer,
+On the algebras formed by the Cayley--Dickson process,
+\emph{Amer.\ J.\ Math.}, \textbf{76}(2):435--446, 1954, \texttt{doi:10.2307/2372583}.
+
+\bibitem{vaswani2017attention}
+A.~Vaswani, N.~Shazeer, N.~Parmar, J.~Uszkoreit, L.~Jones, A.~N. Gomez, \L.~Kaiser, and I.~Polosukhin,
+Attention is all you need,
+in \emph{Advances in Neural Information Processing Systems (NeurIPS)}, vol.~30, pp.~5998--6008, 2017, \texttt{arXiv:1706.03762}.
+
+\bibitem{wickham2019tidyverse}
+H.~Wickham \emph{et al.},
+Welcome to the Tidyverse,
+\emph{J.\ Open Source Softw.}, \textbf{4}(43):1686, 2019, \texttt{doi:10.21105/joss.01686}.
+
+\end{thebibliography}
+
+\end{document}

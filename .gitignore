@@ -8,3 +8,5 @@ dist/
 dist_test_tmp/
 .DS_Store
 Thumbs.db
+*.bak
+
