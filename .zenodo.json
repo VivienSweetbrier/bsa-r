@@ -1,7 +1,7 @@
 {
   "title": "BSA-R x Eleven-Entry Bookkeeping: Three-Pass Sparse Hypercubes, Constructive Lean 4 Moving Viscous Ceiling Proofs, and Supercritical 3D Navier-Stokes Interval Certificates",
   "upload_type": "software",
-  "description": "Open-source R 4.6.1, Python 3, Z3, and constructive Lean 4.35.0 (Classical.choice == False) verification suite and research manuscript for supercritical unforced 3D Navier-Stokes flows on T^3 (Clay Option B setting, f == 0) and Olga Ladyzhenskaya (1967) shear-thickening dyadic cascades, governed by One Big Consortium Split Sheet #001 (GNU AGPLv3).",
+  "description": "Open-source Base R 4.6.1, Python 3, Z3, and constructive Lean 4.35.0 (Classical.choice == False) verification suite and research manuscript for supercritical unforced 3D Navier-Stokes flows on T^3 (Clay Option B setting, f == 0) and Olga Ladyzhenskaya (1967) shear-thickening dyadic cascades, governed by Eleven-Entry Bookkeeping and One Big Consortium Split Sheet #001 (GNU AGPLv3: 50% Architect Node Topher Duguay; 35% Academic & Formal Appendix Co-Authors with full literature-review freedom; 9% Winnipeg 18-Organization Mutual-Aid Endowment; and 6% Axis 5 Upstream Provenance Royalty Pool honoring Bill Mensch/WDC, Glen Bredon/Merlin 16, Mike Westerfield/ORCA-M, Intelligent Systems/IS-SFX, Norman Yen/TRASM/x816, Near/byuu Memorial Fund/xkas, Trashkas, Alcaro, RPGHacker, randomdude999, KungFuFurby & SMWCentral Asar Maintainers, Robert de Marrais, and the R Foundation). Live interactive code & certificates: https://sweetbrier.si/navier",
   "creators": [
     {
       "name": "Duguay, Topher",
