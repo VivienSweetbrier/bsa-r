@@ -4,8 +4,9 @@
   "description": "Open-source R 4.6.1, Python 3, Z3, and constructive Lean 4.35.0 (Classical.choice == False) verification suite and research manuscript for supercritical unforced 3D Navier-Stokes flows on T^3 (Clay Option B setting, f == 0) and Olga Ladyzhenskaya (1967) shear-thickening dyadic cascades, governed by One Big Consortium Split Sheet #001 (GNU AGPLv3).",
   "creators": [
     {
-      "name": "Duguay, Christopher \"Topher\"",
-      "affiliation": "University of Manitoba & Sweetbrier Augmented Intelligence Lab, Winnipeg, MB, Canada"
+      "name": "Duguay, Topher",
+      "orcid": "0009-0006-8693-6839",
+      "affiliation": "University of Manitoba"
     }
   ],
   "license": "agpl-3.0-or-later",
