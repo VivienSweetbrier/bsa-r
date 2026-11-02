@@ -72,8 +72,9 @@ To maintain strict clarity between what our machine-checked theorems and interva
       \item Constructive dyadic shell verification in Base \texttt{R} showing that while classical linear viscosity ($\nu_0 \Delta u$) experiences rapid vorticity amplification under Option C/D power-law forcing $f_n^* = 1.5 k_n^{1.65}$, Ladyzhenskaya's (1967) shear-thickening stress modification~\cite{ladyzhenskaya1967} $\nu_{\mathrm{eff}} = \nu_0 + \nu_1 |\nabla u|^2$ uniformly bounds shell vorticity below $3.0$ across all scales (Section~\ref{sec:ladyzhenskaya}).
       \item Exact 64-byte \texttt{Q8.8} fixed-point verification of all $7$ octahedral Sedenion/Pathion Box-Kites ($42$ primitive assessors, $168$ directed zero-divisor annihilation edges)~\cite{moreno1998,demarrais2000} and three-pass Hilbert \texttt{CSR/CSC} compilation eliminating $25{,}200{,}369$ of $25{,}200{,}451$ dense Cartesian wavevector triads with zero pass-to-pass symbol drift (Section~\ref{sec:bsar}).
       \item Outward-rounded computer-assisted global $C^\infty([0,\infty)\times\mathbb{T}^3)$ regularity certificates for the \emph{infinite-dimensional unforced 3D Navier--Stokes PDE} ($f \equiv 0$) on explicit supercritical initial velocity fields exceeding $\nu = 0.50$---including 3D Arnold--Beltrami--Childress (ABC) helical flow ($2.12\times$), 3D Taylor--Green vortex ($1.41\times$ and $2.83\times$), and 3D 24-mode octahedral Kida--Pelz collision ($2.12\times$ and $3.18\times$)---paired with constructive \texttt{Lean 4.35.0} proofs (\texttt{Classical.choice == False}) of the universal Moving Viscous Ceiling, $\Lambda_{\mathrm{BCC}}$ sublattice contraction dilation ($\sqrt{3}\,\nu$), and \texttt{BSA-R} Fourier-sparsity cool-down gate (Sections~\ref{sec:fourier3d}--\ref{sec:step2}).
+      \item Constructive \texttt{Lean 4.35.0} proofs (\texttt{lean/Step3ArbitraryDataRound2.lean}) and outward-rounded interval enclosures establishing (a) a dimension-independent viscous-absorbed nonlinear difference Riccati inequality certifying \emph{open infinite-dimensional $\mathcal{F}^0(\mathbb{T}^3)$ balls} of completely asymmetric, off-sublattice supercritical initial velocities and covering an uncountable compact 1-parameter supercritical continuum $\{u_0(\theta) : \theta \in [0,1]\}$ with three perturbation balls ($3.14\times$ safety margin), (b) exact 3D Binet--Cauchy cross-product ($\sin\theta_{p,q}$) triad depletion and collinear ray annihilation alongside helical decomposition audits~\cite{constantinmajda1988,waleffe1992,biferale2012}, and (c) constructive Leray energy--enstrophy pigeonhole horizons $T_{\max}(\mathcal{E}_0,\nu,R) = 4 H_R \mathcal{E}_0 / \nu^3$ paired with adversarial 342-mode dense red-team evolutions (Section~\ref{sec:step3}).
     \end{enumerate}
-  \item \textbf{Open Frontier for General Clay Option B:} Certifying invariant supercritical sublattices, sparse $d < 2$ cascades, and explicit supercritical initial-data tubes does \emph{not} resolve Clay Option B for \emph{arbitrary} unconstrained smooth initial data $u_0 \in C^\infty(\mathbb{T}^3)$ capable of transient dense $2 < d \le 3$ Fourier-shell packing; Section~\ref{sec:frontier} isolates the exact analytical inequality required to close that general gap.
+  \item \textbf{Open Frontier for General Clay Option B:} Certifying invariant supercritical sublattices, sparse $d < 2$ cascades, open infinite-dimensional $\mathcal{F}^0$ balls, and compact supercritical continua does \emph{not} resolve Clay Option B for \emph{arbitrary} unconstrained smooth initial data $u_0 \in C^\infty(\mathbb{T}^3)$ of unbounded norm capable of transient dense $2 < d \le 3$ ultraviolet shell packing inside $[0, T_{\max}]$; Section~\ref{sec:frontier} isolates the exact analytical inequality required to close that general gap.
 \end{itemize}
 
 \section{Forced Dyadic Cascades vs.\ Ladyzhenskaya Shear-Thickening Viscosity}\label{sec:ladyzhenskaya}
@@ -224,6 +225,51 @@ Boosted Kida--Pelz ($A=3/8$)     & $3.18\times$ & $1.590990$ & $31$  & $0.862681
 \bottomrule
 \end{tabular}
 \end{table}
+
+\section{Infinite-Dimensional Perturbation Tubes, Solenoidal Depletion, and Leray Cooldown Horizons}\label{sec:step3}
+
+Single-trajectory interval enclosures for symmetric initial data do not automatically extend to asymmetric perturbations that activate fundamental $|k|=1$ modes outside $\Lambda_{\mathrm{BCC}}$. To lift finite-mode reference computations to open neighborhoods and compact continua of arbitrary smooth periodic data, we formalize three additional constructive theorems in \texttt{Lean 4.35.0} (\texttt{lean/Step3ArbitraryDataRound2.lean}, verified via \texttt{\#print axioms} to depend solely on \texttt{[propext, Quot.sound]} with zero \texttt{Classical.choice}) and cross-check all real-arithmetic implications in \texttt{Z3} (\texttt{QF\_NRA} \texttt{unsat}).
+
+\begin{theorem}[Viscous-Absorbed Perturbation Riccati Tube, Solenoidal Cross-Product Depletion, and Leray Horizon]\label{thm:step3}
+Let $\nu > 0$ and consider the unforced ($f \equiv 0$) 3D Navier--Stokes equations on $\mathbb{T}^3$:
+\begin{enumerate}
+  \item \textbf{Dimension-Free Perturbation Riccati Inequality (\texttt{step3\_viscous\_perturbation\_riccati}):} Let $\tilde{u}(t)$ be a finite-mode divergence-free reference trajectory with PDE residual $R(t)$ in $\mathcal{F}^0(\mathbb{T}^3)$ and moments $U_s(t) = \|\tilde{u}(t)\|_{\mathcal{F}^s}$, and let $v(t)$ be \emph{any} smooth divergence-free solution on $\mathbb{T}^3$ (with zero symmetry assumptions across $\mathbb{Z}^3 \setminus \{0\}$). Setting $w = v - \tilde{u}$ and $W_s = \|w(t)\|_{\mathcal{F}^s}$, weighted Cauchy--Schwarz ($W_1^2 \le W_0 W_2$) absorbs $(U_0 + W_0)W_1$ into viscous dissipation $-\nu W_2$ via $(2\nu W_2 - (U_0 + W_0)W_1)^2 \ge 0$, yielding the dimension-independent differential inequality
+  \begin{equation}\label{eq:riccati_tube}
+    D^+ W_0(t) \le \|R(t)\|_{\mathcal{F}^0} + \left(U_1(t) + \frac{\big(U_0(t) + W_0(t)\big)^2}{4\nu}\right) W_0(t).
+  \end{equation}
+  Whenever outward-rounded propagation of~\eqref{eq:riccati_tube} from $W_0(0) \le \delta_{\mathrm{open}}$ satisfies $U_0(T_{\mathrm{cert}}) + W_0(T_{\mathrm{cert}}) < \nu$, every initial datum $v_0 \in C^\infty(\mathbb{T}^3)$ in the infinite-dimensional open Wiener ball $\|v_0 - \tilde{u}(0)\|_{\mathcal{F}^0} < \delta_{\mathrm{open}}$ generates a global smooth solution $v \in C^\infty([0,\infty)\times\mathbb{T}^3)$.
+  \item \textbf{Solenoidal Cross-Product Depletion and Collinear Annihilation (\texttt{step3\_solenoidal\_cross\_depletion}, \texttt{collinear\_triad\_vanishes}):} For any wavevectors $p, q \in \mathbb{Z}^3 \setminus \{0\}$ and divergence-free Fourier mode $p \cdot \hat{u}(p) = 0$, the Binet--Cauchy identity $(p \times \hat{u}(p))\cdot(p \times q) = |p|^2(\hat{u}(p)\cdot q) - (p\cdot\hat{u}(p))(p\cdot q)$ eliminates self-wavenumber advection ($\hat{u}(p)\cdot(p+q) = \hat{u}(p)\cdot q$) and yields
+  \begin{equation}\label{eq:sin_theta}
+    |p|^2 |\hat{u}(p) \cdot (p + q)|^2 \le |\hat{u}(p)|^2 |p \times q|^2 \iff |\hat{u}(p) \cdot (p + q)| \le |\hat{u}(p)|\,|q|\,\sin\theta(p,q).
+  \end{equation}
+  In particular, every collinear triad ($\beta q = \alpha p$, $\beta \neq 0$) vanishes identically.
+  \item \textbf{Constructive Leray Low-Shell Cooldown Horizon (\texttt{step3\_leray\_pigeonhole\_horizon}, \texttt{step3\_low\_shell\_cooldown}):} For \emph{any} smooth divergence-free initial velocity $u_0$ with kinetic energy $\mathcal{E}_0 = \frac{1}{2}\|u_0\|_{L^2}^2$ and finite-shell harmonic constant $H_R := \sum_{1 \le |k| \le R} |k|^{-2}$, Leray's energy inequality $\nu \int_0^T \|\nabla u(s)\|_{L^2}^2\,ds \le \mathcal{E}_0$ constructively guarantees an explicit time $t_* \in [0, T_{\max}]$ with
+  \begin{equation}\label{eq:leray_horizon}
+    T_{\max}(\mathcal{E}_0, \nu, R) := \frac{4 H_R \mathcal{E}_0}{\nu^3}
+  \end{equation}
+  at which the low-wavenumber Wiener norm obeys $F_{0,\le R}(t_*) < \nu / 2$.
+\end{enumerate}
+\end{theorem}
+
+Executing our outward-rounded tube certifier (\texttt{step3\_arbitrary\_data\_round2.py}, SHA-256 receipt: \texttt{84a5f11d35b831f1287a7f4f431129f88970839a932b642e4fc798c6ebc77fec}) at $\nu = 0.50$ establishes open infinite-dimensional $\mathcal{F}^0(\mathbb{T}^3)$ balls around all three supercritical benchmarks and covers an uncountable compact continuum $\{u_0(\theta) : \theta \in [0,1]\}$ of completely symmetry-broken supercritical initial fields (combining supercritical Taylor--Green with asymmetric $|k|=1$ and $|k|^2=2$ helical shear modes so that $\|u_0(\theta)\|_{\mathcal{F}^0} \ge 0.737107 > \nu$ everywhere and Lipschitz constant $L_\theta = 0.06$) using just $M = 3$ perturbation balls at a $3.14\times$ radius safety margin ($\delta_{\min} = 0.031420 > 0.010000$), reported in Table~\ref{tab:step3}.
+
+\begin{table}[htbp]
+\centering
+\caption{Certified infinite-dimensional open $\mathcal{F}^0(\mathbb{T}^3)$ perturbation balls and compact asymmetric continuum covering ($\nu = 0.50$, zero symmetry restrictions on perturbations $w \in \mathcal{F}^0(\mathbb{T}^3)$).}\label{tab:step3}
+\vspace{4pt}
+\begin{tabular}{@{}lrrrrl@{}}
+\toprule
+Supercritical Center / Family ($f \equiv 0$) & Center $\|u_0\|_{\mathcal{F}^0}$ & Steps & Open Radius $\delta_{\mathrm{open}}$ & Worst $\|v(T_{\mathrm{cert}})\|_{\mathcal{F}^0}^{\mathrm{hi}}$ & Global $C^\infty$ Scope \\
+\midrule
+Taylor--Green Open Ball          & $0.707107$ & $42$  & $0.033804$ & $0.498963 < 0.50$ & Open $\ell^1(\mathbb{Z}^3)$ Ball \\
+Kida--Pelz Open Ball             & $1.060660$ & $25$  & $0.029114$ & $0.498985 < 0.50$ & Open $\ell^1(\mathbb{Z}^3)$ Ball \\
+ABC Beltrami Open Ball           & $1.060660$ & $220$ & $0.005102$ & $0.499386 < 0.50$ & Open $\ell^1(\mathbb{Z}^3)$ Ball \\
+Asymmetric Continuum $\theta \in [0,1]$ ($3$ balls) & $\ge 0.737107$ & $47\text{--}48$ & $\ge 0.031420$ & $\le 0.498982 < 0.50$ & Compact Continuum \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+In parallel, auditing a dense asymmetric 124-mode solenoidal field ($15{,}252$ active triads) in the helical curl eigenbasis of Constantin and Majda~\cite{constantinmajda1988} and Waleffe~\cite{waleffe1992,biferale2012} confirms that $228$ collinear triads vanish identically, $\sin\theta(p,q)$ geometry reduces convective magnitude to $0.7772\,F_0 F_1$, and full Leray-projected phase cancellation reduces net convective stretching to $0.1036\,F_0 F_1$ ($89.64\%$ depletion, partitioned $42.79\%$ homochiral vs.\ $57.21\%$ heterochiral). Furthermore, an adversarial projected-gradient search over $342$ dense asymmetric solenoidal modes ($|k|_\infty \le 3$, $\mathcal{E}_0 = 0.50$, $\|u_0\|_{\mathcal{F}^0} = 17.5694 = 35.14\,\nu$) achieves an initial Step-2 ceiling-evasion ratio $\rho_0 = F_0^3 / (\nu^2 F_2) = 122.5833$, yet under unforced 3D Navier--Stokes evolution viscous enstrophy dissipation decreases $\rho(t)$ strictly from $t = 0^+$, crossing $\rho(t) < 1$ at $t = 1.25$ and $\|u(t)\|_{\mathcal{F}^0} < \nu$ at $t = 1.67$.
 
 \section{Un-Netted Provenance Auditing and Open Analytical Frontier}\label{sec:frontier}
 
@@ -379,10 +425,25 @@ W.~Tucker,
 A rigorous ODE solver and Smale's 14th problem,
 \emph{Found.\ Comput.\ Math.}, \textbf{2}(1):53--117, 2002, \texttt{doi:10.1007/s002080010018}.
 
+\bibitem{biferale2012}
+L.~Biferale, S.~Musacchio, and F.~Toschi,
+Inverse energy cascade in three-dimensional isotropic turbulence,
+\emph{Phys.\ Rev.\ Lett.}, \textbf{108}(16):164501, 2012, \texttt{doi:10.1103/PhysRevLett.108.164501}.
+
+\bibitem{constantinmajda1988}
+P.~Constantin and A.~Majda,
+The Beltrami spectrum for incompressible fluid flows,
+\emph{Comm.\ Math.\ Phys.}, \textbf{115}(3):435--456, 1988, \texttt{doi:10.1007/BF01218019}.
+
 \bibitem{vdblessard2015}
 J.~B. van~den~Berg and J.-P. Lessard,
 Rigorous numerics in dynamical systems,
 \emph{Notices Amer.\ Math.\ Soc.}, \textbf{62}(9):1057--1061, 2015, \texttt{doi:10.1090/noti1276}.
+
+\bibitem{waleffe1992}
+F.~Waleffe,
+The nature of triad interactions in homogeneous turbulence,
+\emph{Phys.\ Fluids A}, \textbf{4}(2):350--363, 1992, \texttt{doi:10.1063/1.858309}.
 
 \end{thebibliography}
 

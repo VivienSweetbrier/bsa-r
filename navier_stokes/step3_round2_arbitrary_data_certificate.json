@@ -1,0 +1,235 @@
+{
+  "suite": "bsar_navier_stokes_round2_step3_arbitrary_data",
+  "attestation": "probabilistic_structural",
+  "lean4_module": "bsa-r/lean/Step3ArbitraryDataRound2.lean",
+  "classical_choice_used": false,
+  "external_forcing_f_identically_zero": true,
+  "universal_z3_and_sympy_proofs": {
+    "sympy_binet_cauchy_residual": "0",
+    "z3_theorem_D_viscous_riccati": "unsat",
+    "z3_theorem_E_solenoidal_sin_theta": "unsat",
+    "z3_theorem_F_leray_horizon": "unsat",
+    "all_universal_proofs_unsat": true
+  },
+  "open_l1_perturbation_balls": {
+    "taylor_green_open_ball": {
+      "scenario_id": "TAYLOR-GREEN-3D-ARBITRARY-ASYMMETRIC-OPEN-BALL",
+      "nu": 0.5,
+      "k_galerkin": 2,
+      "steps_taken": 42,
+      "certified_time_T": 0.328125,
+      "initial_center_F0_lo": 0.7071067811865466,
+      "final_center_F0_hi": 0.4414144886177358,
+      "zero_perturbation_defect_W0_hi": 0.007249590561294683,
+      "certified_open_ball_radius_delta_F0": 0.033804,
+      "final_ball_worst_case_F0_hi": 0.4989630146473613,
+      "arbitrary_asymmetric_modes_allowed": true,
+      "global_smoothness_certified_on_open_ball": true
+    },
+    "abc_beltrami_open_ball": {
+      "scenario_id": "ABC-BELTRAMI-3D-ARBITRARY-ASYMMETRIC-OPEN-BALL",
+      "nu": 0.5,
+      "k_galerkin": 2,
+      "steps_taken": 220,
+      "certified_time_T": 1.71875,
+      "initial_center_F0_lo": 1.0606601717798203,
+      "final_center_F0_hi": 0.44911177408182407,
+      "zero_perturbation_defect_W0_hi": 0.02098115694115028,
+      "certified_open_ball_radius_delta_F0": 0.005102,
+      "final_ball_worst_case_F0_hi": 0.49938645859395014,
+      "arbitrary_asymmetric_modes_allowed": true,
+      "global_smoothness_certified_on_open_ball": true
+    },
+    "kida_pelz_open_ball": {
+      "scenario_id": "KIDA-PELZ-3D-ARBITRARY-ASYMMETRIC-OPEN-BALL",
+      "nu": 0.5,
+      "k_galerkin": 2,
+      "steps_taken": 25,
+      "certified_time_T": 0.1953125,
+      "initial_center_F0_lo": 1.060660171779819,
+      "final_center_F0_hi": 0.3622838594993842,
+      "zero_perturbation_defect_W0_hi": 0.08731845371757219,
+      "certified_open_ball_radius_delta_F0": 0.029114,
+      "final_ball_worst_case_F0_hi": 0.4989853456640235,
+      "arbitrary_asymmetric_modes_allowed": true,
+      "global_smoothness_certified_on_open_ball": true
+    }
+  },
+  "asymmetric_supercritical_continuum_covering": {
+    "continuum_certified": true,
+    "num_covering_balls": 3,
+    "lipschitz_constant_F0": 0.060000000000000005,
+    "required_radius_per_cell_F0": 0.01,
+    "min_certified_ball_radius_F0": 0.03142,
+    "min_initial_F0_across_centers": 0.737107,
+    "nu": 0.5,
+    "centers": [
+      {
+        "theta_center": 0.166667,
+        "covered_parameter_interval": [
+          0.0,
+          0.333333
+        ],
+        "initial_F0_lo": 0.737107,
+        "required_cell_radius_F0": 0.01,
+        "certified_ball_radius_F0": 0.032196,
+        "safety_margin_ratio": 3.22,
+        "steps": 48,
+        "worst_case_F0_at_T_cert_hi": 0.498949
+      },
+      {
+        "theta_center": 0.5,
+        "covered_parameter_interval": [
+          0.333333,
+          0.666667
+        ],
+        "initial_F0_lo": 0.737107,
+        "required_cell_radius_F0": 0.01,
+        "certified_ball_radius_F0": 0.033149,
+        "safety_margin_ratio": 3.315,
+        "steps": 48,
+        "worst_case_F0_at_T_cert_hi": 0.498916
+      },
+      {
+        "theta_center": 0.833333,
+        "covered_parameter_interval": [
+          0.666667,
+          1.0
+        ],
+        "initial_F0_lo": 0.737107,
+        "required_cell_radius_F0": 0.01,
+        "certified_ball_radius_F0": 0.03142,
+        "safety_margin_ratio": 3.142,
+        "steps": 47,
+        "worst_case_F0_at_T_cert_hi": 0.498982
+      }
+    ]
+  },
+  "solenoidal_sin_theta_and_helical_depletion": {
+    "active_dense_modes": 124,
+    "total_nonzero_triad_pairs": 15252,
+    "exact_collinear_annihilated_pairs": 228,
+    "gross_scalar_F0_F1": 1.825984,
+    "sin_theta_bound_G_sin": 1.419064,
+    "exact_leray_projected_G_true": 0.189121,
+    "sin_theta_depletion_ratio_vs_F0F1": 0.7772,
+    "true_convective_depletion_ratio_vs_F0F1": 0.1036,
+    "waleffe_homochiral_flux_fraction": 0.4279,
+    "waleffe_heterochiral_flux_fraction": 0.5721
+  },
+  "leray_low_shell_cooldown_horizons": [
+    {
+      "R_shell": 1,
+      "low_shell_mode_count": 6,
+      "H_R_sum_inv_ksq": 6.0,
+      "initial_energy_E0": 0.25,
+      "nu": 0.5,
+      "guaranteed_cooldown_horizon_T_max": 48.0
+    },
+    {
+      "R_shell": 1,
+      "low_shell_mode_count": 6,
+      "H_R_sum_inv_ksq": 6.0,
+      "initial_energy_E0": 0.5,
+      "nu": 0.5,
+      "guaranteed_cooldown_horizon_T_max": 96.0
+    },
+    {
+      "R_shell": 1,
+      "low_shell_mode_count": 6,
+      "H_R_sum_inv_ksq": 6.0,
+      "initial_energy_E0": 1.0,
+      "nu": 0.5,
+      "guaranteed_cooldown_horizon_T_max": 192.0
+    },
+    {
+      "R_shell": 2,
+      "low_shell_mode_count": 32,
+      "H_R_sum_inv_ksq": 16.166667,
+      "initial_energy_E0": 0.25,
+      "nu": 0.5,
+      "guaranteed_cooldown_horizon_T_max": 129.3333
+    },
+    {
+      "R_shell": 2,
+      "low_shell_mode_count": 32,
+      "H_R_sum_inv_ksq": 16.166667,
+      "initial_energy_E0": 0.5,
+      "nu": 0.5,
+      "guaranteed_cooldown_horizon_T_max": 258.6667
+    },
+    {
+      "R_shell": 2,
+      "low_shell_mode_count": 32,
+      "H_R_sum_inv_ksq": 16.166667,
+      "initial_energy_E0": 1.0,
+      "nu": 0.5,
+      "guaranteed_cooldown_horizon_T_max": 517.3333
+    },
+    {
+      "R_shell": 4,
+      "low_shell_mode_count": 256,
+      "H_R_sum_inv_ksq": 40.69821,
+      "initial_energy_E0": 0.25,
+      "nu": 0.5,
+      "guaranteed_cooldown_horizon_T_max": 325.5857
+    },
+    {
+      "R_shell": 4,
+      "low_shell_mode_count": 256,
+      "H_R_sum_inv_ksq": 40.69821,
+      "initial_energy_E0": 0.5,
+      "nu": 0.5,
+      "guaranteed_cooldown_horizon_T_max": 651.1714
+    },
+    {
+      "R_shell": 4,
+      "low_shell_mode_count": 256,
+      "H_R_sum_inv_ksq": 40.69821,
+      "initial_energy_E0": 1.0,
+      "nu": 0.5,
+      "guaranteed_cooldown_horizon_T_max": 1302.3427
+    },
+    {
+      "R_shell": 8,
+      "low_shell_mode_count": 2108,
+      "H_R_sum_inv_ksq": 91.063082,
+      "initial_energy_E0": 0.25,
+      "nu": 0.5,
+      "guaranteed_cooldown_horizon_T_max": 728.5047
+    },
+    {
+      "R_shell": 8,
+      "low_shell_mode_count": 2108,
+      "H_R_sum_inv_ksq": 91.063082,
+      "initial_energy_E0": 0.5,
+      "nu": 0.5,
+      "guaranteed_cooldown_horizon_T_max": 1457.0093
+    },
+    {
+      "R_shell": 8,
+      "low_shell_mode_count": 2108,
+      "H_R_sum_inv_ksq": 91.063082,
+      "initial_energy_E0": 1.0,
+      "nu": 0.5,
+      "guaranteed_cooldown_horizon_T_max": 2914.0186
+    }
+  ],
+  "adversarial_ceiling_redteam": {
+    "k_box_seed": 3,
+    "active_asymmetric_modes_seed": 342,
+    "initial_energy_E0": 0.5,
+    "initial_F0": 17.569404,
+    "initial_F2": 176.970102,
+    "adversarial_initial_ceiling_ratio_rho0": 122.5833,
+    "peak_ceiling_ratio_along_flow": 122.5833,
+    "peak_F0_along_flow": 17.569404,
+    "viscous_ceiling_entry_time_rho_lt_1": 1.25,
+    "lei_lin_ball_entry_time_F0_lt_nu": 1.67,
+    "final_energy_E": 0.00526,
+    "final_F0": 0.499403,
+    "final_F2": 1.036073,
+    "evaded_step2_ceiling_indefinitely": false
+  },
+  "certificate_sha256": "84a5f11d35b831f1287a7f4f431129f88970839a932b642e4fc798c6ebc77fec"
+}
