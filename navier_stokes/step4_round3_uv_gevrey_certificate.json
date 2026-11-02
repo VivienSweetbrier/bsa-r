@@ -1,0 +1,136 @@
+{
+  "suite": "bsar_navier_stokes_round3_step4_uv_gevrey",
+  "attestation": "probabilistic_structural",
+  "lean4_module": "bsa-r/lean/Step4UltravioletGevreyRound3.lean",
+  "classical_choice_used": false,
+  "external_forcing_f_identically_zero": true,
+  "lattice_agmon_wiener_constant": {
+    "m_cutoff": 80,
+    "distinct_nonzero_shells_summed": 5335,
+    "total_lattice_vectors_in_ball": 2143640,
+    "r_in_lo": 79.14022435,
+    "alpha_M_lo": 0.98905708,
+    "sup_S_rho_lo": 19.11855497,
+    "sup_S_rho_hi": 20.92827161,
+    "S_at_rho_eq_1_hi_dominating_rho_ge_1": 11.79517408,
+    "maximizing_regime": "[0.0001, 0.000102591]",
+    "kappa_T3_sq_interval": {
+      "lo": 38.237109945798785,
+      "hi": 41.856543213998954,
+      "width": 3.619433268200169
+    },
+    "kappa_T3_interval": {
+      "lo": 6.183616251498695,
+      "hi": 6.469663299894282,
+      "width": 0.2860470483955862
+    },
+    "continuum_reference_2pi": 6.28318531,
+    "relative_excess_over_2pi_pct": 2.9679
+  },
+  "universal_z3_and_sympy_proofs": {
+    "sympy_quartic_sos_residual": "0",
+    "sympy_young_27_256_sos_residual": "0",
+    "sympy_gevrey_3d_lagrange_residual": "0",
+    "z3_theorem_G1_young_27_128": "unsat",
+    "z3_theorem_G2_palinstrophy_ceiling_and_trap": "unsat",
+    "z3_theorem_H_gevrey_submultiplicative_3d": "unsat",
+    "z3_theorem_I_scale_invariant_e0_d0_gate": "unsat",
+    "all_universal_proofs_unsat": true
+  },
+  "zero_step_broadband_uv_supercritical_gate": {
+    "scenario_id": "BROADBAND-ASYMMETRIC-UV-SHELL-ZERO-STEP-CERTIFIED",
+    "r_max": 16,
+    "active_asymmetric_3d_modes": 17076,
+    "nu": 0.5,
+    "initial_F0_interval": {
+      "lo": 2.2499999999983356,
+      "hi": 2.250000000001675,
+      "width": 3.3395508580724713e-12
+    },
+    "supercritical_F0_over_nu_lo": 4.5,
+    "initial_E0_interval": {
+      "lo": 0.00017336858044021797,
+      "hi": 0.00017336858044051675,
+      "width": 2.9877901368269293e-16
+    },
+    "initial_D0_interval": {
+      "lo": 0.037129998272996866,
+      "hi": 0.037129998273047346,
+      "width": 5.048045315092509e-14
+    },
+    "initial_P0_interval": {
+      "lo": 5.97643340293851,
+      "hi": 5.9764334029459985,
+      "width": 7.488232256491757e-12
+    },
+    "theorem_I_lhs_27_kappa6_E0_D0sq_hi": 0.473231986079601,
+    "theorem_I_rhs_64_kmin_nu6_lo": 0.9999999999999993,
+    "theorem_I_safety_ratio_rhs_over_lhs_lo": 2.1131,
+    "T_trap_hi": 0.05805288,
+    "T_smooth_lo": 0.12267319,
+    "T_gevrey_analyticity_entry_hi": 0.2322115,
+    "linear_gevrey_strip_growth_rate_d_tau_dt": 0.25,
+    "initial_palinstrophy_ceiling_ratio_upsilon0_hi": 0.24009295,
+    "ode_steps_required": 0,
+    "zero_step_global_smoothness_and_gevrey_certified": true
+  },
+  "gevrey_trapping_thresholds_by_viscosity": [
+    {
+      "nu": 1.0,
+      "certified_enstrophy_trapping_radius_D_trap_lo": 0.02389113,
+      "certified_gevrey_analyticity_radius_D_gevrey_lo": 0.00597278,
+      "certified_zero_step_E0_D0sq_budget_lo": 3.232408e-05,
+      "gevrey_strip_linear_rate_kmin_nu_over_2": 0.5
+    },
+    {
+      "nu": 0.5,
+      "certified_enstrophy_trapping_radius_D_trap_lo": 0.00597278,
+      "certified_gevrey_analyticity_radius_D_gevrey_lo": 0.0014932,
+      "certified_zero_step_E0_D0sq_budget_lo": 5.050637e-07,
+      "gevrey_strip_linear_rate_kmin_nu_over_2": 0.25
+    },
+    {
+      "nu": 0.25,
+      "certified_enstrophy_trapping_radius_D_trap_lo": 0.0014932,
+      "certified_gevrey_analyticity_radius_D_gevrey_lo": 0.0003733,
+      "certified_zero_step_E0_D0sq_budget_lo": 7.89162e-09,
+      "gevrey_strip_linear_rate_kmin_nu_over_2": 0.125
+    },
+    {
+      "nu": 0.1,
+      "certified_enstrophy_trapping_radius_D_trap_lo": 0.00023891,
+      "certified_gevrey_analyticity_radius_D_gevrey_lo": 5.973e-05,
+      "certified_zero_step_E0_D0sq_budget_lo": 3.232408e-11,
+      "gevrey_strip_linear_rate_kmin_nu_over_2": 0.05
+    }
+  ],
+  "large_data_palinstrophy_kurtosis_redteam": {
+    "n_grid": 16,
+    "dealiased_active_3d_modes": 728,
+    "nu": 0.25,
+    "initial_E0": 0.6,
+    "initial_F0": 14.494449,
+    "initial_F0_over_nu": 57.9778,
+    "initial_D0": 5.222388,
+    "initial_P0": 35.15779,
+    "theorem_I_violation_multiple_at_t0": 2073592249.9,
+    "initial_spectral_kurtosis_P0_over_D0": 6.7321,
+    "peak_spectral_kurtosis_P_over_D": 6.7321,
+    "kurtosis_at_peak_enstrophy": 6.7321,
+    "peak_enstrophy_D": 5.222388,
+    "time_of_peak_enstrophy": 0.0,
+    "peak_palinstrophy_P": 35.15779,
+    "initial_palinstrophy_ceiling_ratio_upsilon0": 1816990.11,
+    "moving_palinstrophy_ceiling_entry_time_upsilon_lt_1": 9.59,
+    "lei_lin_ball_entry_time_F0_lt_nu": 6.94,
+    "permanent_enstrophy_trap_entry_time_D_lt_Dtrap": 9.63,
+    "certified_D_trap_threshold": 0.0014932,
+    "Theoretical_Leray_trap_upper_bound_T_trap": 1607.29,
+    "final_E": 0.000728,
+    "final_F0": 0.110753,
+    "final_D": 0.00148982,
+    "final_P": 0.00155853,
+    "dual_gate_captured": true
+  },
+  "certificate_sha256": "d4b3516357df610ad3cece1585cb4b0aa8450ce541dae18826a7518bc12bc630"
+}
