@@ -1,0 +1,306 @@
+# UPSTREAM_SOURCE: https://raw.githubusercontent.com/Arize-ai/openinference/main/python/instrumentation/openinference-instrumentation-langchain/tests/cassettes/test_instrumentor/test_gemini_token_counts.yaml
+interactions:
+- request:
+    body: "{\n  \"contents\": [\n    {\n      \"role\": \"user\",\n      \"parts\":
+      [\n        {\n          \"text\": \"Tell me a funny joke, a one-liner.\"\n        }\n
+      \     ]\n    }\n  ],\n  \"generationConfig\": {\n    \"candidateCount\": 1\n
+      \ }\n}"
+    headers: {}
+    method: POST
+    uri: https://us-central1-aiplatform.googleapis.com/v1beta1/projects/test-project/locations/us-central1/publishers/google/models/gemini-2.5-flash:generateContent?%24alt=json%3Benum-encoding%3Dint
+  response:
+    body:
+      string: "{\n  \"candidates\": [\n    {\n      \"content\": {\n        \"role\":
+        \"model\",\n        \"parts\": [\n          {\n            \"text\": \"I'm
+        on a seafood diet. I see food, and I eat it.\"\n          }\n        ]\n      },\n
+        \     \"finishReason\": 1,\n      \"avgLogprobs\": -4.1875125660615806\n    }\n
+        \ ],\n  \"usageMetadata\": {\n    \"promptTokenCount\": 11,\n    \"candidatesTokenCount\":
+        17,\n    \"totalTokenCount\": 218,\n    \"trafficType\": 1,\n    \"promptTokensDetails\":
+        [\n      {\n        \"modality\": 1,\n        \"tokenCount\": 11\n      }\n
+        \   ],\n    \"candidatesTokensDetails\": [\n      {\n        \"modality\":
+        1,\n        \"tokenCount\": 17\n      }\n    ],\n    \"thoughtsTokenCount\":
+        190\n  },\n  \"modelVersion\": \"gemini-2.5-flash\",\n  \"createTime\": \"2025-12-19T23:45:36.565494Z\",\n
+        \ \"responseId\": \"oONFafbBIrrygLUP36rmIA\"\n}\n"
+    headers: {}
+    status:
+      code: 200
+      message: OK
+version: 1
+
+---
+# UPSTREAM_SOURCE: https://raw.githubusercontent.com/Arize-ai/openinference/main/python/instrumentation/openinference-instrumentation-langchain/tests/cassettes/test_instrumentor/test_gemini_token_counts_streaming.yaml
+interactions:
+- request:
+    body: "{\n  \"contents\": [\n    {\n      \"role\": \"user\",\n      \"parts\":
+      [\n        {\n          \"text\": \"Tell me a funny joke, a one-liner.\"\n        }\n
+      \     ]\n    }\n  ],\n  \"generationConfig\": {\n    \"candidateCount\": 1\n
+      \ }\n}"
+    headers: {}
+    method: POST
+    uri: https://us-central1-aiplatform.googleapis.com/v1beta1/projects/test-project/locations/us-central1/publishers/google/models/gemini-2.5-flash:streamGenerateContent?%24alt=json%3Benum-encoding%3Dint
+  response:
+    body:
+      string: "[{\n  \"candidates\": [\n    {\n      \"content\": {\n        \"role\":
+        \"model\",\n        \"parts\": [\n          {\n            \"text\": \"I told
+        my wife she was drawing her eyebrows too high. She looked surprised.\"\n          }\n
+        \       ]\n      },\n      \"finishReason\": 1\n    }\n  ],\n  \"usageMetadata\":
+        {\n    \"promptTokenCount\": 11,\n    \"candidatesTokenCount\": 16,\n    \"totalTokenCount\":
+        259,\n    \"trafficType\": 1,\n    \"promptTokensDetails\": [\n      {\n        \"modality\":
+        1,\n        \"tokenCount\": 11\n      }\n    ],\n    \"candidatesTokensDetails\":
+        [\n      {\n        \"modality\": 1,\n        \"tokenCount\": 16\n      }\n
+        \   ],\n    \"thoughtsTokenCount\": 232\n  },\n  \"modelVersion\": \"gemini-2.5-flash\",\n
+        \ \"createTime\": \"2025-12-19T23:45:33.943266Z\",\n  \"responseId\": \"neNFaaLJOd68gLUP2eiwkQE\"\n}\n]"
+    headers: 
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json; charset=UTF-8
+      Transfer-Encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
+version: 1
+
+---
+# UPSTREAM_SOURCE: https://raw.githubusercontent.com/Arize-ai/openinference/main/python/instrumentation/openinference-instrumentation-langchain/tests/cassettes/test_instrumentor/test_records_token_counts_for_streaming_openai_llm.yaml
+interactions:
+- request:
+    body: '{"messages": [{"content": "Tell me a funny joke, a one-liner.", "role":
+      "user"}], "model": "gpt-3.5-turbo", "logprobs": false, "n": 1, "stream": true,
+      "stream_options": {"include_usage": true}, "temperature": 0.7}'
+    headers: {}
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+  response:
+    body:
+      string: 'data: {"id":"chatcmpl-9rD4cbxcufhWUCMSJ0LP0ZNuora53","object":"chat.completion.chunk","created":1722468666,"model":"gpt-3.5-turbo-0125","system_fingerprint":null,"choices":[{"index":0,"delta":{"role":"assistant","content":""},"logprobs":null,"finish_reason":null}],"usage":null}
+
+
+        data: {"id":"chatcmpl-9rD4cbxcufhWUCMSJ0LP0ZNuora53","object":"chat.completion.chunk","created":1722468666,"model":"gpt-3.5-turbo-0125","system_fingerprint":null,"choices":[{"index":0,"delta":{"content":"Why"},"logprobs":null,"finish_reason":null}],"usage":null}
+
+
+        data: {"id":"chatcmpl-9rD4cbxcufhWUCMSJ0LP0ZNuora53","object":"chat.completion.chunk","created":1722468666,"model":"gpt-3.5-turbo-0125","system_fingerprint":null,"choices":[{"index":0,"delta":{"content":"
+        couldn"},"logprobs":null,"finish_reason":null}],"usage":null}
+
+
+        data: {"id":"chatcmpl-9rD4cbxcufhWUCMSJ0LP0ZNuora53","object":"chat.completion.chunk","created":1722468666,"model":"gpt-3.5-turbo-0125","system_fingerprint":null,"choices":[{"index":0,"delta":{"content":"''t"},"logprobs":null,"finish_reason":null}],"usage":null}
+
+
+        data: {"id":"chatcmpl-9rD4cbxcufhWUCMSJ0LP0ZNuora53","object":"chat.completion.chunk","created":1722468666,"model":"gpt-3.5-turbo-0125","system_fingerprint":null,"choices":[{"index":0,"delta":{"content":"
+        the"},"logprobs":null,"finish_reason":null}],"usage":null}
+
+
+        data: {"id":"chatcmpl-9rD4cbxcufhWUCMSJ0LP0ZNuora53","object":"chat.completion.chunk","created":1722468666,"model":"gpt-3.5-turbo-0125","system_fingerprint":null,"choices":[{"index":0,"delta":{"content":"
+        bicycle"},"logprobs":null,"finish_reason":null}],"usage":null}
+
+
+        data: {"id":"chatcmpl-9rD4cbxcufhWUCMSJ0LP0ZNuora53","object":"chat.completion.chunk","created":1722468666,"model":"gpt-3.5-turbo-0125","system_fingerprint":null,"choices":[{"index":0,"delta":{"content":"
+        stand"},"logprobs":null,"finish_reason":null}],"usage":null}
+
+
+        data: {"id":"chatcmpl-9rD4cbxcufhWUCMSJ0LP0ZNuora53","object":"chat.completion.chunk","created":1722468666,"model":"gpt-3.5-turbo-0125","system_fingerprint":null,"choices":[{"index":0,"delta":{"content":"
+        up"},"logprobs":null,"finish_reason":null}],"usage":null}
+
+
+        data: {"id":"chatcmpl-9rD4cbxcufhWUCMSJ0LP0ZNuora53","object":"chat.completion.chunk","created":1722468666,"model":"gpt-3.5-turbo-0125","system_fingerprint":null,"choices":[{"index":0,"delta":{"content":"
+        by"},"logprobs":null,"finish_reason":null}],"usage":null}
+
+
+        data: {"id":"chatcmpl-9rD4cbxcufhWUCMSJ0LP0ZNuora53","object":"chat.completion.chunk","created":1722468666,"model":"gpt-3.5-turbo-0125","system_fingerprint":null,"choices":[{"index":0,"delta":{"content":"
+        itself"},"logprobs":null,"finish_reason":null}],"usage":null}
+
+
+        data: {"id":"chatcmpl-9rD4cbxcufhWUCMSJ0LP0ZNuora53","object":"chat.completion.chunk","created":1722468666,"model":"gpt-3.5-turbo-0125","system_fingerprint":null,"choices":[{"index":0,"delta":{"content":"?"},"logprobs":null,"finish_reason":null}],"usage":null}
+
+
+        data: {"id":"chatcmpl-9rD4cbxcufhWUCMSJ0LP0ZNuora53","object":"chat.completion.chunk","created":1722468666,"model":"gpt-3.5-turbo-0125","system_fingerprint":null,"choices":[{"index":0,"delta":{"content":"
+        It"},"logprobs":null,"finish_reason":null}],"usage":null}
+
+
+        data: {"id":"chatcmpl-9rD4cbxcufhWUCMSJ0LP0ZNuora53","object":"chat.completion.chunk","created":1722468666,"model":"gpt-3.5-turbo-0125","system_fingerprint":null,"choices":[{"index":0,"delta":{"content":"
+        was"},"logprobs":null,"finish_reason":null}],"usage":null}
+
+
+        data: {"id":"chatcmpl-9rD4cbxcufhWUCMSJ0LP0ZNuora53","object":"chat.completion.chunk","created":1722468666,"model":"gpt-3.5-turbo-0125","system_fingerprint":null,"choices":[{"index":0,"delta":{"content":"
+        two"},"logprobs":null,"finish_reason":null}],"usage":null}
+
+
+        data: {"id":"chatcmpl-9rD4cbxcufhWUCMSJ0LP0ZNuora53","object":"chat.completion.chunk","created":1722468666,"model":"gpt-3.5-turbo-0125","system_fingerprint":null,"choices":[{"index":0,"delta":{"content":"
+        tired"},"logprobs":null,"finish_reason":null}],"usage":null}
+
+
+        data: {"id":"chatcmpl-9rD4cbxcufhWUCMSJ0LP0ZNuora53","object":"chat.completion.chunk","created":1722468666,"model":"gpt-3.5-turbo-0125","system_fingerprint":null,"choices":[{"index":0,"delta":{"content":"."},"logprobs":null,"finish_reason":null}],"usage":null}
+
+
+        data: {"id":"chatcmpl-9rD4cbxcufhWUCMSJ0LP0ZNuora53","object":"chat.completion.chunk","created":1722468666,"model":"gpt-3.5-turbo-0125","system_fingerprint":null,"choices":[{"index":0,"delta":{},"logprobs":null,"finish_reason":"stop"}],"usage":null}
+
+
+        data: {"id":"chatcmpl-9rD4cbxcufhWUCMSJ0LP0ZNuora53","object":"chat.completion.chunk","created":1722468666,"model":"gpt-3.5-turbo-0125","system_fingerprint":null,"choices":[],"usage":{"prompt_tokens":18,"completion_tokens":15,"total_tokens":33}}
+
+
+        data: [DONE]
+
+
+        '
+    headers: {}
+    status:
+      code: 200
+      message: OK
+version: 1
+
+---
+# UPSTREAM_SOURCE: https://raw.githubusercontent.com/Arize-ai/openinference/main/python/instrumentation/openinference-instrumentation-langchain/tests/cassettes/test_instrumentor/test_token_counts.yaml
+interactions:
+- request:
+    body: '{"messages":[{"content":"Translate the following from English into Italian","role":"system"},{"content":"hi!","role":"user"}],"model":"gpt-4o-mini","n":1,"stream":false,"temperature":0.7}'
+    headers: {}
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+  response:
+    body:
+      string: "{\n  \"id\": \"chatcmpl-BI9zeX5oxGehJnciAiPXRPREeePmY\",\n  \"object\":
+        \"chat.completion\",\n  \"created\": 1743668018,\n  \"model\": \"gpt-4o-mini-2024-07-18\",\n
+        \ \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\":
+        \"assistant\",\n        \"content\": \"Ciao!\",\n        \"refusal\": null,\n
+        \       \"annotations\": []\n      },\n      \"logprobs\": null,\n      \"finish_reason\":
+        \"stop\"\n    }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": 20,\n    \"completion_tokens\":
+        4,\n    \"total_tokens\": 24,\n    \"prompt_tokens_details\": {\n      \"cached_tokens\":
+        1,\n      \"audio_tokens\": 2\n    },\n    \"completion_tokens_details\":
+        {\n      \"reasoning_tokens\": 3,\n      \"audio_tokens\": 4,\n      \"accepted_prediction_tokens\":
+        0,\n      \"rejected_prediction_tokens\": 0\n    }\n  },\n  \"service_tier\":
+        \"default\",\n  \"system_fingerprint\": \"fp_b376dfbbd5\"\n}\n"
+    headers: {}
+    status:
+      code: 200
+      message: OK
+version: 1
+
+---
+# UPSTREAM_SOURCE: https://raw.githubusercontent.com/Arize-ai/openinference/main/python/instrumentation/openinference-instrumentation-langchain/tests/cassettes/test_instrumentor/test_tool_call_with_function.yaml
+interactions:
+- request:
+    body: '{"messages":[{"content":"What is 3 * 12? Also, what is 11 + 49?","role":"user"}],"model":"gpt-4o-mini","stream":false,"tools":[{"type":"function","function":{"name":"add","description":"Adds
+      a and b.","parameters":{"properties":{"a":{"type":"integer"},"b":{"type":"integer"}},"required":["a","b"],"type":"object"}}},{"type":"function","function":{"name":"multiply","description":"Multiplies
+      a and b.","parameters":{"properties":{"a":{"type":"integer"},"b":{"type":"integer"}},"required":["a","b"],"type":"object"}}}]}'
+    headers: {}
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+  response:
+    body:
+      string: "{\n  \"id\": \"chatcmpl-BZ8blO4x3ynTj8awD7YPWEqaUByIy\",\n  \"object\":
+        \"chat.completion\",\n  \"created\": 1747714269,\n  \"model\": \"gpt-4o-mini-2024-07-18\",\n
+        \ \"choices\": [\n    {\n      \"index\": 0,\n      \"message\": {\n        \"role\":
+        \"assistant\",\n        \"content\": null,\n        \"tool_calls\": [\n          {\n
+        \           \"id\": \"call_Kd281qYCh92tVGg73bPsF1HZ\",\n            \"type\":
+        \"function\",\n            \"function\": {\n              \"name\": \"multiply\",\n
+        \             \"arguments\": \"{\\\"a\\\": 3, \\\"b\\\": 12}\"\n            }\n
+        \         },\n          {\n            \"id\": \"call_Z3ns3Wjn6WnUADUhPhlommYN\",\n
+        \           \"type\": \"function\",\n            \"function\": {\n              \"name\":
+        \"add\",\n              \"arguments\": \"{\\\"a\\\": 11, \\\"b\\\": 49}\"\n
+        \           }\n          }\n        ],\n        \"refusal\": null,\n        \"annotations\":
+        []\n      },\n      \"logprobs\": null,\n      \"finish_reason\": \"tool_calls\"\n
+        \   }\n  ],\n  \"usage\": {\n    \"prompt_tokens\": 87,\n    \"completion_tokens\":
+        50,\n    \"total_tokens\": 137,\n    \"prompt_tokens_details\": {\n      \"cached_tokens\":
+        0,\n      \"audio_tokens\": 0\n    },\n    \"completion_tokens_details\":
+        {\n      \"reasoning_tokens\": 0,\n      \"audio_tokens\": 0,\n      \"accepted_prediction_tokens\":
+        0,\n      \"rejected_prediction_tokens\": 0\n    }\n  },\n  \"service_tier\":
+        \"default\",\n  \"system_fingerprint\": \"fp_dbaca60df0\"\n}\n"
+    headers: {}
+    status:
+      code: 200
+      message: OK
+version: 1
+
+---
+# UPSTREAM_SOURCE: https://raw.githubusercontent.com/Arize-ai/openinference/main/python/instrumentation/openinference-instrumentation-langchain/tests/cassettes/test_raw_dict_message/test_agent_with_raw_dict_messages.yaml
+interactions:
+- request:
+    body: '{"messages":[{"content":"You are a helpful assistant.","role":"system"},{"content":"What''s
+      the weather in London?","role":"user"}],"model":"gpt-4o-mini","n":1,"stream":true,"temperature":0.0,"tools":[{"type":"function","function":{"name":"get_weather","description":"Get
+      the weather for a location.","parameters":{"properties":{"location":{"type":"string"}},"required":["location"],"type":"object"}}}]}'
+    headers: {}
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+  response:
+    body:
+      string: 'data: {"id":"chatcmpl-CdKU5xm8z6nhRMJs7Slt7m0OhOdgz","object":"chat.completion.chunk","created":1763489569,"model":"gpt-4o-mini-2024-07-18","service_tier":"default","system_fingerprint":"fp_560af6e559","choices":[{"index":0,"delta":{"role":"assistant","content":null,"tool_calls":[{"index":0,"id":"call_7p1vRWhZc9Pm0j6JVvrHK4ZE","type":"function","function":{"name":"get_weather","arguments":""}}],"refusal":null},"logprobs":null,"finish_reason":null}],"obfuscation":"f"}
+
+
+        data: {"id":"chatcmpl-CdKU5xm8z6nhRMJs7Slt7m0OhOdgz","object":"chat.completion.chunk","created":1763489569,"model":"gpt-4o-mini-2024-07-18","service_tier":"default","system_fingerprint":"fp_560af6e559","choices":[{"index":0,"delta":{"tool_calls":[{"index":0,"function":{"arguments":"{\""}}]},"logprobs":null,"finish_reason":null}],"obfuscation":"IlSJqtP4c7n"}
+
+
+        data: {"id":"chatcmpl-CdKU5xm8z6nhRMJs7Slt7m0OhOdgz","object":"chat.completion.chunk","created":1763489569,"model":"gpt-4o-mini-2024-07-18","service_tier":"default","system_fingerprint":"fp_560af6e559","choices":[{"index":0,"delta":{"tool_calls":[{"index":0,"function":{"arguments":"location"}}]},"logprobs":null,"finish_reason":null}],"obfuscation":"KIpgSp"}
+
+
+        data: {"id":"chatcmpl-CdKU5xm8z6nhRMJs7Slt7m0OhOdgz","object":"chat.completion.chunk","created":1763489569,"model":"gpt-4o-mini-2024-07-18","service_tier":"default","system_fingerprint":"fp_560af6e559","choices":[{"index":0,"delta":{"tool_calls":[{"index":0,"function":{"arguments":"\":\""}}]},"logprobs":null,"finish_reason":null}],"obfuscation":"vcSXjae37"}
+
+
+        data: {"id":"chatcmpl-CdKU5xm8z6nhRMJs7Slt7m0OhOdgz","object":"chat.completion.chunk","created":1763489569,"model":"gpt-4o-mini-2024-07-18","service_tier":"default","system_fingerprint":"fp_560af6e559","choices":[{"index":0,"delta":{"tool_calls":[{"index":0,"function":{"arguments":"London"}}]},"logprobs":null,"finish_reason":null}],"obfuscation":"rgXcAPCs"}
+
+
+        data: {"id":"chatcmpl-CdKU5xm8z6nhRMJs7Slt7m0OhOdgz","object":"chat.completion.chunk","created":1763489569,"model":"gpt-4o-mini-2024-07-18","service_tier":"default","system_fingerprint":"fp_560af6e559","choices":[{"index":0,"delta":{"tool_calls":[{"index":0,"function":{"arguments":"\"}"}}]},"logprobs":null,"finish_reason":null}],"obfuscation":"tBHkThTc2Ev"}
+
+
+        data: {"id":"chatcmpl-CdKU5xm8z6nhRMJs7Slt7m0OhOdgz","object":"chat.completion.chunk","created":1763489569,"model":"gpt-4o-mini-2024-07-18","service_tier":"default","system_fingerprint":"fp_560af6e559","choices":[{"index":0,"delta":{},"logprobs":null,"finish_reason":"tool_calls"}],"obfuscation":"TiZm2BODRQiA"}
+
+
+        data: [DONE]
+
+
+        '
+    headers: {}
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"messages":[{"content":"You are a helpful assistant.","role":"system"},{"content":"What''s
+      the weather in London?","role":"user"},{"content":null,"role":"assistant","tool_calls":[{"type":"function","id":"call_7p1vRWhZc9Pm0j6JVvrHK4ZE","function":{"name":"get_weather","arguments":"{\"location\":
+      \"London\"}"}}]},{"content":"The weather in London is sunny.","role":"tool","tool_call_id":"call_7p1vRWhZc9Pm0j6JVvrHK4ZE"}],"model":"gpt-4o-mini","n":1,"stream":true,"temperature":0.0,"tools":[{"type":"function","function":{"name":"get_weather","description":"Get
+      the weather for a location.","parameters":{"properties":{"location":{"type":"string"}},"required":["location"],"type":"object"}}}]}'
+    headers: {}
+    method: POST
+    uri: https://api.openai.com/v1/chat/completions
+  response:
+    body:
+      string: 'data: {"id":"chatcmpl-CdKU7jAO8mYCVjDyDpc0C7u8brkU7","object":"chat.completion.chunk","created":1763489571,"model":"gpt-4o-mini-2024-07-18","service_tier":"default","system_fingerprint":"fp_560af6e559","choices":[{"index":0,"delta":{"role":"assistant","content":"","refusal":null},"logprobs":null,"finish_reason":null}],"obfuscation":"4Msqp0"}
+
+
+        data: {"id":"chatcmpl-CdKU7jAO8mYCVjDyDpc0C7u8brkU7","object":"chat.completion.chunk","created":1763489571,"model":"gpt-4o-mini-2024-07-18","service_tier":"default","system_fingerprint":"fp_560af6e559","choices":[{"index":0,"delta":{"content":"The"},"logprobs":null,"finish_reason":null}],"obfuscation":"TvXs2"}
+
+
+        data: {"id":"chatcmpl-CdKU7jAO8mYCVjDyDpc0C7u8brkU7","object":"chat.completion.chunk","created":1763489571,"model":"gpt-4o-mini-2024-07-18","service_tier":"default","system_fingerprint":"fp_560af6e559","choices":[{"index":0,"delta":{"content":"
+        weather"},"logprobs":null,"finish_reason":null}],"obfuscation":""}
+
+
+        data: {"id":"chatcmpl-CdKU7jAO8mYCVjDyDpc0C7u8brkU7","object":"chat.completion.chunk","created":1763489571,"model":"gpt-4o-mini-2024-07-18","service_tier":"default","system_fingerprint":"fp_560af6e559","choices":[{"index":0,"delta":{"content":"
+        in"},"logprobs":null,"finish_reason":null}],"obfuscation":"8mNQy"}
+
+
+        data: {"id":"chatcmpl-CdKU7jAO8mYCVjDyDpc0C7u8brkU7","object":"chat.completion.chunk","created":1763489571,"model":"gpt-4o-mini-2024-07-18","service_tier":"default","system_fingerprint":"fp_560af6e559","choices":[{"index":0,"delta":{"content":"
+        London"},"logprobs":null,"finish_reason":null}],"obfuscation":"z"}
+
+
+        data: {"id":"chatcmpl-CdKU7jAO8mYCVjDyDpc0C7u8brkU7","object":"chat.completion.chunk","created":1763489571,"model":"gpt-4o-mini-2024-07-18","service_tier":"default","system_fingerprint":"fp_560af6e559","choices":[{"index":0,"delta":{"content":"
+        is"},"logprobs":null,"finish_reason":null}],"obfuscation":"LcZAV"}
+
+
+        data: {"id":"chatcmpl-CdKU7jAO8mYCVjDyDpc0C7u8brkU7","object":"chat.completion.chunk","created":1763489571,"model":"gpt-4o-mini-2024-07-18","service_tier":"default","system_fingerprint":"fp_560af6e559","choices":[{"index":0,"delta":{"content":"
+        sunny"},"logprobs":null,"finish_reason":null}],"obfuscation":"qe"}
+
+
+        data: {"id":"chatcmpl-CdKU7jAO8mYCVjDyDpc0C7u8brkU7","object":"chat.completion.chunk","created":1763489571,"model":"gpt-4o-mini-2024-07-18","service_tier":"default","system_fingerprint":"fp_560af6e559","choices":[{"index":0,"delta":{"content":"."},"logprobs":null,"finish_reason":null}],"obfuscation":"sv3vFIw"}
+
+
+        data: {"id":"chatcmpl-CdKU7jAO8mYCVjDyDpc0C7u8brkU7","object":"chat.completion.chunk","created":1763489571,"model":"gpt-4o-mini-2024-07-18","service_tier":"default","system_fingerprint":"fp_560af6e559","choices":[{"index":0,"delta":{},"logprobs":null,"finish_reason":"stop"}],"obfuscation":"I0"}
+
+
+        data: [DONE]
+
+
+        '
+    headers: {}
+    status:
+      code: 200
+      message: OK
+version: 1

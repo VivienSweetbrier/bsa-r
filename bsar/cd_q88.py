@@ -301,6 +301,9 @@ def enumerate_sedenion_box_kites(lut: S32BitPackedLUT = GLOBAL_S32_LUT) -> Dict[
     }
 
 
+GLOBAL_BOX_KITES_16D = enumerate_sedenion_box_kites(GLOBAL_S32_LUT)
+
+
 class PorchZeroDivisorGate:
     """
     Sweetbrier Pre-API Expense & Noise Firewall ("The Porch"):
@@ -313,7 +316,7 @@ class PorchZeroDivisorGate:
     """
 
     def __init__(self, box_kite_index: int = 0) -> None:
-        catalog = enumerate_sedenion_box_kites()
+        catalog = GLOBAL_BOX_KITES_16D
         bk = catalog["box_kites"][box_kite_index % len(catalog["box_kites"])]
         pair = bk["canonical_zero_divisor_pair"]
         li, lj, lsgn = pair["left_blade"]

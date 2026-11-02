@@ -4,12 +4,13 @@
 [![Runtime: Zero Dependencies](https://img.shields.io/badge/Dependencies-0%20(Python%20Stdlib%20%2B%20Base%20R)-2dd4bf.svg)](#quick-start)
 [![Algebra: 16D Sedenions & 32D Pathions](https://img.shields.io/badge/Algebra-64B%20Q8.8%20Pathions%20(3%20L1%20Cache%20Lines)-f5b942.svg)](#how-it-works)
 
-**`🅱💲🅰-R: Hypercubic Compiler` (`bsar`)** slashes AI agent token & compute bills by **`6.5x` overall on cold starts (`-84.6%`)** and **`782x` on data/log/guardrail chores (`-99.87%`)** — using **zero external runtime dependencies** and **`192 bytes` (`3` CPU L1 cache lines)** of deterministic fixed-point hypercomplex algebra.
+**`🅱💲🅰-R: Hypercubic Compiler` (`bsar` v0.2.0)** slashes AI agent token & compute bills by **`7.14x` overall on cold+warm suites (`-85.99%`; `6.5x–6.69x` 4-chore baseline)** and **`791.8x` on corpus/log/guardrail chores (`771.1x` including public `LangChain` / `CrewAI` / `AutoGen` traces, `-99.87%`)** — running on a **2013 commodity CPU (`Intel Core i7-4770 @ 3.40GHz`, `$0` GPU)** using **zero external runtime dependencies** and **`192 bytes` (`3` CPU L1 cache lines = `0.5859%` of a single core's `32 KB` L1D cache)** of deterministic fixed-point hypercomplex algebra.
 
-### Live Zero-Login Interactive Demos (`docs/`)
+### Live Zero-Login Interactive Demos & Reproducible CSVs (`docs/`)
 1. **Cerebral Valley Portal:** `docs/index.html` (`https://viviensweetbrier.github.io/bsa-r/`)
-2. **Compiler & Cloud-Bill Calculator HUD:** `docs/compiler-hud/index.html`
-3. **Flagship `6D XCube` App — Epistemic Concordance (`Scripture ↔ 1566 Trent ↔ CCC`):** `docs/epistemic-concordance/index.html`
+2. **v0.2.0 Verification HUD (`Pinned Silicon + Public Traces + Asar RATS`):** `docs/compiler-hud/index.html`
+3. **Full Reproducible CSV & Signed JSON:** `docs/compiler-hud/bsar_benchmark_metrics.csv` · `docs/compiler-hud/cerebral_valley_benchmark.json`
+4. **Flagship `6D XCube` App — Epistemic Concordance (`Scripture ↔ 1566 Trent ↔ CCC`):** `docs/epistemic-concordance/index.html`
 
 ---
 
@@ -46,43 +47,63 @@ flowchart TD
 
 ---
 
-## Empirical Benchmark (`tiktoken:o200k_base` + Base `R 4.6.1` Audited)
+## Empirical Benchmark (`tiktoken==0.14.0` `o200k_base` + Base `R 4.6.1` Audited)
 
-| Real Workspace Chore | Naive Harness (`o200k` Tokens) | `bsar` Compiler (`o200k` Tokens) | Reduction | CPU Speed |
+- **Pinned Host Silicon:** `Intel(R) Core(TM) i7-4770 CPU @ 3.40GHz` (`4C/8T` 2013 Haswell, `$0` GPU), `32,768 B` (`32 KB`) L1D/core (`64B` cache line), `256 KB` L2/core, `8 MB` L3 — entire `bsar` algebra kernel (`192 B`) occupies **`0.5859%` of one core's L1D cache**.
+- **Frozen Tokenizer Lock (`requirements-bench.lock`):** `tiktoken==0.14.0` (`o200k_base`, `n_vocab=200019`).
+- **Dollar Cost Proof (`@ $2.50 / 1M` Frontier Standard Input Tier):** Naive `1.83M`-token Data + Public Trace + Guardrail run = **`$4.5839`** vs. `bsar` = **`$0.00594` (`0.59 cents`)** + **`$0.00` GPU** (`$0.00036` at `$0.15 / 1M` Flash tier).
+
+| Chore / Public Multi-Agent Trace Workload | Naive (`o200k` Tokens) | `bsar` (`o200k` Tokens) | Compression (`Reduction`) | Pinned i7-4770 Speed |
 | :--- | ---: | ---: | ---: | :--- |
-| **1. `1.13 MB` Corpus 5-Query Slice (`rc-en.txt`)** | `1,267,655` | **`1,847`** | **`-99.854%` (`686x`)** | `1.03 ms` / `O(1)` slice |
-| **2. Multi-Agent `transcript.jsonl` Audit (`223 KB`)** | `67,463` | **`180`** | **`-99.733%` (`375x`)** | `62.60 ms` total |
-| **3. 100-Step Pre-API Zero-Divisor Porch Firewall** | `250,000` | **`0`** | **`-100.000%` (`∞`)** | **`35.12 µs` / gate** |
-| **4. 240-AST `64B` Cache + `7`-Box-Kite Escape (Cold+Warm)** | `882,000` | **`378,000`** | **`-57.140%` (`2.3x`)** | `1.33 ms` / AST (`100%` spoof catch) |
-| **Combined 4-Chore Suite** | **`2,467,118`** | **`380,027`** | **`-84.60%` (`6.5x`)** | **`2,087,091` tokens saved / run** |
+| **1. `1.13 MB` Corpus 5-Query Slice (`rc-en.txt`)** | `1,267,655` | **`1,847`** | **`686.3x` (`-99.854%`)** | `874 µs` / `O(1)` slice |
+| **2. Multi-Agent `transcript.jsonl` Audit** | `144,332` | **`252`** | **`572.7x` (`-99.825%`)** | `98.30 ms` total |
+| **3. 100-Step Pre-API Zero-Divisor Porch Firewall** | `250,000` | **`0`** | **`∞` (`-100.000%`)** | **`25.96 µs` / gate** |
+| **4. 240-AST `64B` Cache + `7`-Box-Kite Escape** | `882,000` | **`378,000`** | **`2.33x` (`-57.140%`)** | `254.44 ms` / `240` ASTs (`100%` spoof catch) |
+| **5. Public Multi-Agent Traces (`466 KB` Unified 4D Cube)** | `171,578` | **`279`** | **`615.0x` (`-99.837%`)** | **`12.29 ms` across 3 frameworks** |
+| &nbsp;&nbsp;↳ *5a. `LangChain` (`Arize OpenInference`, Apache-2.0)* | `6,786` | *`157` (standalone)* | *`43.2x` (`-97.686%`)* | SHA-256 verified |
+| &nbsp;&nbsp;↳ *5b. `CrewAI` (`Arize OpenInference`, Apache-2.0)* | `150,122` | *`94` (standalone)* | **`1,597.0x` (`-99.937%`)** | SHA-256 verified |
+| &nbsp;&nbsp;↳ *5c. `AutoGen / AG2` (`OpenInference` + UC Berkeley `MAST`)* | `14,670` | *`120` (standalone)* | **`122.2x` (`-99.182%`)** | Catches `1.5` stuck-loop mode |
+| **Data + Log + Guardrail Baseline (`Chores 1–3`)** | **`1,661,987`** | **`2,099`** | **`791.8x` (`-99.874%`)** | Verifies `782x+` claim |
+| **Data + Public Traces + Guardrails (`Chores 1–3 + 5`)** | **`1,833,565`** | **`2,378`** | **`771.1x` (`-99.870%`)** | **`$0.0059` / run (`0` GPU)** |
+| **Full 5-Chore Cold+Warm Suite (`Chores 1–5`)** | **`2,715,565`** | **`380,378`** | **`7.14x` (`-85.99%`)** | Verifies `6.5x+` claim (`R 4.6.1` OK) |
+
+### `Asar` 3-Pass Bit-Exact `Q8.8` Zero-Divisor Microbench (`python -m bsar zd-bench`)
+- **Pass 0 $\to$ Pass 1 $\to$ Pass 2 Determinism:** `177` 64-byte `Q8.8` zero-divisor symbols (`168` `|PSL(2,7)|` 16D Sedenion edges + `1` native 32D Pathion Sand Mandala `(e_1+e_18)*(e_4-e_23)` + `8` fractional `Q8.8` Porch distributive residuals) sealed behind an authentic 8-byte SNES `Asar` `RATS` tag (`STAR` header `535441523f2cc0d3`, bitwise inverse check `0xffff`, `11,336` bytes, `SHA-256: 270d80ebe1c9d826...`).
+- **Pass-to-Pass Drift:** `0` symbol offset drift, **`0` byte drift** (`Pass 1 == Pass 2`), `177 / 177` exact `0x00 × 64` bytes.
+- **Hot-L1 Latency on 2013 `i7-4770`:** **`p50 = 13.98 µs`** per 64-byte `Q8.8` 32D zero-divisor product (`35.38 ms` full 3-pass `177`-symbol slab assembly).
 
 ---
 
 ## Monorepo Layout
 
-- `bsar/` — Core **`🅱💲🅰-R: Hypercubic Compiler`** Python package (`cd_q88.py`, `hypercube.py`, `chore_bench.py`, `cli.py`)
+- `bsar/` — Core **`🅱💲🅰-R: Hypercubic Compiler`** Python package (`cd_q88.py`, `hypercube.py`, `asar_zd_microbench.py`, `hardware_pin.py`, `chore_bench.py`, `cli.py`)
+- `benchmarks/public_traces/` — SHA-256-locked public `LangChain`, `CrewAI`, and `AutoGen / AG2` (`OpenInference` & UC Berkeley `MAST-Data`) trace corpus (`public_traces_manifest.json`)
+- `requirements-bench.lock` — Frozen `tiktoken==0.14.0` benchmark lockfile (`core bsar` keeps `dependencies = []`)
 - `epistemic_concordance/` — Flagship `6D XCube` web application (`bsar_xcube.py`, `replicability_ledger.py`, `compile_corpus.py`, `test_epistemic_concordance.py`)
 - `r/` — Native R (`>= 4.1.0` / verified on `R 4.6.1`) Tidyverse & zero-dependency Base-R verbs (`cayley_dickson_verbs.R`, `validate_bsar_cd.R`)
-- `docs/` — Pre-built static web HUDs ready for zero-config GitHub Pages / Cloudflare Pages deployment
+- `docs/` — Pre-built static web HUDs & CSVs ready for zero-config GitHub Pages / Cloudflare Pages deployment
 - `tests/` — Hostile & deterministic unit test suite (`test_bsar.py`)
 - `LICENSE` — Full **GNU Affero General Public License v3.0 (`AGPLv3`)**
 
 ---
 
-## Quick Start (`0` External Dependencies)
+## Quick Start (`0` External Runtime Dependencies)
 
 ```bash
-# 1. Inspect 64-byte L1 cache-line layout & 7 Sedenion Box-Kites (168 edges)
+# 1. Inspect pinned CPU + L1D cache-line layout & 7 Sedenion Box-Kites (168 edges)
 python -m bsar info
 
-# 2. Run all 12 unit tests (6 core compiler tests + 6 concordance hypercube tests)
-python tests/test_bsar.py
+# 2. Run Asar-style 3-pass bit-exact Q8.8 zero-divisor microbench + STAR RATS check
+python -m bsar zd-bench
+
+# 3. Run all 15 unit tests (9 core compiler/trace/RATS tests + 6 concordance hypercube tests)
+python -m unittest discover -s tests -v
 python epistemic_concordance/test_epistemic_concordance.py
 
-# 3. Run real-chore benchmark & export HUD
-python -m bsar bench --out-dir docs/compiler-hud
+# 4. (Optional: pip install -r requirements-bench.lock) Run 5-chore benchmark & sync docs/compiler-hud
+python -m bsar bench --sync-docs
 
-# 4. (Optional) Cross-verify Q8.8 32D zero-divisors & CSV metrics in Base R
+# 5. Cross-verify Q8.8 32D zero-divisors & CSV metrics in Base R 4.6.1
 Rscript r/validate_bsar_cd.R docs/compiler-hud/cerebral_valley_metrics.csv
 ```
 

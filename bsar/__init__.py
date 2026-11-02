@@ -10,6 +10,11 @@ Unites:
   -R — Copy-on-Modify Tidyverse Pipe Verbs + Carrollian Middle-Term Projection (∃m)
 """
 
+from .asar_zd_microbench import (
+    pack_asar_rats_block,
+    run_asar_q88_zero_divisor_microbench,
+    verify_asar_rats_block,
+)
 from .cd_q88 import (
     BOX_KITE_COUNT_16D,
     L1_CACHE_LINE_BYTES,
@@ -24,6 +29,7 @@ from .cd_q88 import (
     fold_ast_q88,
     q88_to_float,
 )
+from .hardware_pin import pin_host_hardware
 from .hypercube import (
     BsaRHypercubeCompiler,
     EpistemicCellState,
@@ -33,11 +39,12 @@ from .hypercube import (
     hilbert_nd_to_d,
 )
 
-__version__ = "0.1.0"
-BANNER = "🅱💲🅰-R: Hypercubic Compiler v0.1.0"
+__version__ = "0.2.0"
+BANNER = "🅱💲🅰-R: Hypercubic Compiler v0.2.0"
 
 __all__ = [
     "BANNER",
+    "__version__",
     "BOX_KITE_COUNT_16D",
     "L1_CACHE_LINE_BYTES",
     "LUT_32D_BYTES",
@@ -56,4 +63,8 @@ __all__ = [
     "RPipe",
     "canonical_sha256",
     "hilbert_nd_to_d",
+    "pin_host_hardware",
+    "pack_asar_rats_block",
+    "verify_asar_rats_block",
+    "run_asar_q88_zero_divisor_microbench",
 ]

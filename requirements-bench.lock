@@ -1,0 +1,4 @@
+# Frozen benchmark tokenizer lock for 🅱💲🅰-R v0.2.0 reproducibility
+# Core `bsar` runtime has ZERO dependencies; `tiktoken` is used strictly
+# for exact OpenAI `o200k_base` BPE token accounting in `python -m bsar bench`.
+tiktoken==0.14.0

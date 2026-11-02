@@ -1,18 +1,92 @@
 {
-  "report_sha256": "6b05a0cd396758930f5dad5f76b7b22d452806feb1730895cf2d75eb73b37a25",
-  "compiler": "🅱💲🅰-R: Hypercubic Compiler v0.1.0",
+  "report_sha256": "6bfd728315af6ccf14daf23cc0a9112c472cc19f0cd020bfa9e49e7acd242127",
+  "compiler": "🅱💲🅰-R: Hypercubic Compiler v0.2.0",
   "attestation": "probabilistic_structural",
-  "tokenizer_engine": "tiktoken:o200k_base",
+  "tokenizer_engine": "tiktoken:o200k_base (v0.14.0)",
+  "pinned_tokenizer": {
+    "engine": "tiktoken:o200k_base (v0.14.0)",
+    "package": "tiktoken",
+    "version": "0.14.0",
+    "frozen_lock_spec": "tiktoken==0.14.0",
+    "matches_frozen_lock": true,
+    "encoding": "o200k_base",
+    "n_vocab": 200019,
+    "bpe_canary_sha256": "bee821d42bc02ba71a38bea28a158e7a63578fc92f7cbca1440df67ccf6d5d68"
+  },
+  "pinned_hardware": {
+    "cpu_model": "Intel(R) Core(TM) i7-4770 CPU @ 3.40GHz",
+    "base_clock_mhz": 3392,
+    "physical_cores": 4,
+    "logical_threads": 8,
+    "l1d_per_core_bytes": 32768,
+    "l1i_per_core_bytes": 32768,
+    "l1_cache_line_bytes": 64,
+    "l2_per_core_bytes": 262144,
+    "l3_shared_bytes": 8388608,
+    "os_platform": "Windows 10 (AMD64)",
+    "python_version": "3.14.3",
+    "gpu_required": false,
+    "bsar_kernel_total_bytes": 192,
+    "bsar_kernel_l1_cache_lines": 3,
+    "l1d_total_cache_lines_per_core": 512,
+    "bsar_pct_of_single_core_l1d": 0.5859
+  },
   "headline_summary": {
-    "total_naive_tokens_per_suite": 2494872,
-    "total_bsar_tokens_per_suite": 380083,
-    "total_tokens_saved_per_suite": 2114789,
-    "overall_token_reduction_pct": 84.77,
+    "total_naive_tokens_per_suite": 2715565,
+    "total_bsar_tokens_per_suite": 380378,
+    "total_tokens_saved_per_suite": 2335187,
+    "overall_token_reduction_pct": 85.99,
+    "cold_start_suite_compression_x": 7.14,
+    "data_trace_guardrail_naive_tokens": 1833565,
+    "data_trace_guardrail_bsar_tokens": 2378,
+    "data_trace_guardrail_compression_x": 771.1,
+    "v01_4chore_baseline_cold_start_x": 6.69,
+    "v01_ch1_to_3_baseline_x": 791.8,
+    "data_plane_cost_at_2_50_per_1m_usd": {
+      "naive_usd": 4.5839,
+      "bsar_usd": 0.00594,
+      "gpu_infra_usd": 0.0
+    },
+    "pinned_cpu_model": "Intel(R) Core(TM) i7-4770 CPU @ 3.40GHz",
+    "pinned_l1d_per_core_bytes": 32768,
+    "bsar_pct_of_single_core_l1d": 0.5859,
+    "frozen_tiktoken": "tiktoken==0.14.0",
+    "asar_3pass_zd_deterministic": true,
+    "asar_3pass_zd_single_mult_p50_us": 12.915,
     "state_vector_bytes": 64,
     "s32_sign_lut_bytes": 128,
     "sedenion_box_kites": 7,
     "sedenion_assessors": 42,
     "sedenion_annihilation_edges": 168
+  },
+  "asar_q88_zd_microbench": {
+    "microbench_id": "ASAR_3PASS_Q88_ZD_MICROBENCH",
+    "asar_three_pass_deterministic": true,
+    "pass0_symbol_count": 177,
+    "pass1_to_pass2_symbol_offset_drift": 0,
+    "pass1_to_pass2_byte_drift": 0,
+    "rats_header": {
+      "valid": true,
+      "header_hex": "535441523f2cc0d3",
+      "size_m1": 11327,
+      "inv_size_m1": 54208,
+      "xor_check_hex": "0xffff",
+      "payload_bytes": 11328
+    },
+    "rats_slab_total_bytes": 11336,
+    "rats_slab_sha256": "270d80ebe1c9d8267dbd356e34711aa77121fb596a0ab754f597234491cf2d76",
+    "s32_lut_128b_sha256": "a4e903452ffe37e6fae92e7b750f178a98426d7b1bf4f773f1f1dcc1979acd30",
+    "state_vector_bytes": 64,
+    "s32_lut_bytes": 128,
+    "box_kite_count": 7,
+    "sedenion_16d_annihilation_verified": "168/168",
+    "pathion_32d_sand_mandala_verified": "1/1",
+    "porch_distributive_probes_verified": "8/8",
+    "latency_single_64b_zd_mult_p50_us": 12.915,
+    "latency_single_64b_zd_mult_p95_us": 41.585,
+    "latency_single_64b_zd_mult_mean_us": 18.375,
+    "three_pass_full_assembly_ms": 38.7,
+    "first_principles_lut_dual_bootstrap_ms": 2399.15
   },
   "chores": {
     "chore1": {
@@ -23,21 +97,23 @@
       "naive_input_tokens": 1267655,
       "bsar_input_tokens": 1847,
       "tokens_saved": 1265808,
+      "compression_ratio_x": 686.3,
       "token_reduction_pct": 99.854,
-      "compile_once_ms": 100.34,
-      "avg_slice_query_us": 974.44
+      "compile_once_ms": 119.62,
+      "avg_slice_query_us": 884.84
     },
     "chore2": {
       "chore_id": "CHORE_2_TRANSCRIPT_AUDIT",
       "title": "Multi-Agent `transcript.jsonl` Telemetry & `/compact` Slice",
-      "source": "transcript.jsonl (313,410 bytes)",
-      "rats_sha256": "5dafc7a6749332a7b937487b76561a3c9b3b5de1a23858823b667eabb0da9183",
-      "naive_input_tokens": 95217,
-      "bsar_input_tokens": 236,
-      "tokens_saved": 94981,
-      "token_reduction_pct": 99.752,
-      "total_cpu_ms": 82.56,
-      "compact_preview": "source | step_type | tool_name | raw_cells | sum_float\n--- | --- | --- | --- | ---\nMODEL | GENERIC | NO_TOOL | 79 | 0.0\nMODEL | PLANNER_RESPONSE | NO_TOOL | 5 | 9.28125\nMODEL | PLANNER_RESPONSE | edit_file | 14 | 27.34375\nMODEL | PLANNER_RESPONSE | invoke_subagent | 3 | 12.210938\nMODEL | PLANNER_RESPONSE | manage_subagents | 2 | 5.023438\nMODEL | PLANNER_RESPONSE | read_file | 25 | 17.773438\nMODEL | PLANNER_RESPONSE | run_command | 24 | 28.46875\nMODEL | PLANNER_RESPONSE | search_web | 4 | 6.011719\nMODEL | PLANNER_RESPONSE | send_message | 1 | 4.070312\nMODEL | PLANNER_RESPONSE | write_file | 7 | 47.9375\nSYSTEM | SYSTEM_MESSAGE | NO_TOOL | 5 | 0.0\nUSER_EXPLICIT | USER_INPUT | NO_TOOL | 6 | 0.0"
+      "source": "transcript.jsonl (481,106 bytes)",
+      "rats_sha256": "c391a73d9b1be00c59e478318b4e486f8dd63e7dda759289404f35998ae40d5d",
+      "naive_input_tokens": 144332,
+      "bsar_input_tokens": 252,
+      "tokens_saved": 144080,
+      "compression_ratio_x": 572.7,
+      "token_reduction_pct": 99.825,
+      "total_cpu_ms": 110.67,
+      "compact_preview": "source | step_type | tool_name | raw_cells | sum_float\n--- | --- | --- | --- | ---\nMODEL | GENERIC | NO_TOOL | 123 | 0.0\nMODEL | PLANNER_RESPONSE | NO_TOOL | 11 | 19.429688\nMODEL | PLANNER_RESPONSE | edit_file | 30 | 70.320312\nMODEL | PLANNER_RESPONSE | invoke_subagent | 3 | 12.210938\nMODEL | PLANNER_RESPONSE | manage_subagents | 2 | 5.023438\nMODEL | PLANNER_RESPONSE | read_file | 37 | 33.070312\nMODEL | PLANNER_RESPONSE | run_command | 30 | 39.492188\nMODEL | PLANNER_RESPONSE | search_web | 4 | 6.011719\nMODEL | PLANNER_RESPONSE | send_message | 2 | 5.796875\nMODEL | PLANNER_RESPONSE | write_file | 15 | 97.742188\nSYSTEM | CHECKPOINT | NO_TOOL | 1 | 0.0\nSYSTEM | SYSTEM_MESSAGE | NO_TOOL | 7 | 0.0\nUSER_EXPLICIT | USER_INPUT | NO_TOOL | 10 | 0.0"
     },
     "chore3": {
       "chore_id": "CHORE_3_PORCH_ZD_FIREWALL",
@@ -50,10 +126,11 @@
       "native_32d_sand_mandala_exact_zero": true,
       "sedenion_box_kite_pure_bloat_exact_zero": true,
       "distributive_signal_invariance_64b_exact": true,
-      "avg_gate_latency_us": 30.14,
+      "avg_gate_latency_us": 19.53,
       "naive_input_tokens": 250000,
       "bsar_input_tokens": 0,
       "tokens_saved": 250000,
+      "compression_ratio_x": "INF (0 tokens)",
       "token_reduction_pct": 100.0
     },
     "chore4": {
@@ -66,11 +143,109 @@
       "bsar_alternativity_depth_detection_rate_pct": 100.0,
       "bag_of_vectors_alternativity_detection_rate_pct": 0.0,
       "seven_box_kite_exact_zero_escapes": "7/7",
-      "cpu_fold_240_trees_ms": 285.37,
+      "cpu_fold_240_trees_ms": 254.56,
       "naive_input_tokens": 882000,
       "bsar_input_tokens": 378000,
       "tokens_saved": 504000,
+      "compression_ratio_x": 2.33,
       "token_reduction_pct": 57.14
+    },
+    "chore5": {
+      "chore_id": "CHORE_5_PUBLIC_MULTIAGENT_TRACES",
+      "title": "Public Multi-Agent Traces (`LangChain`, `CrewAI`, `AutoGen` / `AG2`)",
+      "rats_sha256": "61cd139dd30db794e81b4a3ec860748386653b06461fa618d53c5f5abc69097e",
+      "manifest_all_sha256_verified": true,
+      "verified_files": [
+        {
+          "local_file": "langchain_openinference_cassettes.yaml",
+          "framework": "langchain",
+          "license": "Apache-2.0",
+          "bytes": 21159,
+          "expected_sha256": "499997d1ebc8c2b482a178508a06e29481bc02c9b12fe33b4aa1b83050a32838",
+          "actual_sha256": "499997d1ebc8c2b482a178508a06e29481bc02c9b12fe33b4aa1b83050a32838",
+          "sha256_verified": true
+        },
+        {
+          "local_file": "crewai_openinference_cassettes.yaml",
+          "framework": "crewai",
+          "license": "Apache-2.0",
+          "bytes": 383220,
+          "expected_sha256": "6e42820b6be7b5be255c04c62ab0fee8f8be0c21f50abde2ab33f322f2bb06b8",
+          "actual_sha256": "6e42820b6be7b5be255c04c62ab0fee8f8be0c21f50abde2ab33f322f2bb06b8",
+          "sha256_verified": true
+        },
+        {
+          "local_file": "autogen_team_openinference_cassettes.yaml",
+          "framework": "autogen_team",
+          "license": "Apache-2.0",
+          "bytes": 13211,
+          "expected_sha256": "233a1cce0dcbc02fc4200e4846524dd9ed413e4af4b696671b6133b28d47a6c2",
+          "actual_sha256": "233a1cce0dcbc02fc4200e4846524dd9ed413e4af4b696671b6133b28d47a6c2",
+          "sha256_verified": true
+        },
+        {
+          "local_file": "autogen_mast_ag2_traces.json",
+          "framework": "autogen_ag2_mast",
+          "license": "Open Academic (UC Berkeley mcemri/MAST-Data)",
+          "bytes": 48838,
+          "expected_sha256": "e0dd056cfde789059ff080505796d571d5db98c325cc0bd9e8ad5cd3878bd08c",
+          "actual_sha256": "e0dd056cfde789059ff080505796d571d5db98c325cc0bd9e8ad5cd3878bd08c",
+          "sha256_verified": true
+        }
+      ],
+      "total_raw_bytes": 466428,
+      "compiled_event_cells": 37,
+      "mast_ag2_detected_failure_modes": [
+        "1.5 Unaware of stopping conditions",
+        "3.3 Ignoring suggestions from agents",
+        "3.3 Lack of result verification",
+        "1.1 Poor task constraint compliance",
+        "1.5 Step repetition",
+        "2.2 Fail to elicit clarification",
+        "2.3 Derailment from task",
+        "2.7 Ignoring suggestions from agents"
+      ],
+      "frameworks": {
+        "langchain": {
+          "framework": "langchain",
+          "title": "LangChain (Arize OpenInference Tool/Stream Cassettes)",
+          "raw_bytes": 21159,
+          "naive_input_tokens": 6786,
+          "bsar_input_tokens": 157,
+          "tokens_saved": 6629,
+          "compression_ratio_x": 43.2,
+          "token_reduction_pct": 97.686,
+          "compact_slice_preview": "framework | event_type | model_or_tool | raw_cells | sum_float\n--- | --- | --- | --- | ---\nlangchain | LLM_CHAT_TURN | gemini-2.5-flash | 1 | 0.21875\nlangchain | LLM_CHAT_TURN | gpt-4o-mini | 1 | 0.023438\nlangchain | LLM_STREAM_TURN | gemini-2.5-flash | 1 | 0.257812\nlangchain | LLM_STREAM_TURN | gpt-3.5-turbo | 1 | 0.03125\nlangchain | TOOL_CALL_TURN | add | 1 | 0.136719\n... (+1 additional rows in slab)"
+        },
+        "crewai": {
+          "framework": "crewai",
+          "title": "CrewAI (Arize OpenInference Crew & Flow Cassettes)",
+          "raw_bytes": 383220,
+          "naive_input_tokens": 150122,
+          "bsar_input_tokens": 94,
+          "tokens_saved": 150028,
+          "compression_ratio_x": 1597.0,
+          "token_reduction_pct": 99.937,
+          "compact_slice_preview": "framework | event_type | model_or_tool | raw_cells | sum_float\n--- | --- | --- | --- | ---\ncrewai | ENV_METADATA_BLOAT | pypi_package_json | 1 | 9.390625\ncrewai | LLM_CHAT_TURN | gpt-4.1-nano | 1 | 0.132812\ncrewai | TOOL_CALL_TURN | scrape_website | 2 | 0.257812"
+        },
+        "autogen": {
+          "framework": "autogen",
+          "title": "AutoGen / AG2 (OpenInference Team + UC Berkeley MAST-Data)",
+          "raw_bytes": 62049,
+          "naive_input_tokens": 14670,
+          "bsar_input_tokens": 120,
+          "tokens_saved": 14550,
+          "compression_ratio_x": 122.2,
+          "token_reduction_pct": 99.182,
+          "compact_slice_preview": "framework | event_type | model_or_tool | raw_cells | sum_float\n--- | --- | --- | --- | ---\nautogen | AGENT_REASONING_TURN | GSM-Plus | 11 | 0.152344\nautogen | CODE_EXEC_TURN | GSM-Plus | 6 | 0.46875\nautogen | LLM_CHAT_TURN | gpt-4o-2024-08-06 | 4 | 0.566406\nautogen | STUCK_LOOP_NUDGE | GSM-Plus | 5 | 0.027344"
+        }
+      },
+      "naive_input_tokens": 171578,
+      "bsar_input_tokens": 279,
+      "tokens_saved": 171299,
+      "compression_ratio_x": 615.0,
+      "token_reduction_pct": 99.837,
+      "total_cpu_ms": 18.45
     }
   },
   "box_kite_catalog": {

@@ -1,5 +1,6 @@
-chore_id,title,naive_tokens,bsar_tokens,tokens_saved,reduction_pct
-CHORE_1_CORPUS_5Q,1.13 MB Corpus 5-Query Cross-Reference (`rc-en.txt`),1267655,1847,1265808,99.854
-CHORE_2_TRANSCRIPT_AUDIT,Multi-Agent `transcript.jsonl` Telemetry & `/compact` Slice,95217,236,94981,99.752
-CHORE_3_PORCH_ZD_FIREWALL,100-Step Pre-API Guardrail / Bloat Filter (`Q8.8` Zero-Divisor Gate),250000,0,250000,100.0
-CHORE_4_AST_CACHE_AND_BOXKITE,Tool-DAG Structural Memoization (`64B` Pathion) & `7`-Box-Kite Escape,882000,378000,504000,57.14
+chore_id,title,naive_tokens,bsar_tokens,tokens_saved,compression_x,reduction_pct,cpu_latency,cpu_model,l1d_per_core_bytes,tokenizer
+CHORE_1_CORPUS_5Q,1.13 MB Corpus 5-Query Cross-Reference (`rc-en.txt`),1267655,1847,1265808,686.3,99.854,884.84 us/slice,Intel(R) Core(TM) i7-4770 CPU @ 3.40GHz,32768,tiktoken==0.14.0
+CHORE_2_TRANSCRIPT_AUDIT,Multi-Agent `transcript.jsonl` Telemetry & `/compact` Slice,144332,252,144080,572.7,99.825,110.67 ms,Intel(R) Core(TM) i7-4770 CPU @ 3.40GHz,32768,tiktoken==0.14.0
+CHORE_3_PORCH_ZD_FIREWALL,100-Step Pre-API Guardrail / Bloat Filter (`Q8.8` Zero-Divisor Gate),250000,0,250000,INF (0 tokens),100.0,19.53 us/gate,Intel(R) Core(TM) i7-4770 CPU @ 3.40GHz,32768,tiktoken==0.14.0
+CHORE_4_AST_CACHE_AND_BOXKITE,Tool-DAG Structural Memoization (`64B` Pathion) & `7`-Box-Kite Escape,882000,378000,504000,2.33,57.14,254.56 ms/240_asts,Intel(R) Core(TM) i7-4770 CPU @ 3.40GHz,32768,tiktoken==0.14.0
+CHORE_5_PUBLIC_MULTIAGENT_TRACES,"Public Multi-Agent Traces (`LangChain`, `CrewAI`, `AutoGen` / `AG2`)",171578,279,171299,615.0,99.837,18.45 ms/3_frameworks,Intel(R) Core(TM) i7-4770 CPU @ 3.40GHz,32768,tiktoken==0.14.0

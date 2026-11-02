@@ -1,0 +1,52 @@
+{
+  "attestation": "probabilistic_structural",
+  "traces": [
+    {
+      "framework": "langchain",
+      "local_file": "langchain_openinference_cassettes.yaml",
+      "license": "Apache-2.0",
+      "upstream_urls": [
+        "https://raw.githubusercontent.com/Arize-ai/openinference/main/python/instrumentation/openinference-instrumentation-langchain/tests/cassettes/test_instrumentor/test_gemini_token_counts.yaml",
+        "https://raw.githubusercontent.com/Arize-ai/openinference/main/python/instrumentation/openinference-instrumentation-langchain/tests/cassettes/test_instrumentor/test_gemini_token_counts_streaming.yaml",
+        "https://raw.githubusercontent.com/Arize-ai/openinference/main/python/instrumentation/openinference-instrumentation-langchain/tests/cassettes/test_instrumentor/test_records_token_counts_for_streaming_openai_llm.yaml",
+        "https://raw.githubusercontent.com/Arize-ai/openinference/main/python/instrumentation/openinference-instrumentation-langchain/tests/cassettes/test_instrumentor/test_token_counts.yaml",
+        "https://raw.githubusercontent.com/Arize-ai/openinference/main/python/instrumentation/openinference-instrumentation-langchain/tests/cassettes/test_instrumentor/test_tool_call_with_function.yaml",
+        "https://raw.githubusercontent.com/Arize-ai/openinference/main/python/instrumentation/openinference-instrumentation-langchain/tests/cassettes/test_raw_dict_message/test_agent_with_raw_dict_messages.yaml"
+      ],
+      "bytes": 21159,
+      "sha256": "499997d1ebc8c2b482a178508a06e29481bc02c9b12fe33b4aa1b83050a32838"
+    },
+    {
+      "framework": "crewai",
+      "local_file": "crewai_openinference_cassettes.yaml",
+      "license": "Apache-2.0",
+      "upstream_urls": [
+        "https://raw.githubusercontent.com/Arize-ai/openinference/main/python/instrumentation/openinference-instrumentation-crewai/tests/cassettes/test_instrumentor/test_nested_flow_gets_its_own_span.yaml",
+        "https://raw.githubusercontent.com/Arize-ai/openinference/main/python/instrumentation/openinference-instrumentation-crewai/tests/cassettes/test_instrumentor/test_crewai_instrumentation.yaml"
+      ],
+      "bytes": 383220,
+      "sha256": "6e42820b6be7b5be255c04c62ab0fee8f8be0c21f50abde2ab33f322f2bb06b8"
+    },
+    {
+      "framework": "autogen_team",
+      "local_file": "autogen_team_openinference_cassettes.yaml",
+      "license": "Apache-2.0",
+      "upstream_urls": [
+        "https://raw.githubusercontent.com/Arize-ai/openinference/main/python/instrumentation/openinference-instrumentation-autogen-agentchat/tests/cassettes/test_instrumenting_team/TestTeam.test_team_run.yaml"
+      ],
+      "bytes": 13211,
+      "sha256": "233a1cce0dcbc02fc4200e4846524dd9ed413e4af4b696671b6133b28d47a6c2"
+    },
+    {
+      "framework": "autogen_ag2_mast",
+      "local_file": "autogen_mast_ag2_traces.json",
+      "license": "Open Academic (UC Berkeley mcemri/MAST-Data)",
+      "upstream_urls": [
+        "https://huggingface.co/datasets/mcemri/MAST-Data/resolve/main/MAD_human_labelled_dataset.json"
+      ],
+      "bytes": 48838,
+      "sha256": "e0dd056cfde789059ff080505796d571d5db98c325cc0bd9e8ad5cd3878bd08c",
+      "trace_count": 3
+    }
+  ]
+}
