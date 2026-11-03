@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LIQUID LEDGER — 11D Hydrodynamic Flow of Money (Sweetbrier / BSA-R)</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 20px;
+      background: #0d101b;
+      color: #e2e8f0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      line-height: 1.5;
+    }
+    .wrap { max-width: 1260px; margin: 0 auto; }
+    .card {
+      background: #161929;
+      border: 1px solid #2d334d;
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    }
+    .header-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 6px; }
+    .pill {
+      font-size: 12px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 999px;
+      border: 1px solid #38bdf8;
+      color: #7dd3fc;
+      background: rgba(56, 189, 248, 0.12);
+    }
+    .pill-green { border-color: #34d399; color: #6ee7b7; background: rgba(52, 211, 153, 0.12); }
+    .pill-gold { border-color: #fbbf24; color: #fde68a; background: rgba(251, 191, 36, 0.12); }
+    h1 { margin: 0; font-size: 22px; color: #f8fafc; }
+    .sub { margin: 4px 0 0 0; font-size: 13px; color: #94a3b8; }
+    .kpi-row { display: grid; grid-template-columns: repeat(3, minmax(120px, 1fr)); gap: 10px; }
+    .kpi {
+      background: #0d101b;
+      border: 1px solid #2d334d;
+      border-radius: 8px;
+      padding: 8px 12px;
+    }
+    .kpi-lbl { font-size: 12px; color: #94a3b8; }
+    .kpi-val { font-size: 17px; font-weight: 700; margin-top: 2px; }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-variant-numeric: tabular-nums; }
+    .main-grid {
+      display: grid;
+      grid-template-columns: 7fr 5fr;
+      gap: 16px;
+    }
+    @media (max-width: 980px) {
+      .main-grid { grid-template-columns: 1fr; }
+    }
+    .row-between { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px; }
+    .sec-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8; }
+    .canvas-box {
+      position: relative;
+      width: 100%;
+      max-width: 540px;
+      aspect-ratio: 1 / 1;
+      margin: 10px auto;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid #38bdf8;
+    }
+    canvas#fluidCanvas { width: 100%; height: 100%; display: block; cursor: crosshair; touch-action: none; }
+    .alert-banner {
+      display: none;
+      position: absolute;
+      top: 12px; left: 12px; right: 12px;
+      background: rgba(136, 19, 55, 0.92);
+      border: 1px solid #fb7185;
+      border-radius: 8px;
+      padding: 10px 12px;
+      color: #ffe4e6;
+      font-size: 12px;
+    }
+    .alert-banner.active { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+    button {
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 8px;
+      padding: 7px 11px;
+      border: 1px solid #3b4261;
+      background: #1e2238;
+      color: #e2e8f0;
+      transition: opacity 0.15s, background 0.15s;
+    }
+    button:hover { opacity: 0.88; }
+    .btn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
+    @media (max-width: 600px) { .btn-grid { grid-template-columns: 1fr; } }
+    .btn-jubilee { border-color: #34d399; background: rgba(16, 185, 129, 0.14); color: #6ee7b7; text-align: left; padding: 10px 12px; }
+    .btn-waterfall { border-color: #fbbf24; background: rgba(245, 158, 11, 0.14); color: #fde68a; text-align: left; padding: 10px 12px; }
+    .btn-sub { display: block; font-size: 12px; font-weight: 400; color: #94a3b8; margin-top: 2px; }
+    .preset-panel {
+      margin-top: 10px;
+      background: #0d101b;
+      border: 1px solid #2d334d;
+      border-radius: 8px;
+      padding: 12px;
+    }
+    .telemetry-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+    .tel-box { background: #0d101b; border: 1px solid #2d334d; border-radius: 8px; padding: 8px 10px; font-size: 12px; }
+    .tel-val { font-size: 15px; font-weight: 700; margin-top: 2px; }
+    .bar-track { width: 100%; height: 9px; background: #0d101b; border: 1px solid #2d334d; border-radius: 999px; overflow: hidden; margin-top: 4px; }
+    .bar-fill { height: 100%; transition: width 0.1s; }
+    .right-stack { display: flex; flex-direction: column; gap: 14px; }
+    .tape { max-height: 215px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+    .tape-item { background: #0d101b; border: 1px solid #2d334d; border-radius: 6px; padding: 7px 9px; font-size: 12px; }
+    a.nav-link { color: #7dd3fc; text-decoration: none; font-size: 12px; font-weight: 700; }
+    a.nav-link:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card header-bar">
+      <div>
+        <div class="pills">
+          <span class="pill">64×64 SPECTRAL HELMHOLTZ–LERAY SOLVER</span>
+          <span class="pill pill-green">∇·u = 0 DOUBLE-ENTRY CONSERVATION</span>
+          <span class="pill pill-gold">100% GIVE-IT-AWAY WATERFALL</span>
+          <a href="/navier" class="nav-link" style="align-self:center; margin-left:4px;">← Back to /navier Monograph</a>
+        </div>
+        <h1>LIQUID LEDGER: 11D Hydrodynamic Flow of Money</h1>
+        <p class="sub">
+          Drag on the monetary torus to steer trade currents. Keep bimodal wash-trading ceiling <span class="mono" style="color:#6ee7b7;">Υ_var(t) = Υ(t)·Θ(t)² &lt; 1.00</span> using Round-4 Spectral Variance, Ladyzhenskaya Oobleck Armor, and Axis-3 Jubilee Forgiveness.
+        </p>
+      </div>
+      <div class="kpi-row">
+        <div class="kpi">
+          <div class="kpi-lbl">Commons Settled</div>
+          <div id="hudRealSettled" class="kpi-val mono" style="color:#6ee7b7;">$0.00M</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-lbl">100% Given Away</div>
+          <div id="hudGivenAway" class="kpi-val mono" style="color:#fde68a;">$0.00M</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-lbl">Checker Status</div>
+          <div id="hudBookStatus" class="kpi-val mono" style="color:#7dd3fc; font-size:14px;">SMOOTH (□ OK)</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="main-grid">
+      <div class="card">
+        <div class="row-between">
+          <span class="sec-title">Periodic Monetary Torus T² (4 Districts · 640 Axis-5 Parcel Tracers)</span>
+          <div style="display:flex; gap:6px; flex-wrap:wrap;">
+            <button id="btnToggleField">View: Vorticity Curl + Parcels</button>
+            <button id="btnAutoShocks" style="border-color:#fb7185; color:#fda4af;">Bimodal Whale/HFT Waves: ON</button>
+          </div>
+        </div>
+
+        <div class="canvas-box">
+          <canvas id="fluidCanvas" width="512" height="512"></canvas>
+          <div id="singularityAlert" class="alert-banner">
+            <div>
+              <strong>Eleven-Entry Checker Warning · Υ_var(t) ≥ 1.00</strong><br/>
+              Bimodal Whale+HFT wash loop exceeding viscous ceiling! Fire <strong>Axis 3 Jubilee Forgiveness</strong>!
+            </div>
+            <button id="btnEmergencyJubilee" style="background:#10b981; color:#090d16; border:none;">Forgive Now</button>
+          </div>
+        </div>
+
+        <div class="btn-grid">
+          <button id="btnJubilee" class="btn-jubilee">
+            🕊️ Axis 3: Jubilee Debt Forgiveness [Space]
+            <span class="btn-sub">Lawful viscosity pulse breaking locked debt momentum</span>
+          </button>
+          <button id="btnWaterfall" class="btn-waterfall">
+            🌊 Axis 5: Give 100% Away Waterfall [W]
+            <span class="btn-sub">0% Architect keep → 35/15/15/10/25% provenance pools</span>
+          </button>
+        </div>
+
+        <div class="preset-panel">
+          <div class="row-between" style="margin-bottom:10px;">
+            <span style="font-size:12px; color:#94a3b8; font-weight:600;">Theorem Presets (Rounds 1–4 Live):</span>
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <button id="btnPresetSingleShell" style="border-color:#38bdf8; color:#7dd3fc;">1. Single-Shell Guilds (|k|²=8 → Θ=0!)</button>
+              <button id="btnPresetBimodal" style="border-color:#fb7185; color:#fda4af;">2. Whale + HFT Bimodal Attack (Θ≈0.76)</button>
+              <button id="btnPresetBeltrami" style="border-color:#c084fc; color:#e9d5ff;">3. Balanced Shear Crystal</button>
+            </div>
+          </div>
+
+          <div class="btn-grid" style="margin-top:4px;">
+            <div>
+              <div class="row-between" style="font-size:12px;">
+                <span style="color:#94a3b8;">Base Viscosity ν₀ (Clearing Friction)</span>
+                <span id="lblNu0" class="mono">0.015</span>
+              </div>
+              <input id="sliderNu0" type="range" min="0.002" max="0.080" step="0.002" value="0.015" style="width:100%; margin-top:6px;" />
+            </div>
+            <div>
+              <div class="row-between" style="font-size:12px; margin-bottom:4px;">
+                <span style="color:#94a3b8;">Ladyzhenskaya Oobleck Tax</span>
+                <span id="lblOobleck" class="mono" style="color:#6ee7b7;">ACTIVE</span>
+              </div>
+              <button id="btnToggleOobleck" style="width:100%; border-color:#34d399; color:#6ee7b7;">🛡️ Progressive Oobleck Armor: ON (ν₀ + ν₁·D)</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="right-stack">
+        <div class="card">
+          <div class="row-between">
+            <span class="sec-title">Live Lean 4 Theorem Telemetry (64×64 FFT)</span>
+            <span id="lblDivCheck" class="mono" style="font-size:12px; color:#6ee7b7;">max|k·û| = 0.00e+0</span>
+          </div>
+
+          <div class="telemetry-grid">
+            <div class="tel-box">
+              <div style="color:#94a3b8;">Monetary Energy M₀(t)</div>
+              <div id="valM0" class="tel-val mono">0.0000</div>
+              <div style="color:#64748b;">Σ |û(k)|² (Active Volume)</div>
+            </div>
+            <div class="tel-box">
+              <div style="color:#94a3b8;">Wash Enstrophy D(t)</div>
+              <div id="valD" class="tel-val mono">0.0000</div>
+              <div style="color:#64748b;">Σ |k|²|û(k)|² (Vortex Loops)</div>
+            </div>
+            <div class="tel-box">
+              <div style="color:#94a3b8;">HFT Palinstrophy P(t)</div>
+              <div id="valP" class="tel-val mono">0.0000</div>
+              <div style="color:#64748b;">Σ |k|⁴|û(k)|² (Micro-Shear)</div>
+            </div>
+            <div class="tel-box">
+              <div style="color:#94a3b8;">Spectral Dispersion Θ(t)</div>
+              <div id="valTheta" class="tel-val mono" style="color:#7dd3fc;">0.0000</div>
+              <div style="color:#64748b;">(M₀P − D²) / (M₀P) ∈ [0,1)</div>
+            </div>
+          </div>
+
+          <div style="margin-top:10px; font-size:12px;">
+            <div class="row-between">
+              <span style="color:#94a3b8;">Round-3 Raw Ratio Υ(t) = κ⁴D³ / (ν_eff⁴ P)</span>
+              <span id="valUpsilonRaw" class="mono">0.000</span>
+            </div>
+            <div class="bar-track"><div id="barUpsilonRaw" class="bar-fill" style="width:0%; background:#f59e0b;"></div></div>
+          </div>
+
+          <div style="margin-top:8px; font-size:12px;">
+            <div class="row-between">
+              <strong>Round-4 Variance Gate Υ_var(t) = Υ(t)·Θ(t)²</strong>
+              <span id="valUpsilonVar" class="mono" style="color:#6ee7b7; font-weight:700;">0.000 &lt; 1.00</span>
+            </div>
+            <div class="bar-track"><div id="barUpsilonVar" class="bar-fill" style="width:0%; background:#10b981;"></div></div>
+          </div>
+
+          <div style="margin-top:10px; font-size:12px;">
+            <div class="row-between" style="color:#94a3b8; margin-bottom:4px;">
+              <span>Fourier Shell Spectrum e(|k|²) — Whale vs. HFT</span>
+              <span id="lblCentroid" class="mono">μ* = 0.0</span>
+            </div>
+            <canvas id="spectrumCanvas" width="360" height="68" style="width:100%; height:68px; background:#0d101b; border:1px solid #2d334d; border-radius:6px;"></canvas>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="row-between">
+            <span class="sec-title">100% Give-It-Away Waterfall Pools (Architect: 0%)</span>
+            <span id="lblSurplusReady" class="mono" style="font-size:12px; color:#fde68a;">Surplus: $0.00M</span>
+          </div>
+          <div id="poolList" style="margin-top:8px; display:flex; flex-direction:column; gap:6px; font-size:12px;"></div>
+        </div>
+
+        <div class="card">
+          <div class="row-between">
+            <span class="sec-title">Eleven-Entry Ledger Tape (Axis 11 Receipts)</span>
+            <span id="lblLedgerCount" class="mono" style="font-size:12px; color:#94a3b8;">0 entries</span>
+          </div>
+          <div id="ledgerTape" class="tape mono"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      "use strict";
+      const N = 64;
+      const SIZE = N * N;
+      const ux = new Float64Array(SIZE);
+      const uy = new Float64Array(SIZE);
+      const uxTmp = new Float64Array(SIZE);
+      const uyTmp = new Float64Array(SIZE);
+      const curlField = new Float64Array(SIZE);
+      const uxRe = new Float64Array(SIZE);
+      const uxIm = new Float64Array(SIZE);
+      const uyRe = new Float64Array(SIZE);
+      const uyIm = new Float64Array(SIZE);
+      const NUM_BINS = 24;
+      const shellBins = new Float64Array(NUM_BINS);
+
+      const bitRev = new Uint8Array(N);
+      for (let i = 0; i < N; i++) {
+        let x = i, r = 0;
+        for (let b = 0; b < 6; b++) { r = (r << 1) | (x & 1); x >>= 1; }
+        bitRev[i] = r;
+      }
+
+      function fft1D(re, im, stride, offset, inverse) {
+        for (let i = 0; i < N; i++) {
+          const j = bitRev[i];
+          if (j > i) {
+            const pi = offset + i * stride, pj = offset + j * stride;
+            const tr = re[pi]; re[pi] = re[pj]; re[pj] = tr;
+            const ti = im[pi]; im[pi] = im[pj]; im[pj] = ti;
+          }
+        }
+        const sign = inverse ? 1.0 : -1.0;
+        for (let len = 2; len <= N; len <<= 1) {
+          const half = len >> 1;
+          const ang = (sign * 2.0 * Math.PI) / len;
+          const wStepRe = Math.cos(ang), wStepIm = Math.sin(ang);
+          for (let i = 0; i < N; i += len) {
+            let wRe = 1.0, wIm = 0.0;
+            for (let k = 0; k < half; k++) {
+              const p1 = offset + (i + k) * stride;
+              const p2 = offset + (i + k + half) * stride;
+              const tr = wRe * re[p2] - wIm * im[p2];
+              const ti = wRe * im[p2] + wIm * re[p2];
+              re[p2] = re[p1] - tr; im[p2] = im[p1] - ti;
+              re[p1] += tr; im[p1] += ti;
+              const nwRe = wRe * wStepRe - wIm * wStepIm;
+              wIm = wRe * wStepIm + wIm * wStepRe;
+              wRe = nwRe;
+            }
+          }
+        }
+        if (inverse) {
+          const invN = 1.0 / N;
+          for (let i = 0; i < N; i++) {
+            const p = offset + i * stride;
+            re[p] *= invN; im[p] *= invN;
+          }
+        }
+      }
+
+      function fft2D(re, im, inverse) {
+        for (let y = 0; y < N; y++) fft1D(re, im, 1, y * N, inverse);
+        for (let x = 0; x < N; x++) fft1D(re, im, N, x, inverse);
+      }
+
+      function signedWaveNum(idx) { return idx <= N / 2 ? idx : idx - N; }
+
+      const NUM_PARCELS = 640;
+      const parcelX = new Float64Array(NUM_PARCELS);
+      const parcelY = new Float64Array(NUM_PARCELS);
+      const parcelPrevX = new Float64Array(NUM_PARCELS);
+      const parcelPrevY = new Float64Array(NUM_PARCELS);
+
+      for (let i = 0; i < NUM_PARCELS; i++) {
+        parcelX[i] = ((i * 73 + 19) % N) + 0.5 * ((i % 7) / 7.0);
+        parcelY[i] = (Math.floor(i / 25) * 2.5 + (i % 25) * 2.56) % N;
+        parcelPrevX[i] = parcelX[i];
+        parcelPrevY[i] = parcelY[i];
+      }
+
+      let nu0 = 0.015;
+      let oobleckEnabled = true;
+      const nu1Oobleck = 0.00042;
+      let jubileeBoost = 0.0;
+      let autoShocks = true;
+      let showVectors = false;
+      let frameCount = 0;
+      let realSettledM = 0.0;
+      let clearingSurplusM = 1.25;
+      let totalGivenAwayM = 0.0;
+
+      const pools = [
+        { id: "P1", label: "P1 Living PDE & Lean 4 Co-Authors (35%)", share: 0.35, totalM: 0.0, hex: "#38bdf8" },
+        { id: "P2", label: "P2 Theorem Dependencies (15%)", share: 0.15, totalM: 0.0, hex: "#a855f7" },
+        { id: "P3", label: "P3 65c816/Asar + Lean4/Z3/R Tools (15%)", share: 0.15, totalM: 0.0, hex: "#14b8a6" },
+        { id: "P4", label: "P4 Memorial Fellowships (Near/Leray/Olga 10%)", share: 0.10, totalM: 0.0, hex: "#ec4899" },
+        { id: "P5", label: "P5 Winnipeg 18-Org Mutual-Aid Sink (25%)", share: 0.25, totalM: 0.0, hex: "#10b981" }
+      ];
+
+      const ledgerEntries = [];
+      let lastEntryId = "GENESIS";
+
+      function deterministicReceiptHex(payloadStr) {
+        let h1 = 0x811c9dc5 >>> 0, h2 = 0x9e3779b9 >>> 0;
+        for (let i = 0; i < payloadStr.length; i++) {
+          const c = payloadStr.charCodeAt(i);
+          h1 = Math.imul(h1 ^ c, 0x01000193) >>> 0;
+          h2 = Math.imul(h2 ^ ((c << 5) | (c >>> 3)), 0x85ebca6b) >>> 0;
+        }
+        let hex = "";
+        for (let lane = 0; lane < 8; lane++) {
+          h1 = Math.imul(h1 ^ (h2 >>> 13), 0xc2b2ae35) >>> 0;
+          h2 = Math.imul(h2 ^ (h1 >>> 11), 0x27d4eb2f) >>> 0;
+          hex += ((h1 ^ lane) >>> 0).toString(16).padStart(8, "0");
+        }
+        return hex;
+      }
+
+      function postElevenEntry(debit, credit, forgiveness, amountM, reason, consentStr, momentumNext) {
+        const idx = ledgerEntries.length + 1;
+        const entryId = "LL-" + String(idx).padStart(4, "0");
+        const canonical = JSON.stringify({
+          entry_id: entryId, debit, credit, forgiveness,
+          amount: Number(amountM.toFixed(4)), provenance: lastEntryId,
+          author: "LiquidLedgerOperator", reason, consent: consentStr,
+          def_version: "clay_opt_b_waterfall_v2", momentum: momentumNext
+        });
+        const receipt = deterministicReceiptHex(canonical);
+        ledgerEntries.unshift({ entryId, debit, credit, forgiveness, amountM, provenance: lastEntryId, reason, receipt });
+        lastEntryId = entryId;
+        if (ledgerEntries.length > 36) ledgerEntries.pop();
+        renderLedgerTape();
+      }
+
+      function projectSolenoidalAndMeasure(dt, applyViscosity, nuEff) {
+        for (let i = 0; i < SIZE; i++) {
+          uxRe[i] = ux[i]; uxIm[i] = 0.0;
+          uyRe[i] = uy[i]; uyIm[i] = 0.0;
+        }
+        fft2D(uxRe, uxIm, false);
+        fft2D(uyRe, uyIm, false);
+
+        shellBins.fill(0.0);
+        let M0 = 0.0, D = 0.0, P = 0.0;
+        const normFactor = 1.0 / (SIZE * SIZE);
+
+        for (let kyIdx = 0; kyIdx < N; kyIdx++) {
+          const ky = signedWaveNum(kyIdx);
+          for (let kxIdx = 0; kxIdx < N; kxIdx++) {
+            const kx = signedWaveNum(kxIdx);
+            const p = kyIdx * N + kxIdx;
+            const kSq = kx * kx + ky * ky;
+            if (kSq === 0 || Math.abs(kx) >= 21 || Math.abs(ky) >= 21) {
+              uxRe[p] = 0.0; uxIm[p] = 0.0; uyRe[p] = 0.0; uyIm[p] = 0.0;
+              continue;
+            }
+            const dotRe = kx * uxRe[p] + ky * uyRe[p];
+            const dotIm = kx * uxIm[p] + ky * uyIm[p];
+            const invKSq = 1.0 / kSq;
+            let pxRe = uxRe[p] - kx * dotRe * invKSq;
+            let pxIm = uxIm[p] - kx * dotIm * invKSq;
+            let pyRe = uyRe[p] - ky * dotRe * invKSq;
+            let pyIm = uyIm[p] - ky * dotIm * invKSq;
+            if (applyViscosity && dt > 0.0) {
+              const damp = Math.exp(-nuEff * kSq * dt);
+              pxRe *= damp; pxIm *= damp; pyRe *= damp; pyIm *= damp;
+            }
+            uxRe[p] = pxRe; uxIm[p] = pxIm;
+            uyRe[p] = pyRe; uyIm[p] = pyIm;
+            const ek = (pxRe * pxRe + pxIm * pxIm + pyRe * pyRe + pyIm * pyIm) * normFactor;
+            M0 += ek; D += kSq * ek; P += (kSq * kSq) * ek;
+            shellBins[Math.min(NUM_BINS - 1, Math.floor(Math.sqrt(kSq) * 1.1))] += ek;
+          }
+        }
+
+        fft2D(uxRe, uxIm, true);
+        fft2D(uyRe, uyIm, true);
+        for (let i = 0; i < SIZE; i++) { ux[i] = uxRe[i]; uy[i] = uyRe[i]; }
+
+        for (let y = 0; y < N; y++) {
+          const yp = (y + 1) & 63, ym = (y + 63) & 63;
+          for (let x = 0; x < N; x++) {
+            const xp = (x + 1) & 63, xm = (x + 63) & 63;
+            curlField[y * N + x] = 0.5 * (uy[y * N + xp] - uy[y * N + xm]) - 0.5 * (ux[yp * N + x] - ux[ym * N + x]);
+          }
+        }
+
+        const varTerm = Math.max(0.0, M0 * P - D * D);
+        const theta = (M0 * P > 1e-14) ? (varTerm / (M0 * P)) : 0.0;
+        return { M0, D, P, theta };
+      }
+
+      function seedSingleShellGuilds() {
+        for (let y = 0; y < N; y++) {
+          const py = (2.0 * Math.PI * y) / N;
+          for (let x = 0; x < N; x++) {
+            const px = (2.0 * Math.PI * x) / N;
+            const p = y * N + x;
+            ux[p] =  2.6 * Math.cos(2 * px + 2 * py) + 2.2 * Math.sin(2 * px - 2 * py);
+            uy[p] = -2.6 * Math.cos(2 * px + 2 * py) + 2.2 * Math.sin(2 * px - 2 * py);
+          }
+        }
+        autoShocks = false;
+        document.getElementById("btnAutoShocks").textContent = "Bimodal Whale/HFT Waves: OFF";
+        projectSolenoidalAndMeasure(0.0, false, nu0);
+        postElevenEntry("Main_Street_Guilds", "Mutual_Aid_Commons", "settled", 2.40,
+          "Seeded Single-Shell |k|^2=8 Guild Crystal (Theorem 8.1: Theta == 0, blow-up impossible!)", "Guilds+Commons", 2.40);
+      }
+
+      function injectBimodalWhaleHFT(strength) {
+        for (let y = 0; y < N; y++) {
+          const py = (2.0 * Math.PI * y) / N;
+          for (let x = 0; x < N; x++) {
+            const px = (2.0 * Math.PI * x) / N;
+            const p = y * N + x;
+            ux[p] += strength * (1.9 * Math.sin(py) + 1.3 * Math.cos(px + py) + 1.35 * Math.cos(px + 7 * py) + 1.1 * Math.sin(6 * px - 6 * py));
+            uy[p] += strength * (-1.9 * Math.sin(px) - 1.3 * Math.cos(px + py) - 0.19 * Math.cos(px + 7 * py) + 1.1 * Math.sin(6 * px - 6 * py));
+          }
+        }
+        projectSolenoidalAndMeasure(0.0, false, nu0);
+      }
+
+      function seedBalancedCrystal() {
+        for (let y = 0; y < N; y++) {
+          const py = (2.0 * Math.PI * y) / N;
+          for (let x = 0; x < N; x++) {
+            const px = (2.0 * Math.PI * x) / N;
+            const p = y * N + x;
+            ux[p] =  1.8 * Math.sin(px) * Math.cos(py) + 0.65 * Math.cos(3 * py);
+            uy[p] = -1.8 * Math.cos(px) * Math.sin(py) - 0.65 * Math.sin(3 * px);
+          }
+        }
+        projectSolenoidalAndMeasure(0.0, false, nu0);
+        postElevenEntry("Clearinghouse_Core", "Main_Street_Guilds", "settled", 1.50,
+          "Initialized Taylor-Green Solenoidal Trade Lattice (div u = 0)", "Clearinghouse+Guilds", 1.50);
+      }
+
+      function bilinearSample(arr, x, y) {
+        let wx = x % N; if (wx < 0) wx += N;
+        let wy = y % N; if (wy < 0) wy += N;
+        const x0 = Math.floor(wx), y0 = Math.floor(wy);
+        const tx = wx - x0, ty = wy - y0;
+        const x1 = (x0 + 1) & 63, y1 = (y0 + 1) & 63;
+        return (1 - tx) * ((1 - ty) * arr[y0 * N + x0] + ty * arr[y1 * N + x0]) +
+               tx * ((1 - ty) * arr[y0 * N + x1] + ty * arr[y1 * N + x1]);
+      }
+
+      let lastMetrics = { M0: 1.0, D: 4.0, P: 16.0, theta: 0.0, nuEff: nu0, upsilonRaw: 0.0, upsilonVar: 0.0 };
+
+      function stepSimulation() {
+        const dt = 0.16;
+        frameCount++;
+        if (autoShocks && frameCount % 210 === 90) {
+          injectBimodalWhaleHFT(0.72);
+          postElevenEntry("Offshore_HFT_Ring", "Whale_Leverage_Pool", "owed", 1.85,
+            "Adversarial Bimodal Surge: Low-k Whale + High-k HFT Wash Loop injected!", "Whale+HFTRing", 3.70);
+        }
+        for (let y = 0; y < N; y++) {
+          for (let x = 0; x < N; x++) {
+            const p = y * N + x;
+            uxTmp[p] = bilinearSample(ux, x - dt * ux[p] * 1.35, y - dt * uy[p] * 1.35);
+            uyTmp[p] = bilinearSample(uy, x - dt * ux[p] * 1.35, y - dt * uy[p] * 1.35);
+          }
+        }
+        for (let i = 0; i < SIZE; i++) { ux[i] = uxTmp[i]; uy[i] = uyTmp[i]; }
+
+        const nuEff = nu0 + (oobleckEnabled ? nu1Oobleck * lastMetrics.D : 0.0) + jubileeBoost;
+        jubileeBoost *= 0.88; if (jubileeBoost < 1e-4) jubileeBoost = 0.0;
+
+        const m = projectSolenoidalAndMeasure(dt, true, nuEff);
+        const kappaGame = 0.145;
+        const denom = Math.pow(Math.max(nuEff, 0.002), 4) * Math.max(m.P, 1e-9);
+        const upsilonRaw = (Math.pow(kappaGame, 4) * Math.pow(m.D, 3)) / denom;
+        const upsilonVar = upsilonRaw * (m.theta * m.theta);
+        lastMetrics = { ...m, nuEff, upsilonRaw, upsilonVar };
+
+        let frameCommonsFlow = 0.0;
+        for (let i = 0; i < NUM_PARCELS; i++) {
+          const px = parcelX[i], py = parcelY[i];
+          parcelPrevX[i] = px; parcelPrevY[i] = py;
+          const vx = bilinearSample(ux, px, py), vy = bilinearSample(uy, px, py);
+          let nx = (px + dt * vx * 1.65) % N; if (nx < 0) nx += N;
+          let ny = (py + dt * vy * 1.65) % N; if (ny < 0) ny += N;
+          parcelX[i] = nx; parcelY[i] = ny;
+          if (ny < 32 && upsilonVar < 1.0) frameCommonsFlow += Math.hypot(vx, vy) * 0.00018;
+        }
+        realSettledM += frameCommonsFlow;
+        clearingSurplusM += frameCommonsFlow * 0.35;
+      }
+
+      const fluidCanvas = document.getElementById("fluidCanvas");
+      const ctx = fluidCanvas.getContext("2d");
+      const offscreen = document.createElement("canvas");
+      offscreen.width = N; offscreen.height = N;
+      const offCtx = offscreen.getContext("2d");
+      const imgData = offCtx.createImageData(N, N);
+      const specCanvas = document.getElementById("spectrumCanvas");
+      const specCtx = specCanvas.getContext("2d");
+
+      function renderFluidTorus() {
+        const d = imgData.data;
+        for (let i = 0; i < SIZE; i++) {
+          const w = curlField[i], mag = Math.hypot(ux[i], uy[i]);
+          const posCurl = Math.min(1.0, Math.max(0.0, w * 0.42));
+          const negCurl = Math.min(1.0, Math.max(0.0, -w * 0.42));
+          const speedGlow = Math.min(1.0, mag * 0.22);
+          const p4 = i * 4;
+          d[p4]     = Math.min(255, Math.floor(12 + 195 * posCurl + 35 * speedGlow));
+          d[p4 + 1] = Math.min(255, Math.floor(18 + 145 * speedGlow + 55 * negCurl));
+          d[p4 + 2] = Math.min(255, Math.floor(32 + 185 * negCurl + 95 * speedGlow));
+          d[p4 + 3] = 255;
+        }
+        offCtx.putImageData(imgData, 0, 0);
+        ctx.drawImage(offscreen, 0, 0, fluidCanvas.width, fluidCanvas.height);
+
+        const scale = fluidCanvas.width / N;
+        ctx.strokeStyle = "rgba(148,163,184,0.25)";
+        ctx.setLineDash([5, 5]);
+        ctx.beginPath(); ctx.moveTo(256, 0); ctx.lineTo(256, 512); ctx.moveTo(0, 256); ctx.lineTo(512, 256); ctx.stroke();
+        ctx.setLineDash([]);
+
+        ctx.lineWidth = 1.6;
+        for (let i = 0; i < NUM_PARCELS; i++) {
+          const x0 = parcelPrevX[i] * scale, y0 = parcelPrevY[i] * scale;
+          const x1 = parcelX[i] * scale, y1 = parcelY[i] * scale;
+          if (Math.abs(x1 - x0) < 48 && Math.abs(y1 - y0) < 48) {
+            const gi = (Math.floor(parcelY[i]) & 63) * N + (Math.floor(parcelX[i]) & 63);
+            ctx.strokeStyle = Math.abs(curlField[gi]) > 1.35 ? "rgba(251,113,133,0.85)" : "rgba(110,231,183,0.82)";
+            ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y1); ctx.stroke();
+          }
+          ctx.fillStyle = "rgba(248,250,252,0.9)";
+          ctx.fillRect(x1 - 1, y1 - 1, 2, 2);
+        }
+
+        if (showVectors) {
+          ctx.strokeStyle = "rgba(250,204,21,0.7)";
+          ctx.lineWidth = 1.2;
+          for (let gy = 2; gy < N; gy += 4) {
+            for (let gx = 2; gx < N; gx += 4) {
+              const p = gy * N + gx;
+              const sx = (gx + 0.5) * scale, sy = (gy + 0.5) * scale;
+              ctx.beginPath(); ctx.moveTo(sx, sy); ctx.lineTo(sx + ux[p] * 5, sy + uy[p] * 5); ctx.stroke();
+            }
+          }
+        }
+
+        ctx.font = "600 12px sans-serif";
+        ctx.fillStyle = "rgba(13,16,27,0.76)";
+        ctx.fillRect(8, 8, 186, 22); ctx.fillRect(310, 8, 194, 22);
+        ctx.fillRect(8, 482, 196, 22); ctx.fillRect(300, 482, 204, 22);
+        ctx.fillStyle = "#6ee7b7"; ctx.fillText("NW: Mutual-Aid Commons (P5)", 14, 23);
+        ctx.fillStyle = "#7dd3fc"; ctx.fillText("NE: Main Street Guilds (P1/P3)", 316, 23);
+        ctx.fillStyle = "#fde68a"; ctx.fillText("SW: 11D Clearinghouse Core", 14, 497);
+        ctx.fillStyle = "#fda4af"; ctx.fillText("SE: Offshore HFT Ring (Hazard)", 306, 497);
+      }
+
+      function renderSpectrum() {
+        const w = specCanvas.width, h = specCanvas.height;
+        specCtx.clearRect(0, 0, w, h);
+        let maxBin = 1e-6;
+        for (let i = 0; i < NUM_BINS; i++) if (shellBins[i] > maxBin) maxBin = shellBins[i];
+        const barW = w / NUM_BINS;
+        for (let i = 0; i < NUM_BINS; i++) {
+          const bh = Math.max(1, (shellBins[i] / maxBin) * (h - 12));
+          specCtx.fillStyle = i < 5 ? "#38bdf8" : (i < 11 ? "#34d399" : "#fb7185");
+          specCtx.fillRect(i * barW + 1, h - bh - 2, Math.max(2, barW - 2), bh);
+        }
+      }
+
+      function renderPools() {
+        document.getElementById("poolList").innerHTML = pools.map((p) => {
+          const pct = Math.min(100, totalGivenAwayM > 0 ? (p.totalM / totalGivenAwayM) * 100 : p.share * 100);
+          return `<div>
+            <div class="row-between"><span>${p.label}</span><span class="mono">$${p.totalM.toFixed(2)}M</span></div>
+            <div class="bar-track" style="height:6px;"><div class="bar-fill" style="width:${pct.toFixed(1)}%; background:${p.hex};"></div></div>
+          </div>`;
+        }).join("");
+      }
+
+      function renderLedgerTape() {
+        document.getElementById("lblLedgerCount").textContent = ledgerEntries.length + " entries";
+        document.getElementById("ledgerTape").innerHTML = ledgerEntries.slice(0, 12).map((e) => {
+          const col = e.forgiveness === "forgiven" ? "#6ee7b7" : (e.forgiveness === "owed" ? "#fde68a" : "#7dd3fc");
+          return `<div class="tape-item">
+            <div class="row-between"><strong>${e.entryId} · ${e.debit} → ${e.credit}</strong><span style="color:${col}; font-weight:700;">[${e.forgiveness}] $${e.amountM.toFixed(2)}M</span></div>
+            <div style="color:#94a3b8; margin-top:2px;">${e.reason}</div>
+            <div style="color:#64748b; margin-top:2px;">Axis5: ${e.provenance} · Axis11: ${e.receipt.slice(0, 20)}…</div>
+          </div>`;
+        }).join("");
+      }
+
+      function updateHUD() {
+        document.getElementById("hudRealSettled").textContent = "$" + realSettledM.toFixed(2) + "M";
+        document.getElementById("hudGivenAway").textContent = "$" + totalGivenAwayM.toFixed(2) + "M";
+        document.getElementById("lblSurplusReady").textContent = "Surplus: $" + clearingSurplusM.toFixed(2) + "M";
+        document.getElementById("valM0").textContent = lastMetrics.M0.toFixed(4);
+        document.getElementById("valD").textContent = lastMetrics.D.toFixed(4);
+        document.getElementById("valP").textContent = lastMetrics.P.toFixed(2);
+        document.getElementById("valTheta").textContent = lastMetrics.theta.toFixed(4);
+        const centroid = lastMetrics.M0 > 1e-9 ? (lastMetrics.D / lastMetrics.M0) : 0.0;
+        document.getElementById("lblCentroid").textContent = "μ* = " + centroid.toFixed(2) + " | ν_eff = " + lastMetrics.nuEff.toFixed(3);
+        document.getElementById("valUpsilonRaw").textContent = lastMetrics.upsilonRaw.toFixed(3);
+        document.getElementById("barUpsilonRaw").style.width = Math.min(100, lastMetrics.upsilonRaw * 50).toFixed(1) + "%";
+
+        const uv = lastMetrics.upsilonVar;
+        const uvEl = document.getElementById("valUpsilonVar");
+        const barVar = document.getElementById("barUpsilonVar");
+        const statusEl = document.getElementById("hudBookStatus");
+        const alertEl = document.getElementById("singularityAlert");
+        barVar.style.width = Math.min(100, uv * 100).toFixed(1) + "%";
+        if (uv >= 1.0) {
+          uvEl.textContent = uv.toFixed(3) + " ≥ 1.00 (REFUSAL!)";
+          uvEl.style.color = "#fb7185";
+          barVar.style.background = "#f43f5e";
+          statusEl.textContent = "REFUSAL HAZARD!";
+          statusEl.style.color = "#fb7185";
+          alertEl.classList.add("active");
+        } else {
+          uvEl.textContent = uv.toFixed(4) + " < 1.00";
+          uvEl.style.color = "#6ee7b7";
+          barVar.style.background = "#10b981";
+          statusEl.textContent = lastMetrics.theta < 0.02 ? "CRYSTAL (Θ=0)" : "SMOOTH (□ OK)";
+          statusEl.style.color = "#6ee7b7";
+          alertEl.classList.remove("active");
+        }
+      }
+
+      let dragging = false, prevGridX = 0, prevGridY = 0;
+      fluidCanvas.addEventListener("pointerdown", (e) => {
+        dragging = true; fluidCanvas.setPointerCapture(e.pointerId);
+        const r = fluidCanvas.getBoundingClientRect();
+        prevGridX = ((e.clientX - r.left) / r.width) * N;
+        prevGridY = ((e.clientY - r.top) / r.height) * N;
+      });
+      fluidCanvas.addEventListener("pointermove", (e) => {
+        if (!dragging) return;
+        const r = fluidCanvas.getBoundingClientRect();
+        const gx = ((e.clientX - r.left) / r.width) * N;
+        const gy = ((e.clientY - r.top) / r.height) * N;
+        const dx = Math.max(-6, Math.min(6, gx - prevGridX));
+        const dy = Math.max(-6, Math.min(6, gy - prevGridY));
+        for (let oy = -5; oy <= 5; oy++) {
+          for (let ox = -5; ox <= 5; ox++) {
+            const r2 = ox * ox + oy * oy;
+            if (r2 > 20.25) continue;
+            const w = Math.exp(-r2 / 6.0);
+            const p = ((Math.floor(gy) + oy + N) & 63) * N + ((Math.floor(gx) + ox + N) & 63);
+            ux[p] += dx * w * 0.55; uy[p] += dy * w * 0.55;
+          }
+        }
+        prevGridX = gx; prevGridY = gy;
+      });
+      window.addEventListener("pointerup", () => { dragging = false; });
+
+      function triggerJubilee() {
+        jubileeBoost = 0.24;
+        postElevenEntry("Whale_Leverage_Pool", "Offshore_HFT_Ring", "forgiven", 1.85,
+          "Axis 3 Jubilee Forgiveness (`Book.forgive()`): Viscous pulse dissolved HFT palinstrophy!", "Clearinghouse+Whale", null);
+      }
+      function triggerWaterfall() {
+        const amt = Math.max(0.50, clearingSurplusM);
+        clearingSurplusM = 0.0; totalGivenAwayM += amt;
+        for (const p of pools) p.totalM += amt * p.share;
+        renderPools();
+        postElevenEntry("Contingent_Clearinghouse", "P1_to_P5_Provenance_Pools", "settled", amt,
+          "100% Give-It-Away Waterfall (0% Architect Keep -> 35/15/15/10/25% Axis-5 Lineage & Mutual Aid)", "Trustee+CoAuthors+Harvest", 0.0);
+      }
+
+      document.getElementById("btnJubilee").addEventListener("click", triggerJubilee);
+      document.getElementById("btnEmergencyJubilee").addEventListener("click", triggerJubilee);
+      document.getElementById("btnWaterfall").addEventListener("click", triggerWaterfall);
+      document.getElementById("btnPresetSingleShell").addEventListener("click", seedSingleShellGuilds);
+      document.getElementById("btnPresetBimodal").addEventListener("click", () => {
+        injectBimodalWhaleHFT(1.15);
+        postElevenEntry("Offshore_HFT_Ring", "Whale_Leverage_Pool", "owed", 2.90,
+          "Triggered Tao Bimodal Whale+HFT Stress Test: e1*e2*(m2-m1)^2 > 0!", "Whale+HFTRing", 5.80);
+      });
+      document.getElementById("btnPresetBeltrami").addEventListener("click", seedBalancedCrystal);
+      document.getElementById("btnToggleField").addEventListener("click", (e) => {
+        showVectors = !showVectors;
+        e.currentTarget.textContent = showVectors ? "View: Velocity Vectors + Parcels" : "View: Vorticity Curl + Parcels";
+      });
+      document.getElementById("btnAutoShocks").addEventListener("click", (e) => {
+        autoShocks = !autoShocks;
+        e.currentTarget.textContent = autoShocks ? "Bimodal Whale/HFT Waves: ON" : "Bimodal Whale/HFT Waves: OFF";
+      });
+      document.getElementById("sliderNu0").addEventListener("input", (e) => {
+        nu0 = parseFloat(e.target.value);
+        document.getElementById("lblNu0").textContent = nu0.toFixed(3);
+      });
+      document.getElementById("btnToggleOobleck").addEventListener("click", (e) => {
+        oobleckEnabled = !oobleckEnabled;
+        document.getElementById("lblOobleck").textContent = oobleckEnabled ? "ACTIVE" : "DISABLED";
+        e.currentTarget.textContent = oobleckEnabled
+          ? "🛡️ Progressive Oobleck Armor: ON (ν₀ + ν₁·D)"
+          : "⚠️ Progressive Oobleck Armor: OFF (1822 Linear ν₀ Only)";
+      });
+      window.addEventListener("keydown", (e) => {
+        if (e.code === "Space") { e.preventDefault(); triggerJubilee(); }
+        else if (e.code === "KeyW") { triggerWaterfall(); }
+      });
+
+      renderPools();
+      seedBalancedCrystal();
+      triggerWaterfall();
+
+      function animate() {
+        stepSimulation();
+        renderFluidTorus();
+        renderSpectrum();
+        if (frameCount % 3 === 0) updateHUD();
+        requestAnimationFrame(animate);
+      }
+      requestAnimationFrame(animate);
+    })();
+  </script>
+</body>
+</html>

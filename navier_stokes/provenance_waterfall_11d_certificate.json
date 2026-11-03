@@ -1,0 +1,851 @@
+{
+  "artifact": "Provenance-to-Payment Waterfall Engine (`Contingent Claims Register v1.0`)",
+  "attestation": "probabilistic_structural",
+  "scope_notice": "Standalone contingent allocation & provenance ledger specification implementing Rules 4a-4f. Zero external transmissions; zero prize claims; 0.0% retained by Architect (100.0% given away).",
+  "node_count_total": 46,
+  "attribution_only_zero_cash_nodes": 15,
+  "architect_retain_share": "0/1",
+  "rho_pass_through": "1/4",
+  "epsilon_dust": "1/1000",
+  "dust_swept_rational": "0/1",
+  "dust_swept_nodes": [],
+  "unclaimed_pending_rational": "5557/25600",
+  "exact_total_conservation_equal_one": true,
+  "lineage_finding_axis5_axis7": [
+    {
+      "node_id": "alcaro_smwcentral_asar_2011",
+      "title": "Alcaro, RPGHacker, randomdude999, KungFuFurby & SMWCentral Asar 3-Pass Assembler",
+      "axis7_reason": "tool_lineage",
+      "load_bearing_for_waterfall": true,
+      "upstream_citations": [
+        "near_byuu_xkas_2004"
+      ]
+    },
+    {
+      "node_id": "biferale2012",
+      "title": "Biferale-Musacchio-Toschi (2012) Helical Inverse Cascade",
+      "axis7_reason": "exposition",
+      "load_bearing_for_waterfall": false,
+      "upstream_citations": []
+    },
+    {
+      "node_id": "bkm1984",
+      "title": "Beale-Kato-Majda (1984) Vorticity Criterion",
+      "axis7_reason": "background",
+      "load_bearing_for_waterfall": false,
+      "upstream_citations": []
+    },
+    {
+      "node_id": "buckmastervicol2019",
+      "title": "Buckmaster & Vicol (2019) Convex Integration Weak Solutions",
+      "axis7_reason": "exposition",
+      "load_bearing_for_waterfall": false,
+      "upstream_citations": []
+    },
+    {
+      "node_id": "cf1993",
+      "title": "Constantin & Fefferman (1993) Direction of Vorticity",
+      "axis7_reason": "exposition",
+      "load_bearing_for_waterfall": false,
+      "upstream_citations": []
+    },
+    {
+      "node_id": "cheskidov2010",
+      "title": "Cheskidov & Shvydkoy (2010) Besov Ill-Posedness",
+      "axis7_reason": "exposition",
+      "load_bearing_for_waterfall": false,
+      "upstream_citations": []
+    },
+    {
+      "node_id": "ckn1982",
+      "title": "Caffarelli-Kohn-Nirenberg (1982) Partial Regularity",
+      "axis7_reason": "background",
+      "load_bearing_for_waterfall": false,
+      "upstream_citations": []
+    },
+    {
+      "node_id": "collab_lead_pde_coauthor",
+      "title": "Lead Academic PDE Co-Author Slot (Target Lemma BIOT-SAVART-BIMODAL-3D)",
+      "axis7_reason": "theorem_dependency",
+      "load_bearing_for_waterfall": true,
+      "upstream_citations": [
+        "tao2016",
+        "fefferman2000"
+      ]
+    },
+    {
+      "node_id": "collab_lean4_cap_coauthor",
+      "title": "Formal Lean 4 & Interval-CAP Appendix Co-Author Slot",
+      "axis7_reason": "code_dependency",
+      "load_bearing_for_waterfall": true,
+      "upstream_citations": [
+        "lean4_2021",
+        "vdblessard2015"
+      ]
+    },
+    {
+      "node_id": "constantinmajda1988",
+      "title": "Peter Constantin & Andrew Majda (1988) Beltrami Curl Spectrum",
+      "axis7_reason": "theorem_dependency",
+      "load_bearing_for_waterfall": true,
+      "upstream_citations": [
+        "memorial_majda_fund"
+      ]
+    },
+    {
+      "node_id": "demarrais2000",
+      "title": "Robert P. C. de Marrais (2000) 42 Sedenion Assessors & 7 Box-Kites -> Preservation Fund",
+      "axis7_reason": "theorem_dependency",
+      "load_bearing_for_waterfall": true,
+      "upstream_citations": []
+    },
+    {
+      "node_id": "dickson1919",
+      "title": "Leonard E. Dickson (1919) Cayley-Dickson Doubling",
+      "axis7_reason": "background",
+      "load_bearing_for_waterfall": false,
+      "upstream_citations": []
+    },
+    {
+      "node_id": "doeringtiti1995",
+      "title": "Charles R. Doering & Edriss S. Titi (1995) Exponential Spectrum Decay",
+      "axis7_reason": "theorem_dependency",
+      "load_bearing_for_waterfall": true,
+      "upstream_citations": [
+        "memorial_doering_fund"
+      ]
+    },
+    {
+      "node_id": "duguay2026zenodo",
+      "title": "BSA-R x Eleven-Entry Bookkeeping (Christopher Duguay, 2026 \u2014 0% Architect Retain)",
+      "axis7_reason": "code_dependency",
+      "load_bearing_for_waterfall": true,
+      "upstream_citations": []
+    },
+    {
+      "node_id": "ess2003",
+      "title": "Escauriaza-Seregin-Sverak (2003) L_{3,inf} Regularity",
+      "axis7_reason": "background",
+      "load_bearing_for_waterfall": false,
+      "upstream_citations": []
+    },
+    {
+      "node_id": "fefferman2000",
+      "title": "Charles L. Fefferman (2000/2006) Clay Option B Specification",
+      "axis7_reason": "theorem_dependency",
+      "load_bearing_for_waterfall": true,
+      "upstream_citations": [
+        "leray1934"
+      ]
+    },
+    {
+      "node_id": "foiastemam1989",
+      "title": "Ciprian Foias & Roger Temam (1989) Gevrey-1 Analyticity Strip",
+      "axis7_reason": "theorem_dependency",
+      "load_bearing_for_waterfall": true,
+      "upstream_citations": [
+        "memorial_foias_fellowship",
+        "leray1934"
+      ]
+    },
+    {
+      "node_id": "gomezserrano2019",
+      "title": "Javier Gomez-Serrano (2019) CAP in PDE Survey",
+      "axis7_reason": "exposition",
+      "load_bearing_for_waterfall": false,
+      "upstream_citations": []
+    },
+    {
+      "node_id": "grigg2005",
+      "title": "Ian Grigg (2005) Ricardian Triple-Entry Shared Receipt (Axis 11)",
+      "axis7_reason": "theorem_dependency",
+      "load_bearing_for_waterfall": true,
+      "upstream_citations": [
+        "ijiri1989"
+      ]
+    },
+    {
+      "node_id": "hilbert1891",
+      "title": "David Hilbert (1891) Space-Filling Curve",
+      "axis7_reason": "background",
+      "load_bearing_for_waterfall": false,
+      "upstream_citations": []
+    },
+    {
+      "node_id": "hopf1951",
+      "title": "Eberhard Hopf (1951) Weak Energy Solutions",
+      "axis7_reason": "background",
+      "load_bearing_for_waterfall": false,
+      "upstream_citations": []
+    },
+    {
+      "node_id": "ijiri1989",
+      "title": "Yuji Ijiri (1989) Momentum Accounting (Axis 10) -> CMU Accounting Scholarship",
+      "axis7_reason": "theorem_dependency",
+      "load_bearing_for_waterfall": true,
+      "upstream_citations": []
+    },
+    {
+      "node_id": "kato1984",
+      "title": "Tosio Kato (1984) Strong L^p Mild Solutions",
+      "axis7_reason": "background",
+      "load_bearing_for_waterfall": false,
+      "upstream_citations": []
+    },
+    {
+      "node_id": "kochtataru2001",
+      "title": "Koch & Tataru (2001) BMO^{-1} Well-Posedness",
+      "axis7_reason": "background",
+      "load_bearing_for_waterfall": false,
+      "upstream_citations": []
+    },
+    {
+      "node_id": "ladyzhenskaya1967",
+      "title": "Olga A. Ladyzhenskaya (1967) Non-Newtonian Shear-Thickening Regularity -> Memorial Fellowship",
+      "axis7_reason": "theorem_dependency",
+      "load_bearing_for_waterfall": true,
+      "upstream_citations": [
+        "leray1934"
+      ]
+    },
+    {
+      "node_id": "lean4_2021",
+      "title": "Leonardo de Moura & Sebastian Ullrich (2021) Lean 4 Theorem Prover / Lean FRO",
+      "axis7_reason": "tool_lineage",
+      "load_bearing_for_waterfall": true,
+      "upstream_citations": [
+        "z3_2008"
+      ]
+    },
+    {
+      "node_id": "leilin2011",
+      "title": "Zhen Lei & Fanghua Lin (2011) Wiener F^0 < nu Global Mild Gate",
+      "axis7_reason": "theorem_dependency",
+      "load_bearing_for_waterfall": true,
+      "upstream_citations": [
+        "leray1934",
+        "fujitakato1964"
+      ]
+    },
+    {
+      "node_id": "fujitakato1964",
+      "title": "Fujita & Kato (1964) Fractional Powers Semigroup",
+      "axis7_reason": "background",
+      "load_bearing_for_waterfall": false,
+      "upstream_citations": []
+    },
+    {
+      "node_id": "memorial_doering_fund",
+      "title": "Charles R. Doering Memorial Applied Mathematics Fund",
+      "axis7_reason": "theorem_dependency",
+      "load_bearing_for_waterfall": true,
+      "upstream_citations": []
+    },
+    {
+      "node_id": "memorial_foias_fellowship",
+      "title": "Ciprian Foias Memorial PDE Fellowship",
+      "axis7_reason": "theorem_dependency",
+      "load_bearing_for_waterfall": true,
+      "upstream_citations": []
+    },
+    {
+      "node_id": "memorial_majda_fund",
+      "title": "Andrew J. Majda Memorial Turbulence & Climate Fellowship",
+      "axis7_reason": "theorem_dependency",
+      "load_bearing_for_waterfall": true,
+      "upstream_citations": []
+    },
+    {
+      "node_id": "moreno1998",
+      "title": "Guillermo Moreno (1998) Cayley-Dickson Zero-Divisor Decomposition",
+      "axis7_reason": "theorem_dependency",
+      "load_bearing_for_waterfall": true,
+      "upstream_citations": []
+    },
+    {
+      "node_id": "near_byuu_xkas_2004",
+      "title": "Near / byuu (2004-2010) xkas Multipass 65c816 Assembler -> Preservation & Mental Health Fund",
+      "axis7_reason": "tool_lineage",
+      "load_bearing_for_waterfall": true,
+      "upstream_citations": [
+        "norman_yen_trasm_1993"
+      ]
+    },
+    {
+      "node_id": "norman_yen_trasm_1993",
+      "title": "Norman Yen / Minus (1993-1997) SNES Assembler, TRASM & x816 + Trashkas",
+      "axis7_reason": "tool_lineage",
+      "load_bearing_for_waterfall": true,
+      "upstream_citations": [
+        "wdc_mensch_1984",
+        "westerfield_orcam_1986",
+        "bredon_merlin_1986"
+      ]
+    },
+    {
+      "node_id": "bredon_merlin_1986",
+      "title": "Glen Bredon (1986) Merlin 8/16 Apple IIgs Assembler -> Bredon Memorial CS Fund",
+      "axis7_reason": "tool_lineage",
+      "load_bearing_for_waterfall": true,
+      "upstream_citations": []
+    },
+    {
+      "node_id": "r_foundation_pipes",
+      "title": "R Core Team & R Foundation (Base R `|>` Pipe & Statistical Runtime)",
+      "axis7_reason": "tool_lineage",
+      "load_bearing_for_waterfall": true,
+      "upstream_citations": []
+    },
+    {
+      "node_id": "tao2016",
+      "title": "Terence Tao (2016) Averaged 3D Navier-Stokes Bimodal Blow-Up Barrier",
+      "axis7_reason": "theorem_dependency",
+      "load_bearing_for_waterfall": true,
+      "upstream_citations": [
+        "leray1934"
+      ]
+    },
+    {
+      "node_id": "leray1934",
+      "title": "Jean Leray (1934) Solenoidal Projector & Energy Inequality -> Memorial Mathematics Fund",
+      "axis7_reason": "theorem_dependency",
+      "load_bearing_for_waterfall": true,
+      "upstream_citations": []
+    },
+    {
+      "node_id": "tucker2002",
+      "title": "Warwick Tucker (2002) Rigorous ODE Solver",
+      "axis7_reason": "exposition",
+      "load_bearing_for_waterfall": false,
+      "upstream_citations": []
+    },
+    {
+      "node_id": "vdblessard2015",
+      "title": "Jan Bouwe van den Berg & Jean-Philippe Lessard (2015) Radii-Polynomial CAP",
+      "axis7_reason": "theorem_dependency",
+      "load_bearing_for_waterfall": true,
+      "upstream_citations": [
+        "ariolikoch2010"
+      ]
+    },
+    {
+      "node_id": "ariolikoch2010",
+      "title": "Gianni Arioli & Hans Koch (2010) Dissipative PDE CAP Enclosure",
+      "axis7_reason": "theorem_dependency",
+      "load_bearing_for_waterfall": true,
+      "upstream_citations": []
+    },
+    {
+      "node_id": "waleffe1992",
+      "title": "Fabian Waleffe (1992) Helical Triad Instability & Depletion",
+      "axis7_reason": "theorem_dependency",
+      "load_bearing_for_waterfall": true,
+      "upstream_citations": []
+    },
+    {
+      "node_id": "wdc_mensch_1984",
+      "title": "Bill Mensch / Western Design Center (1984) W65C816S Silicon & Macro Assembler",
+      "axis7_reason": "tool_lineage",
+      "load_bearing_for_waterfall": true,
+      "upstream_citations": []
+    },
+    {
+      "node_id": "westerfield_orcam_1986",
+      "title": "Mike Westerfield / The Byte Works (1986) Apple IIgs ORCA/M 65c816 Assembler",
+      "axis7_reason": "tool_lineage",
+      "load_bearing_for_waterfall": true,
+      "upstream_citations": []
+    },
+    {
+      "node_id": "winnipeg_18_org_endowment",
+      "title": "Winnipeg 18-Organization Food-Security & Church Mutual-Aid Endowment",
+      "axis7_reason": "data",
+      "load_bearing_for_waterfall": true,
+      "upstream_citations": []
+    },
+    {
+      "node_id": "z3_2008",
+      "title": "Leonardo de Moura & Nikolaj Bjorner (2008) Z3 SMT Solver",
+      "axis7_reason": "tool_lineage",
+      "load_bearing_for_waterfall": true,
+      "upstream_citations": []
+    }
+  ],
+  "payability_finding_waterfall_axis8": [
+    {
+      "node_id": "alcaro_smwcentral_asar_2011",
+      "beneficiary_account": "SMWCentral_Asar_Maintainers_Pool",
+      "consent_owner": "Asar_Maintainers",
+      "is_living_beneficiary": true,
+      "seed_share_rational": "3/100",
+      "post_waterfall_share_rational": "9/400",
+      "post_waterfall_pct": 2.25,
+      "axis8_status": "CONSENTED_PAYABLE"
+    },
+    {
+      "node_id": "biferale2012",
+      "beneficiary_account": "Attribution_Only_Lineage",
+      "consent_owner": "EpistemicRecord",
+      "is_living_beneficiary": true,
+      "seed_share_rational": "0/1",
+      "post_waterfall_share_rational": "0/1",
+      "post_waterfall_pct": 0.0,
+      "axis8_status": "ZERO_ATTRIBUTION_ONLY"
+    },
+    {
+      "node_id": "bkm1984",
+      "beneficiary_account": "Attribution_Only_Lineage",
+      "consent_owner": "EpistemicRecord",
+      "is_living_beneficiary": false,
+      "seed_share_rational": "0/1",
+      "post_waterfall_share_rational": "0/1",
+      "post_waterfall_pct": 0.0,
+      "axis8_status": "ZERO_ATTRIBUTION_ONLY"
+    },
+    {
+      "node_id": "buckmastervicol2019",
+      "beneficiary_account": "Attribution_Only_Lineage",
+      "consent_owner": "EpistemicRecord",
+      "is_living_beneficiary": true,
+      "seed_share_rational": "0/1",
+      "post_waterfall_share_rational": "0/1",
+      "post_waterfall_pct": 0.0,
+      "axis8_status": "ZERO_ATTRIBUTION_ONLY"
+    },
+    {
+      "node_id": "cf1993",
+      "beneficiary_account": "Attribution_Only_Lineage",
+      "consent_owner": "EpistemicRecord",
+      "is_living_beneficiary": true,
+      "seed_share_rational": "0/1",
+      "post_waterfall_share_rational": "0/1",
+      "post_waterfall_pct": 0.0,
+      "axis8_status": "ZERO_ATTRIBUTION_ONLY"
+    },
+    {
+      "node_id": "cheskidov2010",
+      "beneficiary_account": "Attribution_Only_Lineage",
+      "consent_owner": "EpistemicRecord",
+      "is_living_beneficiary": true,
+      "seed_share_rational": "0/1",
+      "post_waterfall_share_rational": "0/1",
+      "post_waterfall_pct": 0.0,
+      "axis8_status": "ZERO_ATTRIBUTION_ONLY"
+    },
+    {
+      "node_id": "ckn1982",
+      "beneficiary_account": "Attribution_Only_Lineage",
+      "consent_owner": "EpistemicRecord",
+      "is_living_beneficiary": true,
+      "seed_share_rational": "0/1",
+      "post_waterfall_share_rational": "0/1",
+      "post_waterfall_pct": 0.0,
+      "axis8_status": "ZERO_ATTRIBUTION_ONLY"
+    },
+    {
+      "node_id": "collab_lead_pde_coauthor",
+      "beneficiary_account": "Lead_PDE_Collaborator_Escrow",
+      "consent_owner": "LeadPDECoAuthor",
+      "is_living_beneficiary": true,
+      "seed_share_rational": "1/4",
+      "post_waterfall_share_rational": "3/16",
+      "post_waterfall_pct": 18.75,
+      "axis8_status": "CONSENTED_PAYABLE"
+    },
+    {
+      "node_id": "collab_lean4_cap_coauthor",
+      "beneficiary_account": "Formal_Lean4_CAP_Collaborator_Escrow",
+      "consent_owner": "Lean4CAPCoAuthor",
+      "is_living_beneficiary": true,
+      "seed_share_rational": "1/10",
+      "post_waterfall_share_rational": "3/40",
+      "post_waterfall_pct": 7.5,
+      "axis8_status": "CONSENTED_PAYABLE"
+    },
+    {
+      "node_id": "constantinmajda1988",
+      "beneficiary_account": "Constantin_Beltrami_Acct",
+      "consent_owner": "P_Constantin",
+      "is_living_beneficiary": true,
+      "seed_share_rational": "1/100",
+      "post_waterfall_share_rational": "3/400",
+      "post_waterfall_pct": 0.75,
+      "axis8_status": "UNCLAIMED_NO_OBLIGATION"
+    },
+    {
+      "node_id": "demarrais2000",
+      "beneficiary_account": "DeMarrais_Open_Science_Preservation_Fund",
+      "consent_owner": "OpenScience_Memorial_Trustee",
+      "is_living_beneficiary": false,
+      "seed_share_rational": "1/100",
+      "post_waterfall_share_rational": "1/100",
+      "post_waterfall_pct": 1.0,
+      "axis8_status": "CONSENTED_PAYABLE"
+    },
+    {
+      "node_id": "dickson1919",
+      "beneficiary_account": "Attribution_Only_Lineage",
+      "consent_owner": "EpistemicRecord",
+      "is_living_beneficiary": false,
+      "seed_share_rational": "0/1",
+      "post_waterfall_share_rational": "0/1",
+      "post_waterfall_pct": 0.0,
+      "axis8_status": "ZERO_ATTRIBUTION_ONLY"
+    },
+    {
+      "node_id": "doeringtiti1995",
+      "beneficiary_account": "Titi_Exponential_Spectrum_Acct",
+      "consent_owner": "E_Titi",
+      "is_living_beneficiary": true,
+      "seed_share_rational": "1/100",
+      "post_waterfall_share_rational": "3/400",
+      "post_waterfall_pct": 0.75,
+      "axis8_status": "UNCLAIMED_NO_OBLIGATION"
+    },
+    {
+      "node_id": "ess2003",
+      "beneficiary_account": "Attribution_Only_Lineage",
+      "consent_owner": "EpistemicRecord",
+      "is_living_beneficiary": true,
+      "seed_share_rational": "0/1",
+      "post_waterfall_share_rational": "0/1",
+      "post_waterfall_pct": 0.0,
+      "axis8_status": "ZERO_ATTRIBUTION_ONLY"
+    },
+    {
+      "node_id": "fefferman2000",
+      "beneficiary_account": "Fefferman_OptionB_Lineage_Acct",
+      "consent_owner": "C_Fefferman",
+      "is_living_beneficiary": true,
+      "seed_share_rational": "1/50",
+      "post_waterfall_share_rational": "123/3200",
+      "post_waterfall_pct": 3.84375,
+      "axis8_status": "UNCLAIMED_NO_OBLIGATION"
+    },
+    {
+      "node_id": "foiastemam1989",
+      "beneficiary_account": "Temam_Gevrey_Lineage_Acct",
+      "consent_owner": "R_Temam",
+      "is_living_beneficiary": true,
+      "seed_share_rational": "1/100",
+      "post_waterfall_share_rational": "3/400",
+      "post_waterfall_pct": 0.75,
+      "axis8_status": "UNCLAIMED_NO_OBLIGATION"
+    },
+    {
+      "node_id": "gomezserrano2019",
+      "beneficiary_account": "Attribution_Only_Lineage",
+      "consent_owner": "EpistemicRecord",
+      "is_living_beneficiary": true,
+      "seed_share_rational": "0/1",
+      "post_waterfall_share_rational": "0/1",
+      "post_waterfall_pct": 0.0,
+      "axis8_status": "ZERO_ATTRIBUTION_ONLY"
+    },
+    {
+      "node_id": "grigg2005",
+      "beneficiary_account": "Grigg_Ricardian_Receipt_Acct",
+      "consent_owner": "I_Grigg",
+      "is_living_beneficiary": true,
+      "seed_share_rational": "1/400",
+      "post_waterfall_share_rational": "3/1600",
+      "post_waterfall_pct": 0.1875,
+      "axis8_status": "UNCLAIMED_NO_OBLIGATION"
+    },
+    {
+      "node_id": "hilbert1891",
+      "beneficiary_account": "Attribution_Only_Lineage",
+      "consent_owner": "EpistemicRecord",
+      "is_living_beneficiary": false,
+      "seed_share_rational": "0/1",
+      "post_waterfall_share_rational": "0/1",
+      "post_waterfall_pct": 0.0,
+      "axis8_status": "ZERO_ATTRIBUTION_ONLY"
+    },
+    {
+      "node_id": "hopf1951",
+      "beneficiary_account": "Attribution_Only_Lineage",
+      "consent_owner": "EpistemicRecord",
+      "is_living_beneficiary": false,
+      "seed_share_rational": "0/1",
+      "post_waterfall_share_rational": "0/1",
+      "post_waterfall_pct": 0.0,
+      "axis8_status": "ZERO_ATTRIBUTION_ONLY"
+    },
+    {
+      "node_id": "ijiri1989",
+      "beneficiary_account": "Yuji_Ijiri_Memorial_Scholarship",
+      "consent_owner": "Ijiri_Memorial_Trustee",
+      "is_living_beneficiary": false,
+      "seed_share_rational": "1/100",
+      "post_waterfall_share_rational": "17/1600",
+      "post_waterfall_pct": 1.0625,
+      "axis8_status": "CONSENTED_PAYABLE"
+    },
+    {
+      "node_id": "kato1984",
+      "beneficiary_account": "Attribution_Only_Lineage",
+      "consent_owner": "EpistemicRecord",
+      "is_living_beneficiary": false,
+      "seed_share_rational": "0/1",
+      "post_waterfall_share_rational": "0/1",
+      "post_waterfall_pct": 0.0,
+      "axis8_status": "ZERO_ATTRIBUTION_ONLY"
+    },
+    {
+      "node_id": "kochtataru2001",
+      "beneficiary_account": "Attribution_Only_Lineage",
+      "consent_owner": "EpistemicRecord",
+      "is_living_beneficiary": true,
+      "seed_share_rational": "0/1",
+      "post_waterfall_share_rational": "0/1",
+      "post_waterfall_pct": 0.0,
+      "axis8_status": "ZERO_ATTRIBUTION_ONLY"
+    },
+    {
+      "node_id": "ladyzhenskaya1967",
+      "beneficiary_account": "Olga_Ladyzhenskaya_Memorial_Fellowship",
+      "consent_owner": "Ladyzhenskaya_Memorial_Trustee",
+      "is_living_beneficiary": false,
+      "seed_share_rational": "1/50",
+      "post_waterfall_share_rational": "3/200",
+      "post_waterfall_pct": 1.5,
+      "axis8_status": "CONSENTED_PAYABLE"
+    },
+    {
+      "node_id": "lean4_2021",
+      "beneficiary_account": "Lean_FRO_Open_Source_Fund",
+      "consent_owner": "LeanFRO_Trustee",
+      "is_living_beneficiary": true,
+      "seed_share_rational": "1/25",
+      "post_waterfall_share_rational": "63/1600",
+      "post_waterfall_pct": 3.9375,
+      "axis8_status": "CONSENTED_PAYABLE"
+    },
+    {
+      "node_id": "leilin2011",
+      "beneficiary_account": "Lei_Lin_Wiener_Gate_Acct",
+      "consent_owner": "Lei_and_Lin",
+      "is_living_beneficiary": true,
+      "seed_share_rational": "3/100",
+      "post_waterfall_share_rational": "9/400",
+      "post_waterfall_pct": 2.25,
+      "axis8_status": "UNCLAIMED_NO_OBLIGATION"
+    },
+    {
+      "node_id": "fujitakato1964",
+      "beneficiary_account": "Attribution_Only_Lineage",
+      "consent_owner": "EpistemicRecord",
+      "is_living_beneficiary": false,
+      "seed_share_rational": "0/1",
+      "post_waterfall_share_rational": "0/1",
+      "post_waterfall_pct": 0.0,
+      "axis8_status": "ZERO_ATTRIBUTION_ONLY"
+    },
+    {
+      "node_id": "memorial_doering_fund",
+      "beneficiary_account": "Charles_Doering_Memorial_Math_Fund",
+      "consent_owner": "Doering_Memorial_Trustee",
+      "is_living_beneficiary": false,
+      "seed_share_rational": "1/200",
+      "post_waterfall_share_rational": "3/400",
+      "post_waterfall_pct": 0.75,
+      "axis8_status": "CONSENTED_PAYABLE"
+    },
+    {
+      "node_id": "memorial_foias_fellowship",
+      "beneficiary_account": "Ciprian_Foias_Memorial_PDE_Fellowship",
+      "consent_owner": "Foias_Memorial_Trustee",
+      "is_living_beneficiary": false,
+      "seed_share_rational": "1/200",
+      "post_waterfall_share_rational": "1/160",
+      "post_waterfall_pct": 0.625,
+      "axis8_status": "CONSENTED_PAYABLE"
+    },
+    {
+      "node_id": "memorial_majda_fund",
+      "beneficiary_account": "Andrew_Majda_Memorial_Fellowship",
+      "consent_owner": "Majda_Memorial_Trustee",
+      "is_living_beneficiary": false,
+      "seed_share_rational": "1/200",
+      "post_waterfall_share_rational": "3/400",
+      "post_waterfall_pct": 0.75,
+      "axis8_status": "CONSENTED_PAYABLE"
+    },
+    {
+      "node_id": "moreno1998",
+      "beneficiary_account": "Moreno_CayleyDickson_Acct",
+      "consent_owner": "G_Moreno",
+      "is_living_beneficiary": true,
+      "seed_share_rational": "1/400",
+      "post_waterfall_share_rational": "1/400",
+      "post_waterfall_pct": 0.25,
+      "axis8_status": "UNCLAIMED_NO_OBLIGATION"
+    },
+    {
+      "node_id": "near_byuu_xkas_2004",
+      "beneficiary_account": "Near_xkas_Preservation_and_Mental_Health_Fund",
+      "consent_owner": "Preservation_MentalHealth_Trustee",
+      "is_living_beneficiary": false,
+      "seed_share_rational": "1/50",
+      "post_waterfall_share_rational": "33/1600",
+      "post_waterfall_pct": 2.0625,
+      "axis8_status": "CONSENTED_PAYABLE"
+    },
+    {
+      "node_id": "norman_yen_trasm_1993",
+      "beneficiary_account": "Norman_Yen_TRASM_x816_Lineage_Acct",
+      "consent_owner": "Norman_Yen",
+      "is_living_beneficiary": true,
+      "seed_share_rational": "1/100",
+      "post_waterfall_share_rational": "81/6400",
+      "post_waterfall_pct": 1.265625,
+      "axis8_status": "UNCLAIMED_NO_OBLIGATION"
+    },
+    {
+      "node_id": "bredon_merlin_1986",
+      "beneficiary_account": "Glen_Bredon_Merlin16_Memorial_Fund",
+      "consent_owner": "Bredon_Memorial_Trustee",
+      "is_living_beneficiary": false,
+      "seed_share_rational": "1/200",
+      "post_waterfall_share_rational": "31/5120",
+      "post_waterfall_pct": 0.605469,
+      "axis8_status": "CONSENTED_PAYABLE"
+    },
+    {
+      "node_id": "r_foundation_pipes",
+      "beneficiary_account": "R_Foundation_for_Statistical_Computing",
+      "consent_owner": "R_Foundation_Board",
+      "is_living_beneficiary": true,
+      "seed_share_rational": "3/100",
+      "post_waterfall_share_rational": "3/100",
+      "post_waterfall_pct": 3.0,
+      "axis8_status": "CONSENTED_PAYABLE"
+    },
+    {
+      "node_id": "tao2016",
+      "beneficiary_account": "Tao_Bimodal_Barrier_Acct",
+      "consent_owner": "T_Tao",
+      "is_living_beneficiary": true,
+      "seed_share_rational": "3/100",
+      "post_waterfall_share_rational": "147/3200",
+      "post_waterfall_pct": 4.59375,
+      "axis8_status": "UNCLAIMED_NO_OBLIGATION"
+    },
+    {
+      "node_id": "leray1934",
+      "beneficiary_account": "Jean_Leray_Memorial_Math_Fund",
+      "consent_owner": "Leray_Memorial_Trustee",
+      "is_living_beneficiary": false,
+      "seed_share_rational": "1/50",
+      "post_waterfall_share_rational": "99/1600",
+      "post_waterfall_pct": 6.1875,
+      "axis8_status": "CONSENTED_PAYABLE"
+    },
+    {
+      "node_id": "tucker2002",
+      "beneficiary_account": "Attribution_Only_Lineage",
+      "consent_owner": "EpistemicRecord",
+      "is_living_beneficiary": true,
+      "seed_share_rational": "0/1",
+      "post_waterfall_share_rational": "0/1",
+      "post_waterfall_pct": 0.0,
+      "axis8_status": "ZERO_ATTRIBUTION_ONLY"
+    },
+    {
+      "node_id": "vdblessard2015",
+      "beneficiary_account": "VdBerg_Lessard_CAP_Acct",
+      "consent_owner": "VdBerg_and_Lessard",
+      "is_living_beneficiary": true,
+      "seed_share_rational": "1/50",
+      "post_waterfall_share_rational": "39/1600",
+      "post_waterfall_pct": 2.4375,
+      "axis8_status": "UNCLAIMED_NO_OBLIGATION"
+    },
+    {
+      "node_id": "ariolikoch2010",
+      "beneficiary_account": "Arioli_Koch_Dissipative_CAP_Acct",
+      "consent_owner": "Arioli_and_Koch",
+      "is_living_beneficiary": true,
+      "seed_share_rational": "1/100",
+      "post_waterfall_share_rational": "29/1600",
+      "post_waterfall_pct": 1.8125,
+      "axis8_status": "UNCLAIMED_NO_OBLIGATION"
+    },
+    {
+      "node_id": "waleffe1992",
+      "beneficiary_account": "Waleffe_Helical_Triads_Acct",
+      "consent_owner": "F_Waleffe",
+      "is_living_beneficiary": true,
+      "seed_share_rational": "1/200",
+      "post_waterfall_share_rational": "1/200",
+      "post_waterfall_pct": 0.5,
+      "axis8_status": "UNCLAIMED_NO_OBLIGATION"
+    },
+    {
+      "node_id": "wdc_mensch_1984",
+      "beneficiary_account": "WDC_65c816_Engineering_Scholarship",
+      "consent_owner": "WDC_Mensch",
+      "is_living_beneficiary": true,
+      "seed_share_rational": "1/100",
+      "post_waterfall_share_rational": "31/2560",
+      "post_waterfall_pct": 1.210938,
+      "axis8_status": "UNCLAIMED_NO_OBLIGATION"
+    },
+    {
+      "node_id": "westerfield_orcam_1986",
+      "beneficiary_account": "ByteWorks_ORCAM_Lineage_Acct",
+      "consent_owner": "M_Westerfield",
+      "is_living_beneficiary": true,
+      "seed_share_rational": "1/100",
+      "post_waterfall_share_rational": "283/25600",
+      "post_waterfall_pct": 1.105469,
+      "axis8_status": "UNCLAIMED_NO_OBLIGATION"
+    },
+    {
+      "node_id": "winnipeg_18_org_endowment",
+      "beneficiary_account": "Winnipeg_18_Org_Mutual_Aid_Endowment",
+      "consent_owner": "Harvest_MutualAid",
+      "is_living_beneficiary": true,
+      "seed_share_rational": "1/4",
+      "post_waterfall_share_rational": "1/4",
+      "post_waterfall_pct": 25.0,
+      "axis8_status": "CONSENTED_PAYABLE"
+    },
+    {
+      "node_id": "z3_2008",
+      "beneficiary_account": "Z3_Theorem_Prover_Fellowship",
+      "consent_owner": "Z3_Maintainers",
+      "is_living_beneficiary": true,
+      "seed_share_rational": "1/50",
+      "post_waterfall_share_rational": "53/1600",
+      "post_waterfall_pct": 3.3125,
+      "axis8_status": "CONSENTED_PAYABLE"
+    }
+  ],
+  "settlement_finding_axis11": {
+    "ledger_loader": "external_poc::ledger.py",
+    "entries_posted_count": 16,
+    "total_consented_cents_posted": 78292969,
+    "settlement_receipts_axis11": {
+      "WF-01-ALCARO_SMWCENTRAL_ASAR_2": "278467b3d8795eb26dc85067ca2a4baa510b28d5e484c44c7f9da112b07eadee",
+      "WF-02-COLLAB_LEAD_PDE_COAUTHOR": "28bd6950f4dec7627ade6d82bbbb069c4e5ca6bb2010cc106aa7d53a6bdcb88a",
+      "WF-03-COLLAB_LEAN4_CAP_COAUTHO": "71e14c416887e4d5a40827d1c0dec79a56236bfbd88cdc06c327449decb7197d",
+      "WF-04-DEMARRAIS2000": "68091f4460c36e85633413938310c7141955ab625db82124b461335d3ea0cc86",
+      "WF-05-IJIRI1989": "10f7c0b4bbf62c59ac730f8d5cf6228d03ba61ce60671754c565cf53e89781d2",
+      "WF-06-LADYZHENSKAYA1967": "b8398e85d2e14fa6cb27506d966955be8638658ecdc378ddbb1d360cfd1a38c7",
+      "WF-07-LEAN4_2021": "85f7f2c9e5ac5dbca068868eb13458865176e93223a9ecedb7775091f3ee2ca3",
+      "WF-08-MEMORIAL_DOERING_FUND": "c81a7f2dc1050cb860f8b93b457aa35fdd4166cbad869f12b2e6871e06c9e7c3",
+      "WF-09-MEMORIAL_FOIAS_FELLOWSHI": "cea7b45a8da6da45cdd9d1219a0e0e94035b765ea1cb071e5a79a835ffaed089",
+      "WF-10-MEMORIAL_MAJDA_FUND": "aafef39e90a75e780c4013c3671b9c34b9a9e30cd2d5c5ba144126fdb872c3d3",
+      "WF-11-NEAR_BYUU_XKAS_2004": "019d31896b744d46146751fd05ba59832c65dddadc1b6a6cc93c18fb96db922c",
+      "WF-12-BREDON_MERLIN_1986": "b3a56705dddebfbebb848c2c6f15a341f7b957371f09056ca8604e0a4ac87276",
+      "WF-13-R_FOUNDATION_PIPES": "af37d8d932f2e4dab47d8814efff3d0bb426d1a636154cc9a7fb4f18c79dd646",
+      "WF-14-LERAY1934": "b1c0c4fcdb62ee422ab40d0a95eeacbc17cffdf6d48bd76026824c2b76948513",
+      "WF-15-WINNIPEG_18_ORG_ENDOWMEN": "6e8da273f502c41842628f7892461d4b6ac921c1fd89745d7f9ff4ebafddf7c6",
+      "WF-16-Z3_2008": "7158cadb4e560474fd405c3f43f4f00ae220a0acf7da8d77f7c8d676888eae56"
+    },
+    "version_pin_check": "WF-01-ALCARO_SMWCENTRAL_ASAR_2: read under waterfall_contingent_v1, the meanings it was posted under. Clean."
+  },
+  "certificate_sha256": "cfcccfaa6b1390670a3b54c1c55c7b765d35071626c25af6ee3d14f11579230c"
+}
