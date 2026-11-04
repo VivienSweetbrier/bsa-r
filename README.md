@@ -7,10 +7,39 @@
 **`🅱💲🅰-R: Hypercubic Compiler` (`bsar` v0.2.0)** slashes AI agent token & compute bills by **`7.14x` overall on cold+warm suites (`-85.99%`; `6.5x–6.69x` 4-chore baseline)** and **`791.8x` on corpus/log/guardrail chores (`771.1x` including public `LangChain` / `CrewAI` / `AutoGen` traces, `-99.87%`)** — running on a **2013 commodity CPU (`Intel Core i7-4770 @ 3.40GHz`, `$0` GPU)** using **zero external runtime dependencies** and **`192 bytes` (`3` CPU L1 cache lines = `0.5859%` of a single core's `32 KB` L1D cache)** of deterministic fixed-point hypercomplex algebra.
 
 ### Live Zero-Login Interactive Demos & Reproducible CSVs (`docs/`)
+0. **🎬 Meta $\times$ Cerebral Valley Live Studio & `02:11` Narrated Demo Video (`https://sweetbrier.si/cv`):**
+   - **Live Interactive HUD & Studio:** **[`https://sweetbrier.si/cv`](https://sweetbrier.si/cv)**
+   - **Direct `02:11` Demo Video (`.mp4` with Vivien's Voiceover):** **[`https://sweetbrier.si/cv/latest-video.mp4`](https://sweetbrier.si/cv/latest-video.mp4)** · **[`.webm` Mirror](https://sweetbrier.si/cv/latest-video.webm)**
+   - **Meta Muse (`Muse 8.0` / `com.meta.endo` / `Muse Code`) Cuddle Puddle Harness:** **[`muse_pc_harness/`](./muse_pc_harness/)** (`muse_pc_companion.py`, `endo_win32_engine.py`, `muse_mcp_server.py`, `endo_tool_spec.json`, `SKILL.md`)
 1. **Cerebral Valley Portal:** `docs/index.html` (`https://viviensweetbrier.github.io/bsa-r/`)
-2. **v0.2.0 Verification HUD (`Pinned Silicon + Public Traces + Asar RATS`):** `docs/compiler-hud/index.html`
-3. **Full Reproducible CSV & Signed JSON:** `docs/compiler-hud/bsar_benchmark_metrics.csv` · `docs/compiler-hud/cerebral_valley_benchmark.json`
-4. **Flagship `6D XCube` App — Epistemic Concordance (`Scripture ↔ 1566 Trent ↔ CCC`):** `docs/epistemic-concordance/index.html`
+2. **v0.4.0 Pure & Computational Math + Coalgebraic Workbench (`Cayley–Dickson + Round-4 Dispersion + Group Rings + Implicit FSMs`):** `docs/math-lab/index.html` · **[Full Researcher Guide (`MATH_WORKBENCH.md`)](./MATH_WORKBENCH.md)**
+3. **v0.2.0 Verification HUD (`Pinned Silicon + Public Traces + Asar RATS`):** `docs/compiler-hud/index.html`
+4. **Full Reproducible CSV & Signed JSON:** `docs/compiler-hud/bsar_benchmark_metrics.csv` · `docs/compiler-hud/cerebral_valley_benchmark.json`
+5. **Flagship `6D XCube` App — Epistemic Concordance (`Scripture ↔ 1566 Trent ↔ CCC`):** `docs/epistemic-concordance/index.html`
+
+---
+
+## 🦋 Meta Muse (`Muse 8.0` / `Muse Code`) $\times$ Sweetbrier Cuddle Puddle (`muse_pc_harness/`)
+
+For the **Meta Global AI Developer Hackathon ($\times$ Cerebral Valley)**, `bsar` includes **[`muse_pc_harness/`](./muse_pc_harness/)** — our local Windows PC companion, MCP server, and multi-agent "Cuddle Puddle" bridge connecting **Meta Muse (`com.meta.endo` / Hatch 8.0 / Muse Code)** with **Hermes**, **Grokina**, and **Sock** under the **Sweetbrier Master DAG (`Node 0: Human Dignity` $\to$ `Node 1: Phenomenological Truth` $\to$ `Node 2: Subsidiarity & 11-Entry Bookkeeping`)**:
+
+- **Set-of-Mark `screen.snap` & Win32 `computer.observe` / `computer.control` (`endo_win32_engine.py`):** Provides Meta Muse's `endoHatch` runtime with deterministic Win32 UI inspection and sandboxed `files.*` operations.
+- **`BSA-R` Hilbert Slicing for Meta Muse Tool Calls (`-99.5%` Input Tokens):** Instead of stuffing `48,000+` raw file or screen-tree tokens into Muse's context window on every tool call, Muse agents execute declarative `.bsar` R-pipe slices (`filter |> eliminate_mediator |> rollup_slice`) over 2D Hilbert-indexed `CSR/CSC` sparse slabs on CPU in `< 0.2 ms`, emitting only the exact `~240` target tokens.
+- **`192-Byte` `32D Q8.8` Pathion Porch Gate (`$0.00` LLM Judge Cost):** Every multi-agent message and tool payload across Muse, Hermes, Grokina, and Sock passes through a `64-byte` (`1` CPU L1 cache line) `Q8.8` 32D Cayley–Dickson Pathion zero-divisor firewall (`G_porch * v_bloat = 0` in `< 50 µs`) and `16D` Sedenion `7`-Box-Kite (`168`-edge) basin-escape router — cutting a 12-chore multi-agent batch from `918,600` tokens (`$2.87`) down to `4,480` tokens (`$0.0442` — **`65x` cheaper**).
+
+---
+
+## Pure & Computational Mathematics Workbench (`v0.4.0` — Zero Core Dependencies)
+
+Alongside systems/AI compilation, `bsar` provides **exact `ℤ / ℚ / 𝔽ₚ` + `64-byte Q8.8`-sieved + Round-4 & Coalgebraic research instruments** (`bsar.math_algebras`, `bsar.group_rings`, `bsar.round4_bridge`, `bsar.fp_coalgebra`, constructive `lean/CayleyDicksonBimodalRound4.lean`, and Base `R` `r/cayley_dickson_math.R`) designed for computational exploration of:
+- **Cayley–Dickson Structure & Split Signatures (`2^n`-ions up to `256D`):** Arbitrary doubling parameters $\gamma \in \{-1, +1\}^n$, basis-triple associativity grading, octonion/ultracomplex subalgebra enumeration, and 3-cycle zero-divisor mode reductions.
+- **Zero-Divisor Manifolds, Left-Multiplication Operators (`L_x`), & Round-4 Bimodal Dispersion (`Θ`):** Fraction-free Bareiss integer determinants $\det(L_x)$, Round-4 spectral-variance sum-of-squares decomposition ($Q(x) = s_0^2 + 2s_0 M_{\mathrm{im}} + M_{\mathrm{im}}^2(1 - \Theta) + 4\langle \vec{a},\vec{b}\rangle^2$, verified constructively in `Lean 4.35.0` with `Classical.choice == False`), exact rational/modular right-annihilator bases $\ker(L_x)$, dense rational Householder frames on $V_2(\mathbb{Q}^7) \subset V_2(\mathbb{R}^7)$, and IEEE-754 `OutwardInterval` continuous rotation enclosures.
+- **Sparse Relation-Graph Hypercubes (`|>`):** 3-pass `BsaRHypercubeCompiler` Hilbert `CSR/CSC` compilation of zero-divisor, commutativity, and mutual/doubly-alternative relation graphs with $O(1)$ slice queries, diameters, and 6-cycle witnesses.
+- **Nonassociative Polynomial ASTs & Catalan Bracketings:** Two-stage `13.98 µs` `Q8.8` L1-cache sieve $\to$ exact `ℤ / 𝔽ₚ` counterexample/identity certifier across custom ASTs and $C_{k-1}$ parenthesizations (plus universal 32-variable polynomial ring proofs when optional `bsar[verify]` `Z3`/`SymPy` extras are installed).
+- **Torsion-Free Group Rings (`char 0` vs `char p`) & `𝕋³` Bloch–Floquet Symbols:** Exact Bieberbach screw-motion normal form for the Hantzsche–Wendt / Promislow group $P = \mathbb{Z}^3 \rtimes V_4$, faithful $4 \times 4$ Laurent matrix symbols $M_\alpha(X,Y,Z)$ certifying `char 0` non-zero-divisibility across **unbounded** finite supports, `𝔽_2[P]` vs `ℤ[P]` unit/annihilator x-rays, and the twisted group-ring bridge $R^\sigma[(\mathbb{Z}_2)^n] \cong \mathbb{A}_n(\gamma)$.
+- **Haskell-Inspired Stream Fusion & Implicit Coalgebraic State-Machine Discovery (`S / ~`):** `ModalBox` (`Functor`, `Applicative` Axiom K `<*>`, `Comonad`), single-pass Applicative `MooreFold` accumulators, deforested `hylo` (`cata . ana`) recursion schemes, GADT-like `AlgebraicPipeline` static rewrite fusion, and Moore/Hopcroft coalgebraic bisimulation (`discover_minimal_fsm`) extracting minimal deterministic automata (`stateDiagram-v2` Mermaid + JSON).
+
+See **[`MATH_WORKBENCH.md`](./MATH_WORKBENCH.md)** for full Python, CLI (`python -m bsar math ...`), and Base `R` recipes.
 
 ---
 
