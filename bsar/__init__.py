@@ -1,11 +1,11 @@
 """
-🅱💲🅰-R: Hypercubic Compiler (`bsar`)
+🅱💲🅰-R: Hypercubic Compiler & Exact Algebraic Workbench (`bsar`)
 License: GNU AGPLv3
 Attestation: probabilistic_structural
 
 Unites:
-  🅱 — Binary 2^k Cayley-Dickson (16D Sedenions & 32D Pathions) + Lua Dynamic Frames
-  💲 — Sedenion Zero-Divisor Expense Slasher (64-byte L1-cache-line Q8.8 registers)
+  🅱 — Binary 2^k Cayley-Dickson (Exact Z/Q/F_p + 64B Q8.8 Sedenions/Pathions/Chingons) & Lua Frames
+  💲 — Sedenion/Pathion Zero-Divisor Sieve & Exact Annihilator / Stiefel / Group-Ring Kernels
   🅰 — Asar 3-Pass Deterministic Hilbert CSR/CSC Slab Assembler + RATS SHA-256 Seal
   -R — Copy-on-Modify Tidyverse Pipe Verbs + Carrollian Middle-Term Projection (∃m)
 """
@@ -29,6 +29,44 @@ from .cd_q88 import (
     fold_ast_q88,
     q88_to_float,
 )
+from .fp_coalgebra import (
+    AlgebraicPipeline,
+    BranchF,
+    FilterStage,
+    LeafF,
+    MinimalQuotientFSM,
+    ModalBox,
+    MooreFold,
+    MutateStage,
+    NonlinearShellFluxStage,
+    ZeroShortCircuitStage,
+    ana,
+    cata,
+    discover_minimal_fsm,
+    extract_promislow_v4_orientation_fsm,
+    extract_sedenion_boxkite_mode_fsm,
+    hylo,
+    make_round4_spectral_fold,
+)
+from .group_rings import (
+    PROMISLOW_14_NON_UP_WORDS,
+    PROMISLOW_A,
+    PROMISLOW_B,
+    PROMISLOW_ID,
+    GroupRingElem,
+    GroupRingSpec,
+    compile_support_product_hypercube,
+    construct_gardam_f2_unit_and_char0_lift,
+    make_cayley_dickson_twisted_group_ring,
+    make_promislow_group_ring,
+    parse_promislow_word,
+    promislow_inv,
+    promislow_mul,
+    promislow_pow,
+    promislow_word_ball,
+    solve_support_zero_divisor_kernel,
+    verify_promislow_14_non_up_set,
+)
 from .hardware_pin import pin_host_hardware
 from .hypercube import (
     BsaRHypercubeCompiler,
@@ -38,9 +76,68 @@ from .hypercube import (
     canonical_sha256,
     hilbert_nd_to_d,
 )
+from .math_algebras import (
+    NAMED_IDENTITIES,
+    CDElem,
+    CayleyDicksonAlgebra,
+    associator,
+    bareiss_det_int,
+    catalan_bracketings,
+    commutator,
+    compile_guterman_zhilina_relation_hypercube,
+    eval_nonassociative_ast_exact,
+    eval_nonassociative_ast_q88,
+    exact_annihilator_profile,
+    exact_nullspace_mod_p,
+    exact_nullspace_rational,
+    identity_ladder_matrix,
+    is_alternative_element,
+    is_doubly_alternative_element,
+    koebisu_sedenion_det_factorization,
+    moreno_pathion_kernel_spectrum_probe,
+    probe_nonassociative_identity,
+    sample_reggiani_stiefel_v2_q7,
+    wilmot_structure_and_reduction_report,
+)
+from .round4_bridge import (
+    OutwardInterval,
+    cayley_dickson_shell_dispersion,
+    certify_continuous_stiefel_rotation_interval,
+    has_z3_and_sympy,
+    promislow_bloch_floquet_matrix_at_rationals,
+    promislow_bloch_floquet_t3_audit,
+    verify_round4_algebraic_bridge_z3,
+)
+from .ix_asm import (
+    BOOT_65816_EMULATION,
+    ENTRY_16BIT_CLEAN,
+    IxAsm,
+    IxFlagTypeError,
+    ProcFlagState,
+    adc_imm16,
+    clc,
+    ix_branch_eq,
+    ix_start,
+    lda_imm8,
+    lda_imm16,
+    ldx_imm16,
+    pha,
+    pla,
+    q16_shift8_normalize,
+    q88_mul_raw,
+    q88_store_slab,
+    rep_m16,
+    rep_mx16,
+    rep_x16,
+    rts,
+    run_ix_asm_verification_suite,
+    sec,
+    sep_m8,
+    sep_x8,
+)
 
-__version__ = "0.2.0"
-BANNER = "🅱💲🅰-R: Hypercubic Compiler v0.2.0"
+__version__ = "0.4.0"
+BANNER = "🅱💲🅰-R: Hypercubic Compiler & Algebraic Workbench v0.4.0"
 
 __all__ = [
     "BANNER",
@@ -67,4 +164,96 @@ __all__ = [
     "pack_asar_rats_block",
     "verify_asar_rats_block",
     "run_asar_q88_zero_divisor_microbench",
+    # v0.3.0 Exact Cayley-Dickson, Manifold, Relation-Graph & Nonassociative Identity Instruments
+    "CayleyDicksonAlgebra",
+    "CDElem",
+    "NAMED_IDENTITIES",
+    "commutator",
+    "associator",
+    "bareiss_det_int",
+    "exact_nullspace_rational",
+    "exact_nullspace_mod_p",
+    "exact_annihilator_profile",
+    "koebisu_sedenion_det_factorization",
+    "sample_reggiani_stiefel_v2_q7",
+    "moreno_pathion_kernel_spectrum_probe",
+    "wilmot_structure_and_reduction_report",
+    "is_alternative_element",
+    "is_doubly_alternative_element",
+    "compile_guterman_zhilina_relation_hypercube",
+    "catalan_bracketings",
+    "eval_nonassociative_ast_exact",
+    "eval_nonassociative_ast_q88",
+    "probe_nonassociative_identity",
+    "identity_ladder_matrix",
+    # v0.3.0 Torsion-Free Group-Ring & Twisted Loop-Ring Instruments
+    "PROMISLOW_ID",
+    "PROMISLOW_A",
+    "PROMISLOW_B",
+    "PROMISLOW_14_NON_UP_WORDS",
+    "GroupRingSpec",
+    "GroupRingElem",
+    "promislow_mul",
+    "promislow_inv",
+    "promislow_pow",
+    "parse_promislow_word",
+    "promislow_word_ball",
+    "make_promislow_group_ring",
+    "make_cayley_dickson_twisted_group_ring",
+    "compile_support_product_hypercube",
+    "verify_promislow_14_non_up_set",
+    "construct_gardam_f2_unit_and_char0_lift",
+    "solve_support_zero_divisor_kernel",
+    # v0.4.0 Haskell/Coalgebraic Implicit State-Machine & Stream-Fusion Instruments
+    "ModalBox",
+    "MooreFold",
+    "make_round4_spectral_fold",
+    "LeafF",
+    "BranchF",
+    "ana",
+    "cata",
+    "hylo",
+    "MinimalQuotientFSM",
+    "discover_minimal_fsm",
+    "extract_promislow_v4_orientation_fsm",
+    "extract_sedenion_boxkite_mode_fsm",
+    "FilterStage",
+    "MutateStage",
+    "NonlinearShellFluxStage",
+    "ZeroShortCircuitStage",
+    "AlgebraicPipeline",
+    # v0.4.0 Navier-Stokes Round-4 Dispersion, OutwardInterval, Bloch-Floquet T^3 & Z3/SymPy Bridge
+    "OutwardInterval",
+    "certify_continuous_stiefel_rotation_interval",
+    "cayley_dickson_shell_dispersion",
+    "promislow_bloch_floquet_matrix_at_rationals",
+    "promislow_bloch_floquet_t3_audit",
+    "has_z3_and_sympy",
+    "verify_round4_algebraic_bridge_z3",
+    # v0.4.1 Atkey Indexed Monad (`IxAsm`) 65c816 + Q8.8 Processor-Flag Type-State Verifier
+    "BOOT_65816_EMULATION",
+    "ENTRY_16BIT_CLEAN",
+    "IxAsm",
+    "IxFlagTypeError",
+    "ProcFlagState",
+    "adc_imm16",
+    "clc",
+    "ix_branch_eq",
+    "ix_start",
+    "lda_imm8",
+    "lda_imm16",
+    "ldx_imm16",
+    "pha",
+    "pla",
+    "q16_shift8_normalize",
+    "q88_mul_raw",
+    "q88_store_slab",
+    "rep_m16",
+    "rep_mx16",
+    "rep_x16",
+    "rts",
+    "run_ix_asm_verification_suite",
+    "sec",
+    "sep_m8",
+    "sep_x8",
 ]
