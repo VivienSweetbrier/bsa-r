@@ -155,6 +155,26 @@ def main(argv: list[str] | None = None) -> int:
         help="Run Atkey Indexed Monad (IxAsm) 65c816 + BSA-R Q8.8 Processor-Flag Type-State Verifier & RATS Assembler",
     )
 
+    p_eng = sub.add_parser(
+        "engine",
+        help="Run v0.5.0 SNES Engine & QoL Metacompiler (Arenas, Session-DMA, Refinements, Verse <transacts>, MWL Importer, LevelDirectory)",
+    )
+    eng_sub = p_eng.add_subparsers(dest="engine_cmd")
+    eng_sub.add_parser(
+        "brutal-sock",
+        help="Compile BRUTAL SOCK dogfood slice (MWL -> TypedLevelIR, Arenas, Session-DMA, PIXI/GPS/UberASM)",
+    )
+    p_seeds = eng_sub.add_parser(
+        "seeds",
+        help="Compile Seeds? infinite-descent RPG slice (1024+ floor directory + Doubles Battle Room Optimisation Receipt)",
+    )
+    p_seeds.add_argument("--floors", type=int, default=1024, help="Number of floors to compile into append-only directory (default 1024)")
+    p_mwl = eng_sub.add_parser(
+        "mwl-import",
+        help="Defensively validate & lower a Lunar Magic .mwl file into TypedLevelIR",
+    )
+    p_mwl.add_argument("mwl_path", type=str, help="Path to .mwl file")
+
     args = parser.parse_args(argv)
     if args.cmd in (None, "info"):
         bk = enumerate_sedenion_box_kites()
@@ -387,6 +407,44 @@ def main(argv: list[str] | None = None) -> int:
                 "ix_asm_verification": run_ix_asm_verification_suite(),
             }
             print(json.dumps(out_ix, indent=2, ensure_ascii=False))
+            return 0
+
+    if args.cmd == "engine":
+        from .engine_scene import compile_brutal_sock_dogfood, compile_seeds_descent_dogfood
+        from .mwl_importer import import_mwl_file
+
+        ecmd = args.engine_cmd or "brutal-sock"
+        if ecmd == "brutal-sock":
+            print(json.dumps({"workbench": BANNER, "result": compile_brutal_sock_dogfood()}, indent=2, ensure_ascii=False))
+            return 0
+        if ecmd == "seeds":
+            out_s = compile_seeds_descent_dogfood(floor_count=args.floors)
+            # Convert dataclass receipt to dict for clean JSON output
+            from dataclasses import asdict
+
+            out_s["room_moves_optimisation_receipt"] = asdict(out_s["room_moves_optimisation_receipt"])
+            print(json.dumps({"workbench": BANNER, "result": out_s}, indent=2, ensure_ascii=False))
+            return 0
+        if ecmd == "mwl-import":
+            ir = import_mwl_file(args.mwl_path)
+            print(
+                json.dumps(
+                    {
+                        "workbench": BANNER,
+                        "level_id": ir.level_id,
+                        "name": ir.name,
+                        "lm_version_hex": f"0x{ir.lm_version:04X}",
+                        "layer1_objects": len(ir.layer1_objects),
+                        "sprites": len(ir.sprites),
+                        "exits": len(ir.exits),
+                        "palette_bytes": len(ir.palette_bgr555),
+                        "engine_blob_bytes": len(ir.serialize_engine_blob()),
+                        "crc16_hex": f"0x{ir.crc16:04X}",
+                    },
+                    indent=2,
+                    ensure_ascii=False,
+                )
+            )
             return 0
 
     return 0

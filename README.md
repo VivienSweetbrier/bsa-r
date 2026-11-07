@@ -44,6 +44,24 @@ See **[`MATH_WORKBENCH.md`](./MATH_WORKBENCH.md)** for full Python, CLI (`python
 
 ---
 
+## 🎮 `v0.5.0` QoL Compiler Guarantees & Godot-for-SNES Engine Foundation (`docs/engine-design/`)
+
+Building directly on `bsar.ix_asm` ("flags were the first implicit machine we made explicit; memory is the second"), `bsar` `v0.5.0` implements the consolidated QoL & Engine queue (**[`docs/engine-design/`](./docs/engine-design/)** — dogfooded against **BRUTAL SOCK** and **Seeds?**):
+
+1. **Region-Typed Bump Arenas & Rank-2 `runST` Escape Verifier (`bsar.arenas` + `lean/IxArenaRegions.lean`):**
+   - Bump-only `O(1)` allocation and `O(1)` VBlank/room-exit cursor bulldozing (`no individual free()` = zero use-after-free, double-free, or fragmentation).
+   - Enforces the **Rank-2 Escape Rule**, directional nested lifetimes, linear register taint handshakes (`X`/`Y`/`DP`), dedicated `INTERRUPT_MINI` NMI scratch isolation, and hardware bus geography (`WRAM $7E/$7F` vs. `SA-1 BW-RAM $40` Open-Bus guard vs. quarantined `$41:C000` SRAM).
+2. **Session-Typed DMA / VBlank & SA-1 5-Cycle Math Protocols (`bsar.dma_sessions`):**
+   - Linear DMA channel sessions (`Idle -> Armed(AlignedPtr) -> InFlightVBlank -> Completed`) make active-display VRAM writes, half-completed transfers, and NTSC VBlank byte-budget overruns unrepresentable, alongside linear `SA1MathSession` enforcement for SA-1's 5-cycle `$2253 -> $2307` `Q8.8` hardware multiplier.
+3. **Refinement Types for Lengths, Bank Crossings, Budgets & Silicon Opcodes (`bsar.refinements`):**
+   - Carries `[lo, hi]` bounds, `LoROM` (`32 KB`) / `SA-1` (`64 KB`) non-bank-straddling invariants, `OAM` (`128`) / `SA-1 Sprite` (`22`) / `CGRAM` (`256`) hardware budgets, and silicon opcode legality checks (catching non-existent `CPX d,s` / `CPY d,s` stack-relative addressing at compile time).
+4. **Verse Effects (`<computes>`..`<transacts>`) & Coalgebraic Optimisation Receipts (`bsar.verse_effects`):**
+   - Implements Simon Peyton Jones's Verse semantics with **zero runtime GC** (`O(1)` 2-instruction arena cursor rollback + shadow state commit when any `<decides>` `guard(...)` fails), plus checkable `STAR` RATS + `ModalBox` SHA-256 **Bisimulation Optimisation Receipts** (`prove_bisimulation_receipt`).
+5. **"Just One Language" Metacompiler — Defensive `.mwl` Importer, Infinite Level Directory & Scene Machines (`bsar.mwl_importer`, `bsar.engine_scene`):**
+   - Zero-trust Lunar Magic `.mwl` binary parser $\to$ `TypedLevelIR`, append-only `{id, bank, offset, length, crc16}` ROM Level Directory (**shattering SMW's 512-level cap** — verified on `1,024+` *Seeds?* floors via `python -m bsar engine seeds`), whole-project compile-time door/warp referential integrity (`IxBrokenExitCompileError` with `(x, y)` coordinates), and composable `SceneMachine` codegen for PIXI (`40x64`), GPS (`10` block labels), and UberASM (`sa1:`).
+
+---
+
 ## Why `🅱💲🅰-R` Exists
 
 Most multi-agent harnesses burn cloud budget in two places:

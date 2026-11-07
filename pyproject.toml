@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "bsar"
-version = "0.2.0"
-description = "🅱💲🅰-R: Hypercubic Compiler — 3-Pass Hilbert XCube Assembler, R Pipe Verbs, and 64-Byte Q8.8 32D Cayley-Dickson Expense Engine"
+version = "0.5.0"
+description = "🅱💲🅰-R: Hypercubic Compiler, Algebraic Workbench & SNES Engine — Region-Typed Arenas, Session-Typed VBlank DMA, Verse Zero-GC <transacts>, Refinement Types, Coalgebraic Optimisation Receipts, MWL Importer & Infinite Level Directory"
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "AGPL-3.0-or-later" }
@@ -13,6 +13,7 @@ dependencies = []
 
 [project.optional-dependencies]
 bench = ["tiktoken==0.14.0"]
+verify = ["sympy>=1.12", "z3-solver>=4.12"]
 
 [project.scripts]
 bsar = "bsar.cli:main"
