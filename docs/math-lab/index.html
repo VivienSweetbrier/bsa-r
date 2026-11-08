@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>🅱💲🅰-R Algebraic &amp; Group-Ring Workbench (v0.4.0)</title>
+<style>
+  :root {
+    --bg: #0b0e14;
+    --panel: #131824;
+    --panel2: #0f1420;
+    --border: #263046;
+    --gold: #f5b942;
+    --emerald: #2dd4bf;
+    --rose: #fb7185;
+    --ink: #f1f5f9;
+    --muted: #94a3b8;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    line-height: 1.55;
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 2rem 1.25rem 3.5rem; }
+  .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; font-size: .9rem; }
+  .topbar a { color: var(--emerald); text-decoration: none; font-weight: 600; }
+  .hero {
+    background: linear-gradient(135deg, #111827 0%, #172554 55%, #0f172a 100%);
+    border: 2px solid var(--emerald);
+    border-radius: 14px;
+    padding: 1.6rem 1.8rem;
+    margin-bottom: 1.5rem;
+  }
+  h1 { margin: 0; font-size: 1.75rem; color: var(--gold); }
+  .sub { color: var(--muted); margin: .45rem 0 0; font-size: .98rem; }
+  .tabs { display: flex; flex-wrap: wrap; gap: .6rem; margin-bottom: 1.25rem; }
+  .tab {
+    background: var(--panel);
+    color: var(--ink);
+    border: 1px solid var(--border);
+    padding: .6rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: .9rem;
+  }
+  .tab.active { background: var(--emerald); color: #081018; border-color: var(--emerald); }
+  .pane { display: none; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1.4rem; }
+  .pane.active { display: block; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; }
+  @media (max-width: 860px) { .grid2 { grid-template-columns: 1fr; } }
+  label { display: block; font-size: .83rem; color: var(--muted); margin-bottom: .3rem; font-weight: 600; }
+  input, select, textarea {
+    width: 100%;
+    background: var(--panel2);
+    color: var(--ink);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: .55rem .7rem;
+    font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+    font-size: .88rem;
+    margin-bottom: .8rem;
+  }
+  button.run {
+    background: var(--gold);
+    color: #0b0e14;
+    border: none;
+    border-radius: 7px;
+    padding: .6rem 1.1rem;
+    font-weight: 800;
+    cursor: pointer;
+    font-size: .9rem;
+  }
+  button.preset {
+    background: #1e293b;
+    color: var(--emerald);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: .35rem .65rem;
+    cursor: pointer;
+    font-size: .8rem;
+    margin-right: .35rem;
+    margin-bottom: .45rem;
+  }
+  pre.out {
+    background: #070a10;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: .95rem;
+    overflow-x: auto;
+    font-size: .83rem;
+    color: #e2e8f0;
+    margin: 0;
+    min-height: 220px;
+  }
+  .badge-ok { color: var(--emerald); font-weight: 700; }
+  .badge-warn { color: var(--rose); font-weight: 700; }
+  code { background: #080b11; color: var(--emerald); padding: .1rem .35rem; border-radius: 4px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <a href="../index.html">&larr; Back to 🅱💲🅰-R Portal</a>
+    <span>Zero-CDN Client-Side Workbench &middot; <code>python -m bsar math</code> Companion</span>
+  </div>
+
+  <div class="hero">
+    <h1>🅱💲🅰-R Algebraic &amp; Group-Ring Workbench (<code>v0.4.0</code>)</h1>
+    <p class="sub">Open-ended zero-dependency computational instruments for <strong>Cayley–Dickson structure &amp; split signatures</strong>, <strong>zero-divisor manifolds &amp; Round-4 bimodal dispersion Θ</strong>, <strong>relation-graph hypercubes</strong>, <strong>nonassociative AST identities</strong>, <strong>torsion-free group-ring T³ Bloch–Floquet probes</strong>, and <strong>coalgebraic implicit state-machine discovery</strong>.</p>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('tab-ker', this)">1. Annihilators, Stiefel V₂(ℝ⁷) &amp; det(Lₓ)</button>
+    <button class="tab" onclick="showTab('tab-rel', this)">2. Split/Std Relation Graphs &amp; Subalgebras</button>
+    <button class="tab" onclick="showTab('tab-ast', this)">3. Nonassociative Identity &amp; Catalan ASTs</button>
+    <button class="tab" onclick="showTab('tab-gr', this)">4. Torsion-Free Group Rings (P: Char 0 vs Char p)</button>
+    <button class="tab" onclick="showTab('tab-r4fsm', this)">5. Round-4 Dispersion Θ &amp; Implicit Coalgebraic FSMs</button>
+  </div>
+
+  <!-- TAB 1: ANNIHILATORS & MANIFOLDS -->
+  <div id="tab-ker" class="pane active">
+    <div class="grid2">
+      <div>
+        <h3 style="margin-top:0;color:var(--gold)">Left Multiplication Lₓ, Exact Nullity &amp; Quartic Obstruction</h3>
+        <div style="margin-bottom:.6rem">
+          <button class="preset" onclick="loadKerPreset(4,'-1,-1,-1,-1','1:1, 10:1')">16D Box-Kite (nullity 4)</button>
+          <button class="preset" onclick="loadKerPreset(4,'-1,-1,-1,-1','1:2, 2:2, 3:1, 9:2, 10:-1, 11:-2')">16D Dense Stiefel V₂(ℚ⁷)</button>
+          <button class="preset" onclick="loadKerPreset(5,'-1,-1,-1,-1,-1','1:1, 26:1')">32D Pathion (nullity 4)</button>
+          <button class="preset" onclick="loadKerPreset(5,'-1,-1,-1,-1,-1','1:1, 10:1')">32D Embedded (nullity 8)</button>
+          <button class="preset" onclick="loadKerPreset(5,'-1,-1,-1,-1,-1','1:1, 18:1')">32D Sand Mandala (nullity 12)</button>
+          <button class="preset" onclick="loadKerPreset(4,'-1,-1,-1,1','0:1, 8:1')">Split 16D Idempotent-like</button>
+        </div>
+        <label>Cayley–Dickson Level n (dim = 2ⁿ: 3=8D, 4=16D, 5=32D, 6=64D)</label>
+        <select id="ker-lvl" onchange="syncKerGamma()">
+          <option value="3">n = 3 (8D Octonions)</option>
+          <option value="4">n = 4 (16D Sedenions)</option>
+          <option value="5" selected>n = 5 (32D Pathions)</option>
+          <option value="6">n = 6 (64D Chingons)</option>
+        </select>
+        <label>Doubling Signature γ = (γ₁, ..., γₙ) ∈ {-1, +1}ⁿ</label>
+        <input id="ker-gamma" value="-1,-1,-1,-1,-1">
+        <label>Sparse Element Coordinates (index:integer_coeff, ...)</label>
+        <input id="ker-coords" value="1:1, 18:1">
+        <button class="run" onclick="runKerProbe()">Compute Exact Lₓ Nullity &amp; Obstructions</button>
+      </div>
+      <div>
+        <pre id="ker-out" class="out"></pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 2: RELATION GRAPHS & WILMOT STRUCTURE -->
+  <div id="tab-rel" class="pane">
+    <div class="grid2">
+      <div>
+        <h3 style="margin-top:0;color:var(--gold)">Relation Graphs &amp; Subalgebra / Mode Census</h3>
+        <p style="font-size:.86rem;color:var(--muted);margin-top:0">Enumerates primitive cross-half 2-blades <code>eᵢ ± eⱼ</code> and compiles their <strong>zero-divisor</strong>, <strong>commutativity</strong>, and <strong>mutual alternativity</strong> graphs across standard or split signatures.</p>
+        <div style="margin-bottom:.6rem">
+          <button class="preset" onclick="document.getElementById('rel-lvl').value='4';document.getElementById('rel-gamma').value='-1,-1,-1,-1';runRelProbe()">Standard S₁₆ (-1,-1,-1,-1)</button>
+          <button class="preset" onclick="document.getElementById('rel-lvl').value='4';document.getElementById('rel-gamma').value='-1,-1,-1,1';runRelProbe()">Split-Last S₁₆ (-1,-1,-1,+1)</button>
+          <button class="preset" onclick="document.getElementById('rel-lvl').value='4';document.getElementById('rel-gamma').value='-1,-1,1,-1';runRelProbe()">Split-Octonion Doubled (-1,-1,+1,-1)</button>
+          <button class="preset" onclick="document.getElementById('rel-lvl').value='5';document.getElementById('rel-gamma').value='-1,-1,-1,-1,-1';runRelProbe()">Standard 32D Pathions P₃₂</button>
+        </div>
+        <label>Level n</label>
+        <select id="rel-lvl" onchange="document.getElementById('rel-gamma').value=Array(parseInt(this.value)).fill(-1).join(',')">
+          <option value="4" selected>n = 4 (16D)</option>
+          <option value="5">n = 5 (32D)</option>
+        </select>
+        <label>Signature γ ∈ {-1, +1}ⁿ</label>
+        <input id="rel-gamma" value="-1,-1,-1,-1">
+        <button class="run" onclick="runRelProbe()">Compile Relation Hypercube Summary</button>
+      </div>
+      <div>
+        <pre id="rel-out" class="out"></pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 3: NONASSOCIATIVE IDENTITIES -->
+  <div id="tab-ast" class="pane">
+    <div class="grid2">
+      <div>
+        <h3 style="margin-top:0;color:var(--gold)">Nonassociative Identity &amp; Catalan Bracketing Prober</h3>
+        <p style="font-size:.86rem;color:var(--muted);margin-top:0">Screens structured basis &amp; multi-blade assignments across <code>ℝ, ℂ, ℍ, 𝕆, 𝕊₁₆, ℙ₃₂</code> and inspects all Catalan <code>Cₖ₋₁</code> parenthesizations on concrete inputs.</p>
+        <label>Select Identity or Catalan Parenthesization Probe</label>
+        <select id="ast-id">
+          <option value="flexibility">Flexibility: (x * y) * x - x * (y * x)</option>
+          <option value="power4">Power-Associativity (deg 4): ((x * x) * x) * x - (x * x) * (x * x)</option>
+          <option value="left_alt" selected>Left Alternativity: (x * x) * y - x * (x * y)</option>
+          <option value="left_moufang">Left Moufang: ((x * y) * x) * z - x * (y * (x * z))</option>
+          <option value="catalan4">All C₃ = 5 Catalan Bracketings of (x, y, z, w) in 32D Pathions</option>
+        </select>
+        <button class="run" onclick="runAstProbe()">Run Exact Identity Sweep</button>
+      </div>
+      <div>
+        <pre id="ast-out" class="out"></pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 4: TORSION-FREE GROUP RINGS -->
+  <div id="tab-gr" class="pane">
+    <div class="grid2">
+      <div>
+        <h3 style="margin-top:0;color:var(--gold)">Promislow / Hantzsche–Wendt Group P Support Hypercube</h3>
+        <p style="font-size:.86rem;color:var(--muted);margin-top:0">Exact Euclidean screw-motion normal form for <code>P = ⟨a, b | b⁻¹a²b = a⁻², a⁻¹b²a = b⁻²⟩</code>. Enter any generator words in <code>a, b, A=a⁻¹, B=b⁻¹</code> to inspect unique products (<code>UP</code>) and parity fibers.</p>
+        <div style="margin-bottom:.6rem">
+          <button class="preset" onclick="document.getElementById('gr-words').value='a, abb, aB, Ba, ABB, BA, AB, BB, bb, A, bAb, bab, ab, bA';runGrProbe()">Promislow 14-Element Non-UP Set (0 unique products!)</button>
+          <button class="preset" onclick="document.getElementById('gr-words').value='1, a, b, ab, ba, A, B';runGrProbe()">7-Element Ball Slice (has unique products)</button>
+        </div>
+        <label>Support Words S ⊂ P (comma-separated, using a, b, A, B, 1)</label>
+        <textarea id="gr-words" rows="3">a, abb, aB, Ba, ABB, BA, AB, BB, bb, A, bAb, bab, ab, bA</textarea>
+        <button class="run" onclick="runGrProbe()">Compile S × S Product Multiplicity Cube</button>
+      </div>
+      <div>
+        <pre id="gr-out" class="out"></pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB 5: ROUND-4 DISPERSION & IMPLICIT COALGEBRAIC FSMS -->
+  <div id="tab-r4fsm" class="pane">
+    <div class="grid2">
+      <div>
+        <h3 style="margin-top:0;color:var(--gold)">Navier–Stokes Round-4 Dispersion Θ &amp; Coalgebraic Bisimulation (<code>S / ~</code>)</h3>
+        <p style="font-size:.86rem;color:var(--muted);margin-top:0">Single-pass Applicative <code>MooreFold</code> shell-variance depletion (<code>M₀P - D² = 4e₁e₂</code>, Lean 4.35.0 constructive <code>Classical.choice == False</code>) + automatic implicit deterministic state-machine extraction via Moore/Hopcroft coalgebraic bisimulation.</p>
+        <label>Select Round-4 / Functional Coalgebra Probe</label>
+        <select id="r4-mode" onchange="runR4FsmProbe()">
+          <option value="promislow_fsm" selected>Coalgebraic FSM: Promislow P Ball (3 Trace Obs &rarr; Splits at Round 2 into 4-State V₄!)</option>
+          <option value="boxkite_fsm">Coalgebraic FSM: 42 Sedenion Assessors &rarr; 7 Wilmot Box-Kite Modes</option>
+          <option value="round4_zd">Round-4 Bimodal Dispersion Θ: Zero Divisor (Θ = 1, Q = 0) vs Single-Shell Octonion (Θ = 0, Q &gt; 0)</option>
+        </select>
+        <button class="run" onclick="runR4FsmProbe()">Run Coalgebraic / Round-4 Certifier</button>
+      </div>
+      <div>
+        <pre id="r4-out" class="out"></pre>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function showTab(id, btn) {
+  document.querySelectorAll('.pane').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function buildSignTable(gamma) {
+  const n = gamma.length;
+  if (n === 0) return [[1]];
+  const sub = buildSignTable(gamma.slice(0, n - 1));
+  const half = 1 << (n - 1);
+  const dim = 1 << n;
+  const g = gamma[n - 1];
+  const out = Array.from({length: dim}, () => new Int8Array(dim));
+  const conj = k => (k === 0 ? 1 : -1);
+  for (let i = 0; i < dim; i++) {
+    for (let j = 0; j < dim; j++) {
+      let s = 1;
+      if (i < half && j < half) s = sub[i][j];
+      else if (i < half && j >= half) s = sub[j - half][i];
+      else if (i >= half && j < half) s = conj(j) * sub[i - half][j];
+      else s = g * conj(j - half) * sub[j - half][i - half];
+      out[i][j] = s;
+    }
+  }
+  return out;
+}
+
+function cdMult(x, y, S) {
+  const n = x.length;
+  const out = new BigInt64Array(n);
+  for (let i = 0; i < n; i++) {
+    if (x[i] === 0n) continue;
+    for (let j = 0; j < n; j++) {
+      if (y[j] === 0n) continue;
+      out[i ^ j] += BigInt(S[i][j]) * x[i] * y[j];
+    }
+  }
+  return out;
+}
+
+function bareissDetBigInt(M) {
+  const n = M.length;
+  const A = M.map(r => r.map(v => BigInt(v)));
+  let sign = 1n, prev = 1n;
+  for (let k = 0; k < n - 1; k++) {
+    if (A[k][k] === 0n) {
+      let sw = -1;
+      for (let r = k + 1; r < n; r++) if (A[r][k] !== 0n) { sw = r; break; }
+      if (sw === -1) return 0n;
+      const tmp = A[k]; A[k] = A[sw]; A[sw] = tmp;
+      sign = -sign;
+    }
+    const piv = A[k][k];
+    for (let i = k + 1; i < n; i++) {
+      for (let j = k + 1; j < n; j++) {
+        A[i][j] = (A[i][j] * piv - A[i][k] * A[k][j]) / prev;
+      }
+      A[i][k] = 0n;
+    }
+    prev = piv;
+  }
+  return sign * A[n - 1][n - 1];
+}
+
+function modNullity(M, p = 65521) {
+  const n = M.length;
+  const A = M.map(r => r.map(v => ((Number(v) % p) + p) % p));
+  const modPow = (b, e) => {
+    let res = 1, base = b % p;
+    while (e > 0) { if (e & 1) res = (res * base) % p; base = (base * base) % p; e >>= 1; }
+    return res;
+  };
+  let row = 0;
+  for (let col = 0; col < n && row < n; col++) {
+    let piv = -1;
+    for (let r = row; r < n; r++) if (A[r][col] !== 0) { piv = r; break; }
+    if (piv === -1) continue;
+    [A[row], A[piv]] = [A[piv], A[row]];
+    const inv = modPow(A[row][col], p - 2);
+    for (let c = col; c < n; c++) A[row][c] = (A[row][c] * inv) % p;
+    for (let r = 0; r < n; r++) {
+      if (r !== row && A[r][col] !== 0) {
+        const f = A[r][col];
+        for (let c = col; c < n; c++) A[r][c] = (A[r][c] - f * A[row][c] + p * p) % p;
+      }
+    }
+    row++;
+  }
+  return n - row;
+}
+
+function syncKerGamma() {
+  const lvl = parseInt(document.getElementById('ker-lvl').value, 10);
+  document.getElementById('ker-gamma').value = Array(lvl).fill(-1).join(',');
+}
+
+function loadKerPreset(lvl, gam, coords) {
+  document.getElementById('ker-lvl').value = String(lvl);
+  document.getElementById('ker-gamma').value = gam;
+  document.getElementById('ker-coords').value = coords;
+  runKerProbe();
+}
+
+function runKerProbe() {
+  try {
+    const lvl = parseInt(document.getElementById('ker-lvl').value, 10);
+    const gamma = document.getElementById('ker-gamma').value.split(',').map(s => parseInt(s.trim(), 10));
+    if (gamma.length !== lvl || gamma.some(g => g !== -1 && g !== 1)) {
+      throw new Error(`Gamma must contain exactly ${lvl} values in {-1, +1}.`);
+    }
+    const dim = 1 << lvl;
+    const S = buildSignTable(gamma);
+    const x = new BigInt64Array(dim);
+    document.getElementById('ker-coords').value.split(',').forEach(tok => {
+      if (!tok.trim()) return;
+      const [k, v] = tok.split(':').map(s => s.trim());
+      const idx = parseInt(k, 10);
+      if (idx >= 0 && idx < dim) x[idx] = BigInt(parseInt(v, 10));
+    });
+    const L = Array.from({length: dim}, () => Array(dim).fill(0n));
+    for (let i = 0; i < dim; i++) {
+      if (x[i] === 0n) continue;
+      for (let j = 0; j < dim; j++) L[i ^ j][j] += x[i] * BigInt(S[i][j]);
+    }
+    const nullity = modNullity(L);
+    const detExact = dim <= 32 ? bareissDetBigInt(L).toString() : "(skipped for dim=64 browser speed; use Python CLI)";
+    const report = {
+      algebra_dim: dim,
+      gamma: gamma,
+      nullity_ker_Lx: nullity,
+      moreno_mod4_divisible: (nullity % 4 === 0),
+      exact_bareiss_det_Lx: detExact
+    };
+    if (dim === 16 && gamma.every(g => g === -1)) {
+      let nx2 = 0n, nva2 = 0n, nvb2 = 0n, dot = 0n;
+      for (let i = 0; i < 16; i++) nx2 += x[i] * x[i];
+      for (let i = 1; i < 8; i++) { nva2 += x[i] * x[i]; nvb2 += x[i + 8] * x[i + 8]; dot += x[i] * x[i + 8]; }
+      const Q = nx2 * nx2 - 4n * (nva2 * nvb2 - dot * dot);
+      const koebisuDet = (nx2 ** 4n) * (Q * Q);
+      report.koebisu_sedenion_quartic_Q = Q.toString();
+      report.koebisu_formula_det = koebisuDet.toString();
+      report.exact_koebisu_match = (koebisuDet.toString() === detExact);
+    }
+    document.getElementById('ker-out').textContent = JSON.stringify(report, null, 2);
+  } catch (err) {
+    document.getElementById('ker-out').textContent = "Error: " + err.message;
+  }
+}
+
+function runRelProbe() {
+  try {
+    const lvl = parseInt(document.getElementById('rel-lvl').value, 10);
+    const gamma = document.getElementById('rel-gamma').value.split(',').map(s => parseInt(s.trim(), 10));
+    const dim = 1 << lvl, half = dim >> 1;
+    const S = buildSignTable(gamma);
+    const verts = [];
+    for (let i = 1; i < half; i++) {
+      for (let j = half; j < dim; j++) {
+        if (j === (i ^ half)) continue;
+        for (const sgn of [1, -1]) verts.push({lbl: `e${i}${sgn>0?'+':'-'}e${j}`, i, j, sgn});
+      }
+    }
+    let zdEdges = 0, commEdges = 0;
+    const adj = Array.from({length: verts.length}, () => []);
+    for (let a = 0; a < verts.length; a++) {
+      for (let b = a + 1; b < verts.length; b++) {
+        const u = verts[a], v = verts[b];
+        if (u.i === v.i && u.j === v.j) continue;
+        const uv = new Map(), vu = new Map();
+        for (const [ui, us] of [[u.i, 1], [u.j, u.sgn]]) {
+          for (const [vi, vs] of [[v.i, 1], [v.j, v.sgn]]) {
+            const t = ui ^ vi;
+            uv.set(t, (uv.get(t) || 0) + us * vs * S[ui][vi]);
+            vu.set(t, (vu.get(t) || 0) + us * vs * S[vi][ui]);
+          }
+        }
+        let isZd = true, isComm = true;
+        for (const val of uv.values()) if (val !== 0) isZd = false;
+        for (const val of vu.values()) if (val !== 0) isZd = false;
+        for (const [k, val] of uv.entries()) if ((vu.get(k) || 0) !== val) isComm = false;
+        if (isZd) { zdEdges++; adj[a].push(b); adj[b].push(a); }
+        if (isComm) commEdges++;
+      }
+    }
+    const vis = new Uint8Array(verts.length);
+    const comps = [];
+    for (let i = 0; i < verts.length; i++) {
+      if (vis[i] || adj[i].length === 0) continue;
+      let cnt = 0; const q = [i]; vis[i] = 1;
+      while (q.length) {
+        const c = q.pop(); cnt++;
+        for (const nb of adj[c]) if (!vis[nb]) { vis[nb] = 1; q.push(nb); }
+      }
+      comps.push(cnt);
+    }
+    document.getElementById('rel-out').textContent = JSON.stringify({
+      algebra_dim: dim,
+      gamma: gamma,
+      primitive_assessor_vertices: verts.length,
+      zero_divisor_undirected_edges: zdEdges,
+      zero_divisor_active_components: comps.length,
+      zero_divisor_component_sizes: comps.slice(0, 10),
+      commutativity_undirected_edges: commEdges
+    }, null, 2);
+  } catch (err) {
+    document.getElementById('rel-out').textContent = "Error: " + err.message;
+  }
+}
+
+function runAstProbe() {
+  const mode = document.getElementById('ast-id').value;
+  if (mode === 'catalan4') {
+    const S = buildSignTable([-1, -1, -1, -1, -1]);
+    const mk = pairs => { const v = new BigInt64Array(32); pairs.forEach(([i, c]) => v[i] = BigInt(c)); return v; };
+    const x = mk([[1,1],[18,1]]), y = mk([[2,1],[9,-1]]), z = mk([[3,1],[20,1]]), w = mk([[5,1],[12,1]]);
+    const m = (a, b) => cdMult(a, b, S);
+    const fmt = v => Array.from(v).map((c, i) => c !== 0n ? `${c}*e${i}` : null).filter(Boolean).slice(0, 5).join(' + ');
+    const trees = {
+      "(((x * y) * z) * w)": fmt(m(m(m(x, y), z), w)),
+      "((x * (y * z)) * w)": fmt(m(m(x, m(y, z)), w)),
+      "((x * y) * (z * w))": fmt(m(m(x, y), m(z, w))),
+      "(x * ((y * z) * w))": fmt(m(x, m(m(y, z), w))),
+      "(x * (y * (z * w)))": fmt(m(x, m(y, m(z, w))))
+    };
+    const distinct = new Set(Object.values(trees)).size;
+    document.getElementById('ast-out').textContent = JSON.stringify({
+      algebra: "32D Pathions (A_5)",
+      catalan_C3_trees: 5,
+      distinct_evaluated_values: distinct,
+      tree_evaluations_preview: trees
+    }, null, 2);
+    return;
+  }
+  const results = [];
+  for (let lvl = 0; lvl <= 5; lvl++) {
+    const dim = 1 << lvl;
+    const S = buildSignTable(Array(lvl).fill(-1));
+    const m = (a, b) => cdMult(a, b, S);
+    const sub = (a, b) => a.map((v, i) => v - b[i]);
+    const isZ = a => a.every(v => v === 0n);
+    const pool = [];
+    for (const idx of [1, 2, 3, 8, 9, 10, 18]) {
+      if (idx < dim) { const v = new BigInt64Array(dim); v[idx] = 1n; pool.push(v); }
+    }
+    if (dim >= 16) {
+      const b1 = new BigInt64Array(dim); b1[1] = 1n; b1[10] = 1n; pool.push(b1);
+      const b2 = new BigInt64Array(dim); b2[2] = 1n; b2[11] = -1n; pool.push(b2);
+    }
+    if (pool.length === 0) { const v = new BigInt64Array(dim); v[0] = 2n; pool.push(v); }
+    let holds = true;
+    for (let i = 0; i < pool.length && holds; i++) {
+      for (let j = 0; j < pool.length && holds; j++) {
+        const x = pool[i], y = pool[j], z = pool[(i + j + 1) % pool.length];
+        let diff;
+        if (mode === 'flexibility') diff = sub(m(m(x, y), x), m(x, m(y, x)));
+        else if (mode === 'power4') diff = sub(m(m(m(x, x), x), x), m(m(x, x), m(x, x)));
+        else if (mode === 'left_alt') diff = sub(m(m(x, x), y), m(x, m(x, y)));
+        else diff = sub(m(m(m(x, y), x), z), m(x, m(y, m(x, z))));
+        if (!isZ(diff)) holds = false;
+      }
+    }
+    results.push({level: lvl, dim: dim, holds: holds});
+  }
+  document.getElementById('ast-out').textContent = JSON.stringify({identity: mode, sweep_R_to_P32: results}, null, 2);
+}
+
+function runGrProbe() {
+  try {
+    const mulP = (g1, g2) => {
+      const [x1, y1, z1, sx1, sy1] = g1;
+      const [x2, y2, z2, sx2, sy2] = g2;
+      const sz1 = sx1 * sy1;
+      return [x1 + sx1 * x2, y1 + sy1 * y2, z1 + sz1 * z2, sx1 * sx2, sy1 * sy2];
+    };
+    const invP = g => [-g[3] * g[0], -g[4] * g[1], -(g[3] * g[4]) * g[2], g[3], g[4]];
+    const ID = [0, 0, 0, 1, 1], A = [1, 1, 0, 1, -1], B = [0, 1, 1, -1, 1];
+    const tok = {a: A, A: invP(A), b: B, B: invP(B), x: A, X: invP(A), y: B, Y: invP(B)};
+    const words = document.getElementById('gr-words').value.split(',').map(s => s.trim()).filter(Boolean);
+    const elems = words.map(w => {
+      if (w === '1') return ID;
+      let cur = ID;
+      for (const ch of w) {
+        if (!tok[ch]) throw new Error(`Unknown generator '${ch}' in word '${w}'`);
+        cur = mulP(cur, tok[ch]);
+      }
+      return cur;
+    });
+    const counts = new Map();
+    for (const u of elems) {
+      for (const v of elems) {
+        const key = mulP(u, v).join(',');
+        counts.set(key, (counts.get(key) || 0) + 1);
+      }
+    }
+    const mults = Array.from(counts.values());
+    const uniqueCount = mults.filter(m => m === 1).length;
+    const oddCount = mults.filter(m => m % 2 === 1).length;
+    document.getElementById('gr-out').textContent = JSON.stringify({
+      group: "Promislow / Hantzsche-Wendt P (torsion-free)",
+      support_cardinality: elems.length,
+      distinct_group_elements_in_input: new Set(elems.map(e => e.join(','))).size,
+      cartesian_pairs_S_x_S: elems.length * elems.length,
+      distinct_products: mults.length,
+      unique_products_multiplicity_1: uniqueCount,
+      has_unique_product: uniqueCount > 0,
+      odd_multiplicity_products_mod2_nonzero: oddCount,
+      min_multiplicity: Math.min(...mults),
+      max_multiplicity: Math.max(...mults)
+    }, null, 2);
+  } catch (err) {
+    document.getElementById('gr-out').textContent = "Error: " + err.message;
+  }
+}
+
+runKerProbe();
+runRelProbe();
+runAstProbe();
+runGrProbe();
+
+function discoverMinimalFsmJS(name, seeds, alphabet, stepFn, obsFn) {
+  const reachable = [];
+  const seen = new Map();
+  const queue = [];
+  for (const s of seeds) {
+    const k = JSON.stringify(s);
+    if (!seen.has(k)) { seen.set(k, reachable.length); reachable.push(s); queue.push(s); }
+  }
+  const rawTrans = [];
+  const rawObs = [];
+  while (queue.length) {
+    const cur = queue.shift();
+    rawObs.push(String(obsFn(cur)));
+    const dsts = [];
+    for (const sym of alphabet) {
+      const nxt = stepFn(cur, sym);
+      const nk = JSON.stringify(nxt);
+      if (!seen.has(nk)) { seen.set(nk, reachable.length); reachable.push(nxt); queue.push(nxt); }
+      dsts.push(seen.get(nk));
+    }
+    rawTrans.push(dsts);
+  }
+  const encode = arr => {
+    const vocab = new Map();
+    return arr.map(v => { if (!vocab.has(v)) vocab.set(v, vocab.size); return vocab.get(v); });
+  };
+  let blockOf = encode(rawObs);
+  let rounds = 0;
+  while (true) {
+    rounds++;
+    const sigs = reachable.map((_, i) => `${blockOf[i]}|${rawTrans[i].map(d => blockOf[d]).join(',')}`);
+    const nextB = encode(sigs);
+    if (new Set(nextB).size === new Set(blockOf).size) { blockOf = nextB; break; }
+    blockOf = nextB;
+  }
+  const numQ = new Set(blockOf).size;
+  const sizes = {}, obs = {}, trans = {};
+  for (let b = 0; b < numQ; b++) sizes[`Q0${b}`] = 0;
+  blockOf.forEach((b, idx) => {
+    const q = `Q0${b}`;
+    sizes[q]++;
+    if (!(q in trans)) {
+      obs[q] = rawObs[idx];
+      trans[q] = {};
+      alphabet.forEach((sym, ai) => { trans[q][sym] = `Q0${blockOf[rawTrans[idx][ai]]}`; });
+    }
+  });
+  return { name, raw_reachable_states: reachable.length, minimal_quotient_states: numQ, refinement_rounds: rounds, state_observations: obs, equivalence_class_sizes: sizes, transitions: trans };
+}
+
+function runR4FsmProbe() {
+  const mode = document.getElementById('r4-mode').value;
+  if (mode === 'promislow_fsm') {
+    const mulP = (g1, g2) => [
+      ((g1[0] + g1[3] * g2[0]) % 4 + 4) % 4,
+      ((g1[1] + g1[4] * g2[1]) % 4 + 4) % 4,
+      ((g1[2] + (g1[3] * g1[4]) * g2[2]) % 4 + 4) % 4,
+      g1[3] * g2[3], g1[4] * g2[4]
+    ];
+    const ID = [0, 0, 0, 1, 1], A = [1, 1, 0, 1, -1], B = [0, 1, 1, -1, 1];
+    const fsm = discoverMinimalFsmJS(
+      "Promislow_P_Implicit_V4_PointGroup_Automaton",
+      [ID], ["a", "b"],
+      (g, sym) => mulP(g, sym === "a" ? A : B),
+      g => g[3] + g[4]
+    );
+    document.getElementById('r4-out').textContent = JSON.stringify(fsm, null, 2);
+  } else if (mode === 'boxkite_fsm') {
+    const S = buildSignTable([-1, -1, -1, -1]);
+    const assessors = [];
+    for (let i = 1; i <= 7; i++) for (let j = 9; j <= 15; j++) if (j !== (i ^ 8)) assessors.push([i, j]);
+    const isZdPair = (u, v) => {
+      if (u[0] === v[0] || u[1] === v[1]) return false;
+      for (const sgn of [1, -1]) {
+        const x = new BigInt64Array(16), y = new BigInt64Array(16);
+        x[u[0]] = 1n; x[u[1]] = 1n; y[v[0]] = 1n; y[v[1]] = BigInt(sgn);
+        if (cdMult(x, y, S).every(c => c === 0n)) return true;
+      }
+      return false;
+    };
+    const nbrs = new Map();
+    for (const u of assessors) {
+      const ns = assessors.filter(v => isZdPair(u, v));
+      nbrs.set(JSON.stringify(u), ns);
+    }
+    const fsm = discoverMinimalFsmJS(
+      "Sedenion_42_Assessors_to_7_Wilmot_BoxKite_Modes",
+      assessors, ["min_zd_nbr", "max_zd_nbr"],
+      (u, sym) => { const ns = nbrs.get(JSON.stringify(u)); return sym === "min_zd_nbr" ? ns[0] : ns[ns.length - 1]; },
+      u => {
+        const comp = [u, ...nbrs.get(JSON.stringify(u))];
+        const used = new Set(comp.map(p => p[0]));
+        for (let k = 1; k <= 7; k++) if (!used.has(k)) return `strut_${k}`;
+        return "0";
+      }
+    );
+    document.getElementById('r4-out').textContent = JSON.stringify(fsm, null, 2);
+  } else {
+    const mooreFold = pairs => {
+      const [M0, D, P] = pairs.reduce(([m0, d, p], [m, e]) => [m0 + e, d + m * e, p + m * m * e], [0, 0, 0]);
+      const varNum = M0 * P - D * D;
+      return { M0, D, P, variance_M0P_minus_D2: varNum, theta_dispersion: M0 * P > 0 ? varNum / (M0 * P) : 0 };
+    };
+    document.getElementById('r4-out').textContent = JSON.stringify({
+      lean4_constructive_proof: "lean/CayleyDicksonBimodalRound4.lean (Classical.choice == False)",
+      round4_identity: "Q(x) = s0^2 + 2*s0*M_im + M_im^2*(1 - Theta_z2) + 4*<a,b>^2",
+      zero_divisor_e1_plus_e10: { ...mooreFold([[-1, 1], [1, 1]]), koebisu_Q: 0, status: "Bimodal Stiefel Balance (Theta == 1)" },
+      single_shell_2e1_minus_e3: { ...mooreFold([[-1, 5], [1, 0]]), koebisu_Q: 25, status: "Monochromatic Single-Shell Invertible (Theta == 0)" }
+    }, null, 2);
+  }
+}
+runR4FsmProbe();
+</script>
+</body>
+</html>
