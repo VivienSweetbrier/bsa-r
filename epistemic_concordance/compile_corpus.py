@@ -13,7 +13,15 @@ import json
 from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
-from bsar_xcube import BsarXCubeCompiler, EpistemicState, LuaAssociativeNode, canonical_sha256
+from bsar_xcube import (
+    AddressSpace,
+    BsarXCubeCompiler,
+    EpistemicState,
+    HAS_BSAR_V050,
+    LuaAssociativeNode,
+    canonical_sha256,
+    with_arena,
+)
 from replicability_ledger import ZeroPiiSafetyFloor, build_resurrection_replicability_audit
 
 import os
@@ -254,6 +262,451 @@ def build_public_domain_bible_store() -> Dict[str, Dict[str, str]]:
             "drb": "For the expectation of the creature waiteth for the revelation of the sons of God... Because the creature also itself shall be delivered from the servitude of corruption, into the liberty of the glory of the children of God.",
             "kjv": "For the earnest expectation of the creature waiteth for the manifestation of the sons of God... Because the creature itself also shall be delivered from the bondage of corruption into the glorious liberty of the children of God.",
         },
+        "HEB.10.10-14": {
+            "ref": "Hebrews 10:10, 12, 14",
+            "canon": "ECUMENICAL_66_SHARED",
+            "drb": "In the which will, we are sanctified by the oblation of the body of Jesus Christ once... But this man offering one sacrifice for sins, for ever sitteth on the right hand of God... For by one oblation he hath perfected for ever them that are sanctified.",
+            "kjv": "By the which will we are sanctified through the offering of the body of Jesus Christ once for all... But this man, after he had offered one sacrifice for sins for ever, sat down on the right hand of God... For by one offering he hath perfected for ever them that are sanctified.",
+        },
+    }
+
+
+def build_bounded_question_cards() -> Dict[int, Dict[str, Any]]:
+    """
+    Alethea's 6-Layer Bounded Question Architecture ("One Question, One Clear Answer" Front Door):
+      1. The Question (what a layperson or evangelical actually asks)
+      2. The 60-Second Short Answer (plain English, zero jargon)
+      3. Three-Part Breakdown / Contextualized Witnesses (Presence, Action, Sacrifice; Patristics & Catechism)
+      4. The Strongest Objection (steel-manned Reformed/CARM, Lutheran, and Memorialist arguments)
+      5. What Remains Disputed (DOCTRINAL vs TERMINOLOGICAL vs DISCIPLINARY vs CANON_BOUNDARY)
+      6. Editorial Priority Rank (for the Q&A Front Door)
+    """
+    return {
+        1374: {
+            "priority_rank": 1,
+            "category_badge": "LEAD QUESTION #1 · EUCHARIST & THE MASS",
+            "question": "When Jesus Says 'This Is My Body,' What Happens? (And Didn't He Sacrifice Himself Only Once?)",
+            "lay_hook": "Is the Eucharist really Jesus, or a symbol? And if Hebrews 10 says Christ offered one sacrifice once for all, why does the Catholic Church call the Mass a sacrifice?",
+            "short_answer": (
+                "Sometimes Jesus's words do more than describe an existing state—they accomplish what they declare. "
+                "When Christ says 'Your sins are forgiven' or 'Lazarus, come out,' His word brings that reality into being. "
+                "Catholics (and Eastern Orthodox, alongside Lutherans on Real Presence) take Jesus's words at the Last Supper—'This is my body'—as an effective divine utterance (in bsar v0.5.0 terms, a <transacts> speech-act rather than a passive <reads> label). "
+                "And the Mass is NOT a new or repeated crucifixion alongside Calvary: as CCC § 1367 explicitly states, 'The sacrifice of Christ and the sacrifice of the Eucharist are one single sacrifice'—making the one once-for-all sacrifice of the Cross sacramentally present across time."
+            ),
+            "three_pillars": [
+                {
+                    "title": "1. Presence: What Is Jesus Giving?",
+                    "body": "Across Matthew 26:26, Mark 14:22, Luke 22:19, 1 Corinthians 11:24, and John 6:51–56, Jesus identifies the bread and cup with His true body and blood ('my flesh is meat indeed'). In the 2nd century, St. Ignatius of Antioch (Smyrnaeans 7, c. 110 AD) and St. Justin Martyr (First Apology 66, c. 155 AD) witness that early Christians confessed the Eucharist to be the very flesh and blood of the incarnate Jesus.",
+                },
+                {
+                    "title": "2. Action: What Does His Declaration Accomplish? (Speech-Act / <transacts>)",
+                    "body": "CCC § 1375 quotes St. John Chrysostom (4th century): 'It is not man that causes the things offered to become the Body and Blood of Christ, but he who was crucified for us, Christ himself. The priest, in the role of Christ, pronounces these words, but their power and grace are God's. This is my body, he says. This word transforms the things offered.'",
+                },
+                {
+                    "title": "3. Sacrifice: How Does the Eucharist Relate to the Once-for-All Cross?",
+                    "body": "Hebrews 10:10–14 teaches that Christ offered 'one sacrifice for sins for ever.' The 1566 Catechism of Trent (Part II, L8780+) and CCC § 1367 agree unconditionally: Christ is not re-crucified. In biblical passover remembrance (zikaron / anamnesis, Luke 22:19), God's once-for-all saving event becomes truly present to the assembly so believers participate in its inexhaustible fruits.",
+                },
+            ],
+            "strongest_objection": (
+                "Steel-Manned Protestant & CARM Objection (Three Distinct Views): "
+                "(1) Memorialist / CARM Objection: Jesus frequently uses metaphors ('I am the door', 'I am the true vine'); an effective divine utterance does not automatically prove literal substantial change, and calling the Mass a propitiatory sacrifice risks appearing to supplement Hebrews 10:14's 'one offering.' "
+                "(2) Reformed (Calvin / Westminster 29): Rejects physical transubstantiation because Christ's risen human body is locally at the Father's right hand in heaven, while affirming that believers truly feed on Christ spiritually by the Holy Spirit through faith. "
+                "(3) Confessional Lutheran (Augsburg Art. X / Marburg 1529): Agrees 100% with Catholics against memorialism that Christ's true body and blood are objectively present ('This IS my body'), but affirms Sacramental Union ('in, with, and under' bread and wine) while declining Aristotelian transubstantiation and the sacrificial framing of the Mass."
+            ),
+            "dispute_taxonomy": "DOCTRINAL_AND_METAPHYSICAL_CRUX (Substantial transformation vs. Lutheran Sacramental Union vs. Reformed spiritual participation vs. Memorialism; plus Anamnesis of one sacrifice vs. subjective remembrance)",
+            "what_evidence_supports_vs_disputes": (
+                "Supported by verified sources: Early patristic realism (Ignatius, Justin, Irenaeus, Chrysostom) and unbroken 1566 Trent ↔ 1992 CCC doctrinal continuity (while liturgical discipline such as vernacular vs. Latin or communion under both kinds changed). "
+                "Remains genuinely disputed: Whether Christ's words require substantial change ('transubstantiation') versus Lutheran sacramental union or Reformed spiritual participation."
+            ),
+        },
+        1996: {
+            "priority_rank": 2,
+            "category_badge": "BIG QUESTION #2 · JUSTIFICATION, ASSURANCE & CARM SALVATION SUMMARY",
+            "question": "Does Catholic Salvation Add Human Works or Sacraments to Christ's Finished Work?",
+            "lay_hook": "Am I saved by trusting Jesus, or by doing a checklist of religious things to attain, maintain, and regain salvation?",
+            "short_answer": (
+                "In official Catholic teaching, no human work, commandment-keeping, or religious effort can ever earn or initiate salvation. "
+                "The Council of Trent (Session VI, Ch. 8) and CCC § 1996 teach that initial justification is 100% a free, unmerited gift of God's grace through faith in Jesus Christ (`Romans 3:24; Ephesians 2:8`). "
+                "Where Catholics and Evangelicals (such as Matt Slick at CARM) disagree is not over whether Christ's cross is sufficient, but over what God's grace *does* inside the believer: "
+                "does justification mean a purely legal courtroom declaration (`forensic imputation`) where good works are only external fruit, or does God's grace actually infuse Christ's life into the soul (`transformative union`) so that faith working through love (`Galatians 5:6; James 2:24`) truly participates in Christ's life?"
+            ),
+            "three_pillars": [
+                {
+                    "title": "1. Engaging CARM's Salvation Summary Directly & Fairly",
+                    "body": "Matt Slick's CARM article ('Summary of the Process of Salvation in Roman Catholicism') describes Catholic sacraments, penance, and good works as human requirements to attain, maintain, or regain salvation. Primary Catholic texts respond that Baptism and Penance are not 'human works we do for God'—they are Christ's own merciful instruments applying His unmerited cross to us when we cannot save ourselves (Titus 3:5).",
+                },
+                {
+                    "title": "2. Shared Anti-Pelagian Bedrock (1999 Joint Declaration)",
+                    "body": "Trent Session VI Canon 1 pronounces anathema on anyone who says a human being can be justified before God by their own works without divine grace through Jesus Christ. Everything begins, continues, and ends in unmerited grace (CCC § 2001).",
+                },
+                {
+                    "title": "3. Holding Paul (Eph 2:8–9) and James (Jas 2:24) Together",
+                    "body": "Ephesians 2:8–10 says we are saved 'by grace through faith... not of works' (v. 8–9) AND 'created in Christ Jesus in good works, which God hath prepared that we should walk in them' (v. 10). Catholic theology uses 'justification' to include both initial forgiveness and interior renewal, whereas Reformed theology separates them into distinct boxes ('Justification' vs. 'Sanctification').",
+                },
+            ],
+            "strongest_objection": (
+                "Steel-Manned Reformed / CARM Objection: Even if Rome says grace initiates everything, making interior renewal, mortal/venial sin distinctions, and sacramental confession necessary conditions for final perseverance blurs the boundary between Christ's finished alien righteousness (Romans 4:5) and our imperfect obedience, undermining the believer's joyful assurance of salvation (1 John 5:13)."
+            ),
+            "dispute_taxonomy": "TERMINOLOGICAL_AND_DOCTRINAL_CRUX ('dikaioun' = forensic declaration alone vs. forensic forgiveness + interior transformation; instrumental sacraments vs. extra-sacramental faith alone)",
+            "what_evidence_supports_vs_disputes": (
+                "Supported by verified sources: Catholic primary sources (Trent Session VI; CCC §§ 1996–2005) explicitly reject Pelagianism and works-righteousness prior to grace. "
+                "Remains genuinely disputed: Forensic imputation vs. transformative infusion, and whether mortal sin can forfeit justification."
+            ),
+        },
+        1031: {
+            "priority_rank": 3,
+            "category_badge": "BIG QUESTION #3 · PURGATORY & FINAL PURIFICATION",
+            "question": "If Jesus Paid for All Our Sins on the Cross, Why Would Anything Remain in Purgatory?",
+            "lay_hook": "If I'm forgiven by Christ's blood, isn't Purgatory a 'second chance' place that implies Jesus's payment wasn't enough?",
+            "short_answer": (
+                "The single most important clarification is that in Catholic teaching, Purgatory is ONLY for people who are already saved—people who die in God's grace and friendship and whose eternal salvation in heaven is 100% assured (CCC § 1030). "
+                "Nobody in Purgatory is earning a second chance or paying for unforgiven guilt. "
+                "Rather, just as an Evangelical agrees that a forgiven Christian died-in-Christ must still be completely freed from lingering selfish habits and attachments before standing in the blazing holiness of God (`Revelation 21:27; Hebrews 12:14`), Catholics call that final, painful-yet-joyful completion of Christ's sanctifying work 'Purgatory.'"
+            ),
+            "three_pillars": [
+                {
+                    "title": "1. Start With the Saved, Not the Condemned (CCC §§ 1030–1031)",
+                    "body": "CCC § 1030 states: 'All who die in God's grace and friendship, but still imperfectly purified, are indeed assured of their eternal salvation; but after death they undergo purification, so as to achieve the holiness necessary to enter the joy of heaven.'",
+                },
+                {
+                    "title": "2. Why Infer Prayer for the Dead & Purifying Fire? (The Two Witnesses)",
+                    "body": "Catholic teaching joins two biblical strands with 2nd/3rd-century Christian catacomb inscriptions: (a) 1 Corinthians 3:15 (shared 66-book canon: the builder whose imperfect work is burned up 'shall suffer loss: but he himself shall be saved; yet so as by fire'), and (b) 2 Maccabees 12:46 (73-book Deuterocanon: praying for the dead 'that they may be loosed from sins').",
+                },
+                {
+                    "title": "3. Completion of Christ's Work, Not an Addition to It",
+                    "body": "Just as a surgeon's operation saves your life (justification) while physical therapy heals the remaining stiffness of the wound (sanctification), final purification applies the blood of Christ to heal the last damaged reflexes of a redeemed soul.",
+                },
+            ],
+            "strongest_objection": (
+                "Steel-Manned Protestant Objection (The Necessary Second Step): Even if a Protestant agrees that God completes our sanctification at death so nothing unclean enters heaven, why infer the specifically Catholic account of Purgatory—including temporal punishment/satisfaction after death, indulgences, and prayer for the dead? Furthermore, Protestants reject 2 Maccabees as non-canonical and read 1 Corinthians 3:15 as the Last Day testing of a minister's preaching work rather than a post-mortem state of purification."
+            ),
+            "dispute_taxonomy": "CANON_BOUNDARY_AND_DOCTRINAL_INFERENCE_CRUX (66-book vs. 73-book canon on 2 Macc 12:46; instantaneous glorification at death vs. purgatorial satisfaction/cleansing)",
+            "what_evidence_supports_vs_disputes": (
+                "Supported by verified sources: Early Christian liturgical prayers for the departed (Tertullian c. 211 AD; Martyrdom of Perpetua 203 AD) and CCC § 1030's explicit assurance of salvation for all souls in Purgatory. "
+                "Remains genuinely disputed: Canonical status of 2 Maccabees, exegesis of 1 Cor 3:15, and the medieval/Tridentine theology of temporal punishment and indulgences."
+            ),
+        },
+        2106: {
+            "priority_rank": 4,
+            "category_badge": "BIG QUESTION #4 · SCRIPTURE, TRADITION & DEVELOPMENT OF DOCTRINE",
+            "question": "What Makes a Later Church Teaching a Faithful Development Rather Than a Human Invention?",
+            "lay_hook": "Who gets to decide what Christianity teaches, and didn't Vatican II's Dignitatis Humanae reverse 19th-century papal teaching on religious liberty?",
+            "short_answer": (
+                "Every Christian tradition develops terminology not found word-for-word in the Bible (such as the word 'Trinity' or 'homoousios' at Nicaea in 325 AD) in order to answer new questions without changing the Apostolic Gospel. "
+                "St. John Henry Newman formulated 7 Notes to test whether a later teaching is an authentic unfolding of the original seed (like an acorn growing into an oak) or a corruption. "
+                "In our hardest test case—Religious Liberty (`CCC § 2106` & Vatican II's *Dignitatis Humanae* vs. the 1566 Catechism of Trent on the First Commandment)—the moral obligation to seek God's truth remains unchanged, while the Church's judgment on civil state police coercion shifted to protect the uncoerced dignity of human conscience."
+            ),
+            "three_pillars": [
+                {
+                    "title": "1. The Scripture & Tradition Question (WEA–Catholic Dialogue)",
+                    "body": "Evangelicals ask how Sola Scriptura guards against human traditions (Mark 7:8); Catholics ask how we know which 27 New Testament books belong in the Bible and why Nicene Trinitarian definitions bind conscience if the Church lacked living interpretive authority (2 Thess 2:15; 1 Tim 3:15).",
+                },
+                {
+                    "title": "2. Newman's 7 Notes as a Falsifiable Checklist",
+                    "body": "Instead of waving a magic wand called 'development,' Newman's 7 criteria (Preservation of Type, Continuity of Principles, Power of Assimilation, Logical Sequence, Anticipation of the Future, Conservative Action on the Past, and Chronic Vigour) let readers score each claim piece by piece.",
+                },
+                {
+                    "title": "3. Honesty on Hard Cases (Dignitatis Humanae vs. 19th-Century Statements)",
+                    "body": "Rather than hiding tension, this node places Trent Part III (L13331+) alongside CCC § 2106 so readers can evaluate whether distinguishing moral duty toward truth from civil coercion resolves the 19th-century *Quanta Cura* tension.",
+                },
+            ],
+            "strongest_objection": (
+                "Steel-Manned Protestant & Traditionalist Objections: Protestants argue that if the Magisterium can redefine the scope of earlier authoritative statements, 'development' becomes an unfalsifiable ratchet that can justify any post-biblical accretion (papal infallibility, Marian dogmas). Conversely, rupture critics argue that 19th-century popes explicitly condemned civil religious liberty as a principle, making Vatican II a policy reversal rather than homogeneous development."
+            ),
+            "dispute_taxonomy": "DOCTRINAL_AUTHORITY_AND_JURISDICTIONAL_SCOPE_CRUX (Sola Scriptura vs. Scripture + Tradition + Magisterium; Moral duty vs. Civil state jurisdiction)",
+            "what_evidence_supports_vs_disputes": (
+                "Supported by verified sources: Early Christians clearly reasoned from Scripture + Apostolic Rule of Faith to define the Trinity and Canon. "
+                "Remains genuinely disputed: Where infallible development ends and reformable prudential/civil judgment begins."
+            ),
+        },
+        1213: {
+            "priority_rank": 5,
+            "category_badge": "BIG QUESTION #5 · BAPTISM & SACRAMENTAL GRACE",
+            "question": "Are Sacraments Like Baptism God's Gifts, Human Works, or Both in Different Senses?",
+            "lay_hook": "When Jesus says 'unless one is born of water and the Spirit' (John 3:5), does Baptism actually give grace, or is it an outward symbol of a decision I already made?",
+            "short_answer": (
+                "Catholics and Lutherans both teach that Baptism is NOT a human work we offer to God to earn points—it is God's own visible promise and action ('the washing of regeneration and renewal of the Holy Spirit,' `Titus 3:5`) forgiving sin and adopting us into Christ (`Galatians 3:27`). "
+                "Reformed Protestants view Baptism as a divinely ordained covenant sign and seal, while Baptist/Evangelical traditions view it as a believer's public profession of prior inward faith. "
+                "Crucially, CCC § 1257 also affirms that while the Church is bound to Christ's sacraments, 'God Himself is not bound by His sacraments' and can save the unbaptized who seek Him sincerely."
+            ),
+            "three_pillars": [
+                {
+                    "title": "1. John 3:5 & Titus 3:5 in Early Christianity",
+                    "body": "Across the first 1,500 years of Christianity (and in the 1566 Catechism of Trent, L7160+), 'born of water and the Spirit' (John 3:5) and 'washing of regeneration' (Titus 3:5) were universally read as uniting outward water with the inward grace of the Holy Spirit.",
+                },
+                {
+                    "title": "2. Why a Sacrament Is a Gift Received, Not a Work Performed",
+                    "body": "An infant (or adult) being washed in water is passive: they are not 'working' their way to heaven; they are receiving a free adoption gift signed with the name of the Father, Son, and Holy Spirit (Matthew 28:19).",
+                },
+                {
+                    "title": "3. God Is Not Bound by His Sacraments (CCC § 1257)",
+                    "body": "The Thief on the Cross (Luke 23:43) and martyrs baptized in blood prove that God's mercy is never trapped by ritual mechanics when physical water is unavailable.",
+                },
+            ],
+            "strongest_objection": (
+                "Steel-Manned Evangelical / CARM Objection: If water baptism automatically regenerates (*ex opere operato*), millions of baptized people who show zero repentance or living faith in Christ may be lulled into false security, whereas Cornelius and his household received the Holy Spirit by hearing the Gospel *before* they were baptized in water (Acts 10:44–48)."
+            ),
+            "dispute_taxonomy": "DOCTRINAL_INSTRUMENTALITY_CRUX (Instrumental sacrament of regeneration vs. Covenantal sign & seal vs. Believer's ordinance of profession)",
+            "what_evidence_supports_vs_disputes": (
+                "Supported by verified sources: Strong Catholic–Lutheran convergence on John 3:5 and Titus 3:5 against purely symbolic readings. "
+                "Remains genuinely disputed: Ex opere operato efficacy and infant baptism vs. credobaptism."
+            ),
+        },
+        604: {
+            "priority_rank": 6,
+            "category_badge": "SHARED ECUMENICAL BEDROCK #6 · JOHN 3:16 & THE CROSS",
+            "question": "Do Catholics, Lutherans, and Evangelicals Agree on John 3:16 and Christ's Cross?",
+            "lay_hook": "At the deepest level—why God sent His Son to die for us while we were still sinners—do we worship the same Savior?",
+            "short_answer": (
+                "Yes—100%. Both the 1566 Catechism of Trent (Part I, Art. IV, L4269–L4271) and CCC § 604 proclaim that God's love in `John 3:16` and `Romans 5:8` precedes all human merit, and that Christ's satisfaction on the Cross did not merely equal our debt 'but far exceeded it.' "
+                "Before debating how that grace is distributed, Catholics, Lutherans, and Evangelicals stand on the exact same foundation: we are insolvent sinners rescued solely by the unmerited love of the Triune God in Christ Jesus."
+            ),
+            "three_pillars": [
+                {
+                    "title": "1. Byte-Pinned 1566 Trent Witness (L4269–L4271)",
+                    "body": "Read the verbatim 1566 Roman Catechism below: 'It was not a price merely equal to our sins, but one that far exceeded them... offered by Christ the Lord upon the altar of the Cross, which entirely appeased the wrath and indignation of the Father.'",
+                },
+                {
+                    "title": "2. Unmerited Divine Initiative (CCC § 604)",
+                    "body": "By giving His Son for our sins, God manifests that His plan for us is one of benevolent love that precedes any merit on our part ('while we were yet sinners, Christ died for us,' Romans 5:8).",
+                },
+                {
+                    "title": "3. The Ecumenical Starting Point",
+                    "body": "Every fruitful dialogue between Catholics and Protestants begins here: Christ alone is the Redeemer whose blood cancels the bond that stood against us (Colossians 2:14).",
+                },
+            ],
+            "strongest_objection": (
+                "Question Raised in Dialogue: If Trent and the CCC affirm such an over-solvent, all-sufficient Cross, why do downstream Catholic practices (indulgences, temporal punishment, Marian consecration) sometimes look to Protestant observers like they are hedging that sufficiency?"
+            ),
+            "dispute_taxonomy": "SHARED_ECUMENICAL_BEDROCK (100% agreement on unmerited divine initiative and the superabundant sufficiency of Christ's Passion; downstream debate concerns participatory application)",
+            "what_evidence_supports_vs_disputes": (
+                "Supported by verified sources: Direct verbal and theological agreement across John 3:16, Romans 5:8, 1566 Trent Art. IV, Lutheran Book of Concord, CARM, and CCC § 604."
+            ),
+        },
+        639: {
+            "priority_rank": 7,
+            "category_badge": "SHARED ECUMENICAL BEDROCK #7 · BODILY RESURRECTION",
+            "question": "Why Do All Nicene Christians Confess the Bodily Resurrection as a Testable Historical Event?",
+            "lay_hook": "Is the Resurrection of Jesus just a poetic metaphor for 'hope living on in our hearts,' or a real historical event open to evidentiary scrutiny?",
+            "short_answer": (
+                "Catholics (`CCC § 639`), Lutherans, and Reformed apologists (`CARM`) agree unconditionally against modernist reductionism: as St. Paul writes in `1 Corinthians 15:14, 17`, 'if Christ be not risen, then is our preaching vain, and your faith is also vain.' "
+                "Our Hume Replicability Lab tests the historical witness clusters (the early Jerusalem creed in 1 Cor 15:3–8, the empty tomb discovered by women, and the conversion of hostile persecutor Paul in Galatians 1) while automatically collapsing synoptic duplicates so evidence is never double-counted."
+            ),
+            "three_pillars": [
+                {
+                    "title": "1. The Pre-Pauline Creed (1 Corinthians 15:3–8)",
+                    "body": "Dated by virtually all historians (believing and skeptical alike) to within a few years of the Crucifixion in Jerusalem, naming Cephas, the Twelve, James, and over 500 eyewitnesses.",
+                },
+                {
+                    "title": "2. Anti-Echo Deduplication (Synoptic Mark/Matthew Collapse)",
+                    "body": "Because Matthew 28:1–8 shares literary dependence with Mark 16:1–8, our Bsar XCube collapses them into a single independent cluster (`CL_SYNOPTIC_EMPTY_TOMB_WOMEN`) rather than inflating probability through repetition.",
+                },
+                {
+                    "title": "3. Costly Outgroup Testimony (Galatians 1:13–19)",
+                    "body": "Saul of Tarsus had every status, religious, and career incentive to oppose the Christian movement, yet underwent a sudden reversal culminating in martyrdom.",
+                },
+            ],
+            "strongest_objection": (
+                "Steel-Manned Humean Objection ('Of Miracles', 1748): Because uniform human experience weighs against dead men rising, any combination of naturalistic explanations (grief hallucinations, legend growth, mistaken tomb) is argued to be antecedently more probable than a miracle."
+            ),
+            "dispute_taxonomy": "HISTORICAL_APOLOGETIC_CRUX (100% shared across Catholic, Lutheran, and Reformed traditions against naturalistic skepticism)",
+            "what_evidence_supports_vs_disputes": (
+                "Supported by verified sources: Multiple early, independent, costly witness channels (1 Cor 15, Markan empty tomb core, Galatians 1). "
+                "Remains disputed with philosophical naturalists: Choice of starting prior P(Miracle) and MDL penalty for compound naturalistic explanations."
+            ),
+        },
+        253: {
+            "priority_rank": 8,
+            "category_badge": "NICENE FOUNDATION #8 · THE HOLY TRINITY",
+            "question": "Why Do Christians Worship One God in Three Persons (Father, Son, and Holy Spirit)?",
+            "lay_hook": "Is the Trinity a 4th-century philosophical invention, or the necessary way to hold together everything the Bible says about God?",
+            "short_answer": (
+                "The doctrine of the Trinity (`CCC § 253`) holds three biblical truths together without Dropping any of them: (1) there is strictly One God (`Deut 6:4; Isaiah 43:10`), (2) the Father, the Son (`John 1:1, 14`), and the Holy Spirit are each truly divine and distinct from one another, and (3) Jesus commands Baptism in the singular 'name [not names] of the Father, and of the Son, and of the Holy Spirit' (`Matthew 28:19`). "
+                "Nicaea (325 AD) used precise language to protect the biblical mystery against attempts to turn Jesus into a lesser created god."
+            ),
+            "three_pillars": [
+                {
+                    "title": "1. Monotheistic Bedrock (Isaiah 43:10; Genesis 1:1)",
+                    "body": "God is one undivided divine nature and substance—never three separate gods (tritheism).",
+                },
+                {
+                    "title": "2. The Triune Baptismal Name (Matthew 28:19) & Logos (John 1:1)",
+                    "body": "From the earliest decades of the Church, Christians baptized in the one Name of the Father, Son, and Holy Spirit and worshiped Jesus as Lord.",
+                },
+                {
+                    "title": "3. 100% Shared Nicene Unity",
+                    "body": "Catholics, Eastern Orthodox, Lutherans, Anglicans, and Reformed/Evangelical Christians (including CARM) confess the exact same Nicene Trinitarian faith.",
+                },
+            ],
+            "strongest_objection": (
+                "Unitarian / Anti-Nicene Objection: The technical Greek word *homoousios* ('of one substance') does not appear in Scripture and borrows Hellenistic philosophical vocabulary."
+            ),
+            "dispute_taxonomy": "TERMINOLOGICAL_CLARIFICATION_PRESERVING_BIBLICAL_TYPE (100% agreed across Catholic, Lutheran, and Reformed traditions)",
+            "what_evidence_supports_vs_disputes": (
+                "Supported by verified sources: Continuous worship of Father, Son, and Spirit from the New Testament through Nicaea, 1566 Trent, and 1992 CCC."
+            ),
+        },
+        460: {
+            "priority_rank": 9,
+            "category_badge": "NICENE BOUNDARY #9 · PARTICIPATORY THEOSIS (2 PETER 1:4)",
+            "question": "What Does the Bible Mean by Becoming 'Partakers of the Divine Nature' (2 Peter 1:4)?",
+            "lay_hook": "When St. Athanasius and the Catechism say 'the Son of God became man so that we might become God' (CCC § 460), how is that different from becoming independent creator-gods?",
+            "short_answer": (
+                "In historic Nicene Christianity (`CCC § 460`, quoting St. Irenaeus, St. Athanasius, and St. Thomas Aquinas), *Theosis* (divinization) means that through union with Christ and the indwelling Holy Spirit, redeemed humans share in God's own life, love, and incorruptible glory **by grace and adoption**—while God alone remains the uncreated Creator forever (`Isaiah 43:10`). "
+                "Just as iron placed in a fire glows with the fire's heat and light without ceasing to be iron, believers are glorified in Christ without ever crossing the ontological Creator–creature boundary."
+            ),
+            "three_pillars": [
+                {
+                    "title": "1. Grace by Adoption vs. Nature (CCC § 460)",
+                    "body": "Only the Eternal Son is God by nature; humans become sons and daughters of God by adoptive grace through Him (Romans 8:15–21; 2 Peter 1:4).",
+                },
+                {
+                    "title": "2. The Uncreated Creator Razor (Isaiah 43:10)",
+                    "body": "As explored in our Nicene Cosmology tab, any system where God was once a finite man or humans evolve into independent planet-creators violates divine aseity (`0`), whereas participatory glorification in Christ is ancient orthodoxy (`1`).",
+                },
+                {
+                    "title": "3. Embodied Cosmic Renewal (Romans 8:19–21)",
+                    "body": "Christian hope is not floating on clouds as disembodied ghosts; it is the bodily resurrection and renewal of creation in the glory of the children of God.",
+                },
+            ],
+            "strongest_objection": (
+                "Cautious Protestant Question: Bold patristic phrases like 'becoming god by grace' can sound alarming to modern ears if detached from the strict Creator–creature distinction."
+            ),
+            "dispute_taxonomy": "TERMINOLOGICAL_EMPHASIS_WITHIN_SHARED_NICENE_BOUNDARY (Eastern/Catholic 'Theosis' vs. Western Protestant 'Union with Christ & Glorification')",
+            "what_evidence_supports_vs_disputes": (
+                "Supported by verified sources: 2 Peter 1:4, Romans 8:19–21, Athanasius De Incarnatione 54:3, and CCC § 460 all maintain the strict Creator–creature distinction."
+            ),
+        },
+        2838: {
+            "priority_rank": 10,
+            "category_badge": "UNIVERSAL CHRISTIAN PRAYER #10 · FORGIVING DEBTS",
+            "question": "Why Does the Lord's Prayer Tie God's Forgiveness to Our Forgiving Others (Matthew 6:12)?",
+            "lay_hook": "When we pray 'Forgive us our debts, as we also forgive our debtors,' does our forgiving others earn God's mercy, or keep our hearts open to receive it?",
+            "short_answer": (
+                "As Jesus explains in the Parable of the Unmerciful Servant (`Matthew 18:21–35`) and `CCC §§ 2838, 2842`, the King cancels our massive, unpayable 10,000-talent debt first out of pure mercy. "
+                "Our forgiving our neighbor's 100-denarii debt does not *earn* the King's pardon—rather, a heart that locks its neighbor in debtor's prison closes itself off from the very mercy it just begged to receive."
+            ),
+            "three_pillars": [
+                {
+                    "title": "1. Asymmetric Solvency (10,000 Talents vs. 100 Denarii)",
+                    "body": "God's forgiveness of our sin precedes and infinitely outweighs any offense a neighbor commits against us.",
+                },
+                {
+                    "title": "2. Bilateral Release in Human Community",
+                    "body": "Across the 1st-century Didache, the 1566 Catechism of Trent (Part IV, L18902+), Luther's Small Catechism, and the Heidelberg Catechism, Christians pray this petition daily to break cycles of retaliation.",
+                },
+                {
+                    "title": "3. XCubes Pericope Spreading (S_W) Demonstration",
+                    "body": "Under the hood, Matthew 6:9–13 is spread across CCC §§ 2838 and 2842 while conserving its single cluster weight (+11.0 dB total).",
+                },
+            ],
+            "strongest_objection": (
+                "Pastoral Question: Does forgiving a debtor mean excusing ongoing abuse or waiving civil justice? No—both Trent and the CCC distinguish interior release of vengeful hatred from legitimate protection of the innocent and civil order."
+            ),
+            "dispute_taxonomy": "SHARED_ECUMENICAL_BEDROCK (100% agreement across Catholic, Lutheran, and Reformed traditions)",
+            "what_evidence_supports_vs_disputes": (
+                "Supported by verified sources: Universal Christian catechesis on the Fifth Petition of the Our Father."
+            ),
+        },
+        2842: {
+            "priority_rank": 11,
+            "category_badge": "UNIVERSAL CHRISTIAN PRAYER #11 · THE 'AS' OF MERCY",
+            "question": "What Does the Word 'As' Mean in 'Forgive Us... As We Forgive' (CCC § 2842)?",
+            "lay_hook": "Why is the Fifth Petition the only line of the Our Father that Jesus immediately circles back to explain in Matthew 6:14–15?",
+            "short_answer": (
+                "CCC § 2842 notes that this 'as' is unique in Jesus's teaching: the outpouring of divine mercy cannot penetrate a human heart that refuses to forgive its brother (`Matthew 18:32–35`). "
+                "Imitating Christ's mercy is the living proof that we have actually received the Father's grace."
+            ),
+            "three_pillars": [
+                {
+                    "title": "1. The Parable of the Unmerciful Servant (Matthew 18:32–33)",
+                    "body": "'Wicked servant, I forgave thee all the debt, because thou besoughtest me: Shouldst not thou then have had compassion also on thy fellow servant, even as I had compassion on thee?'",
+                },
+                {
+                    "title": "2. Reception vs. Meritorious Cause",
+                    "body": "Sunlight shines freely on every window, but a shuttered window remains dark inside; unforgiveness shutters the soul against grace.",
+                },
+                {
+                    "title": "3. Ecumenical Consensus",
+                    "body": "Affirmed identically in Trent Part IV, CCC § 2842, Luther's Small Catechism, and Westminster Shorter Catechism Q. 105.",
+                },
+            ],
+            "strongest_objection": (
+                "None between Catholic, Lutheran, and Reformed traditions; all read Matthew 18:21–35 as the normative commentary on Matthew 6:12."
+            ),
+            "dispute_taxonomy": "SHARED_ECUMENICAL_BEDROCK (Universal Christian moral and liturgical consensus)",
+            "what_evidence_supports_vs_disputes": (
+                "Supported by verified sources: Direct Gospel teaching in Matthew 6:12–15 and Matthew 18:21–35."
+            ),
+        },
+    }
+
+
+def build_pastoral_pathways_guide() -> Dict[str, Any]:
+    """
+    Alethea's Constructive Section 2:
+    'What Would Becoming Catholic Mean for Us?' — Worship, Community, Heritage, and Pastoral Pathways
+    (including the Personal Ordinariate of the Chair of St. Peter).
+    """
+    return {
+        "title": "What Would Becoming Catholic Mean for Us? — Heritage, Worship & Pastoral Pathways",
+        "framing_note": (
+            "As Alethea noted, we should clearly separate two distinct questions: "
+            "(1) 'Is this teaching true?' (investigated through primary sources, Newman's 7 Notes, and steel-manned objections in the Q&A and XCube tabs), and "
+            "(2) 'If a Protestant Christian, family, or congregation becomes convinced of Catholic teaching, can they enter full Catholic communion without abandoning everything valuable in their inherited Christian life?' "
+            "Mainline and evangelical traditions carry deep scriptural devotion, choral and liturgical beauty, and genuine convictions—not merely 'inherited branding.' "
+            "Here is what entering Catholic communion actually looks like in practice, what is preserved, and what requires real doctrinal commitment."
+        ),
+        "pathways": [
+            {
+                "id": "PATH_1_ORDINARIATE",
+                "title": "The Personal Ordinariate (Anglicanorum Coetibus — Retained Liturgical & Communal Heritage)",
+                "badge": "CANONICAL CORPORATE & PAROCHIAL PATHWAY",
+                "summary": (
+                    "Established by Pope Benedict XVI in 2009 (Anglicanorum Coetibus) and expanded by Pope Francis, the Personal Ordinariates "
+                    "(such as the Personal Ordinariate of the Chair of St. Peter in North America, Our Lady of Walsingham in the UK, and Our Lady of the Southern Cross in Australia) "
+                    "allow former Anglican, Episcopalian, Methodist, and wider Protestant communities and individuals to become 100% Roman Catholic while retaining their cherished liturgical, musical, and pastoral patrimony."
+                ),
+                "what_is_preserved": (
+                    "Divine Worship liturgy in classic sacral English (Cranmerian/Book of Common Prayer prose rhythms approved by the Holy See), Choral Evensong, traditional hymnody, parish fellowship structures, and case-by-case ordination of married former Protestant clergy to the Catholic priesthood."
+                ),
+                "what_is_required": (
+                    "Full profession of the Catechism of the Catholic Church—it is genuine full communion built on shared truth, not a superficial corporate merger that leaves contradictory doctrinal commitments unresolved."
+                ),
+                "official_url": "https://ordinariate.net/",
+            },
+            {
+                "id": "PATH_2_EVANGELICAL_SCRIPTURE",
+                "title": "Evangelical & Reformed Christians — Bringing Deep Biblical Literacy Home",
+                "badge": "INDIVIDUAL & FAMILY OCIA / RECEPTION",
+                "summary": (
+                    "Evangelical and Reformed Christians who enter the Catholic Church do not leave their love of Scripture behind. "
+                    "Valid Trinitarian water baptism (`Matthew 28:19`) is already recognized by the Catholic Church and is never repeated (`CCC § 1272`)—confirming that baptized Protestants are already brothers and sisters in Christ."
+                ),
+                "what_is_preserved": (
+                    "Your valid Trinitarian baptism, daily immersion in the 66 books of Scripture, personal relationship with Jesus Christ, and evangelical zeal for the Gospel."
+                ),
+                "what_is_required": (
+                    "Reception into full communion through Confirmation and the Eucharist after discerning the Church's sacramental and apostolic teaching without coercion (Sweetbrier Node 0 / CCC § 2106)."
+                ),
+                "official_url": "https://www.vatican.va/archive/hist_councils/ii_vatican_council/documents/vat-ii_decree_19641121_unitatis-redintegratio_en.html",
+            },
+            {
+                "id": "PATH_3_LUTHERAN_DIALOGUE",
+                "title": "Confessional Lutheran & High-Church Traditions — Sacramental & Liturgical Continuity",
+                "badge": "50+ YEARS OF FORMAL DIALOGUE",
+                "summary": (
+                    "From the 1999 Joint Declaration on the Doctrine of Justification (JDDJ) to the *Declaration on the Way* (2015), Catholic–Lutheran dialogue has documented deep agreement on the Trinity, Christology, Baptismal regeneration, and the Real Presence in the Eucharist."
+                ),
+                "what_is_preserved": (
+                    "The Christocentric proclamation of unmerited grace (John 3:16; Romans 3:24), high sacramental reverence for Baptism and the Altar, and classic chorale liturgy."
+                ),
+                "what_is_required": (
+                    "Resolving the remaining defined points on Eucharistic sacrifice (CCC § 1367), the Petrine ministry, and episcopal succession."
+                ),
+                "official_url": "http://www.christianunity.va/",
+            },
+        ],
     }
 
 
@@ -491,6 +944,7 @@ def build_concordance_bundle() -> Dict[str, Any]:
     n1374.add_thread(verse_ref="1CO.10.16", cluster_id="CL_PAUL_EUCHARISTIC_KOINONIA", warrant_mode="DEDUCTIVE_PROOF", canon_scope="ECUMENICAL_66_SHARED", mediator="TRENT_EUCHARIST", newman_note="N4_LOGICAL_SEQUENCE", decibans=8.4)
     n1374.add_thread(verse_ref="1CO.11.23-29", cluster_id="CL_PAUL_EUCHARISTIC_KOINONIA", warrant_mode="DEDUCTIVE_PROOF", canon_scope="ECUMENICAL_66_SHARED", mediator="SACROSANCTUM_CONCILIUM", newman_note="N6_CONSERVATIVE_ACTION", decibans=8.6)
     n1374.add_thread(verse_ref="MAL.1.11", cluster_id="CL_MALACHI_PURE_OFFERING", warrant_mode="TYPOLOGICAL_FULFILLMENT", canon_scope="ECUMENICAL_66_SHARED", mediator="DIDACHE_14_TRENT_XXII", newman_note="N5_ANTICIPATION_OF_FUTURE", decibans=6.2)
+    n1374.add_thread(verse_ref="HEB.10.10-14", cluster_id="CL_HEBREWS_ONCE_FOR_ALL_SACRIFICE", warrant_mode="DEDUCTIVE_PROOF", canon_scope="ECUMENICAL_66_SHARED", mediator="CCC_1367_TRENT_XXII_SINGLE_SACRIFICE", newman_note="N6_CONSERVATIVE_ACTION", decibans=8.8)
     compiler.register_node(n1374)
 
     # 7. CCC § 1996 — Justification & Free Gift of Grace (Pillar III: Life in Christ)
@@ -601,15 +1055,55 @@ def build_concordance_bundle() -> Dict[str, Any]:
         newman_note="N0_EXPLICIT_KERYGMA",
     )
 
+    question_cards = build_bounded_question_cards()
+    all_nodes = [n253, n460, n604, n639, n1031, n1213, n1374, n1996, n2106, n2838, n2842]
+    verse_tx_log: List[Dict[str, Any]] = []
+    arena_receipt: Dict[str, Any] = {}
+
+    if HAS_BSAR_V050 and with_arena is not None and AddressSpace is not None:
+        def _register_all_in_arena(arena_scope: Any) -> int:
+            for nd in all_nodes:
+                nd.attrs["question_card"] = question_cards[nd.ccc_id]
+                tx_rec = compiler.register_node_transact(
+                    nd,
+                    arena=arena_scope,
+                    require_question_card=True,
+                )
+                nd.attrs["verse_transact_receipt"] = tx_rec
+                verse_tx_log.append(tx_rec)
+            return len(verse_tx_log)
+
+        _, arena_receipt = with_arena(
+            "epistemic_concordance_v050",
+            AddressSpace.WRAM_7E_FRAME,
+            4096,
+            _register_all_in_arena,
+        )
+    else:
+        for nd in all_nodes:
+            nd.attrs["question_card"] = question_cards[nd.ccc_id]
+            tx_rec = compiler.register_node_transact(nd, arena=None, require_question_card=True)
+            nd.attrs["verse_transact_receipt"] = tx_rec
+            verse_tx_log.append(tx_rec)
+
     slab = compiler.compile_three_pass()
+    bisim_receipt = BsarXCubeCompiler.build_doctrinal_bisimulation_receipt()
+    pastoral_pathways = build_pastoral_pathways_guide()
     resurrection_audit = build_resurrection_replicability_audit()
     cosmology_boundary = build_nicene_cosmology_boundary_matrix()
 
     bundle = {
-        "project": "Epistemic Concordance — Scripture <-> Catechism of Trent (1566) <-> CCC (Bsar 6D XCube)",
+        "project": "Epistemic Concordance — Scripture <-> Catechism of Trent (1566) <-> CCC (Bsar v0.5.0 6D XCube)",
+        "engine_version": "bsar.v0.5.0",
         "license": "GNU-AGPLv3",
         "trent_witness_sha256": trent_sha,
         "xcube_slab": slab,
+        "bsar_v050_receipts": {
+            "doctrinal_bisimulation_receipt": bisim_receipt,
+            "arena_scope_receipt": arena_receipt,
+            "verse_transact_node_commits": verse_tx_log,
+        },
+        "pastoral_pathways_guide": pastoral_pathways,
         "bible_public_domain": bible_store,
         "trent_public_domain": trent_passages,
         "resurrection_replicability_lab": resurrection_audit,
@@ -619,6 +1113,7 @@ def build_concordance_bundle() -> Dict[str, Any]:
             "usccb_print_and_licensed_ccc": "https://www.usccb.org/beliefs-and-teachings/what-we-believe/catechism/catechism-of-the-catholic-church",
             "lutheran_book_of_concord": "https://bookofconcord.org/",
             "reformed_carm_apologetics": "https://carm.org/",
+            "personal_ordinariate": "https://ordinariate.net/",
         },
     }
     safety.assert_clean(bundle)
@@ -835,6 +1330,49 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   .btn-link.alt { background: var(--burgundy); }
   .btn-link.carm { background: var(--navy); }
   .btn-link.luth { background: var(--gold); }
+  .qa-lead-banner {
+    background: linear-gradient(135deg, #edf6f0 0%, #fcfaf4 100%);
+    border: 2px solid var(--pine);
+    border-radius: 8px;
+    padding: 1.1rem 1.25rem;
+    margin-bottom: 1rem;
+  }
+  .short-answer-box {
+    border-left: 5px solid var(--pine);
+    background: #f4fbf7;
+    padding: .9rem 1.1rem;
+    border-radius: 0 8px 8px 0;
+    margin: .75rem 0;
+    font-size: 1.02rem;
+  }
+  .objection-box {
+    border-left: 5px solid var(--burgundy);
+    background: #fdf6f6;
+    padding: .85rem 1.05rem;
+    border-radius: 0 8px 8px 0;
+    margin: .75rem 0;
+  }
+  .dispute-box {
+    border-left: 5px solid var(--navy);
+    background: #f4f7fb;
+    padding: .85rem 1.05rem;
+    border-radius: 0 8px 8px 0;
+    margin: .75rem 0;
+  }
+  details.go-deeper {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: #faf7f0;
+    padding: .75rem 1rem;
+    margin-top: .85rem;
+    font-family: system-ui, sans-serif;
+  }
+  details.go-deeper summary {
+    cursor: pointer;
+    font-weight: 700;
+    color: var(--pine);
+    font-size: .92rem;
+  }
   pre.code {
     background: #1b2220;
     color: #d8f3dc;
@@ -859,10 +1397,11 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 </head>
 <body>
 <header>
-  <h1>Epistemic Concordance: Scripture ↔ Catechism of Trent (1566) ↔ CCC</h1>
-  <p>Powered by <strong>Bsar 6D XCube</strong> (Asar 3-Pass Slab + R Pipe Verbs + Lua Dynamic Frames + CarrollCube ∃m) · Cardinal Newman 7-Note Profiles · Psychometric Replicability Engine</p>
+  <h1>Epistemic Concordance: Start With a Question — Scripture ↔ 1566 Catechism of Trent ↔ CCC</h1>
+  <p>Answer First, Evidence Immediately Available, Full <strong>Bsar v0.5.0 6D XCube</strong> Underneath (Verse <code>&lt;transacts&gt;</code> · Coalgebraic Bisimulation Receipt · Cardinal Newman 7 Notes · Zero Straw-Men)</p>
   <div class="pill-row">
     <span class="pill" id="meta-rats">RATS SHA-256: loading…</span>
+    <span class="pill" id="meta-bisim">v0.5.0 Bisimulation Receipt: loading…</span>
     <span class="pill">Trent 1566 Witness: Public Domain (Byte-Pinned)</span>
     <span class="pill">Scripture: Douay-Rheims 1899 &amp; KJV 1769 (Public Domain)</span>
     <span class="pill">License: GNU AGPLv3 (Free Open Hosting · Dual-License Commercial Ready)</span>
@@ -871,15 +1410,48 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 
 <main>
   <div class="tabs">
-    <button class="tab-btn active" onclick="switchTab('ccc')">1. CCC Statement → Bible &amp; Trent (Forward CSR)</button>
-    <button class="tab-btn" onclick="switchTab('verse')">2. Bible Verse → All Supporting CCC §§ (Reverse CSC)</button>
-    <button class="tab-btn" onclick="switchTab('rpipe')">3. Live R-Verb XCube Slicer (|&gt;)</button>
-    <button class="tab-btn" onclick="switchTab('hume')">4. Hume “Of Miracles” (@PAHoyeck) Replicability Lab</button>
-    <button class="tab-btn" onclick="switchTab('cosm')">5. Nicene Cosmology Boundary: LDS &amp; Antiquity (1 / ? / 0)</button>
+    <button class="tab-btn active" onclick="switchTab('qa')">1. Start With a Question (Lay &amp; Ecumenical Q&amp;A)</button>
+    <button class="tab-btn" onclick="switchTab('pathways')">2. What Would Becoming Catholic Mean? (Ordinariate &amp; Pathways)</button>
+    <button class="tab-btn" onclick="switchTab('ccc')">3. Full CCC → Bible &amp; Trent XCube (Forward CSR)</button>
+    <button class="tab-btn" onclick="switchTab('verse')">4. Bible Verse → All CCC §§ (Reverse CSC)</button>
+    <button class="tab-btn" onclick="switchTab('rpipe')">5. Live R-Verb XCube Slicer (|&gt;)</button>
+    <button class="tab-btn" onclick="switchTab('hume')">6. Hume “Of Miracles” Replicability Lab</button>
+    <button class="tab-btn" onclick="switchTab('cosm')">7. Nicene Cosmology Boundary (1 / ? / 0)</button>
   </div>
 
-  <!-- TAB 1: CCC -> BIBLE & TRENT -->
-  <section id="panel-ccc" class="panel active">
+  <!-- TAB 1: START WITH A QUESTION (ALETHEA 6-LAYER BOUNDED CASE FRONT DOOR) -->
+  <section id="panel-qa" class="panel active">
+    <div class="qa-lead-banner">
+      <strong>How This Page Works (One Question, One Clear Answer):</strong>
+      Choose a question below—starting with the Eucharist (<em>"When Jesus says 'This is my body,' what happens?"</em>), Justification &amp; CARM's salvation summary, Purgatory, or Development of Doctrine. Every bounded case gives you: (1) a <strong>60-Second Plain-Language Answer</strong>, (2) <strong>Three Key Distinctions &amp; Primary Witnesses</strong> (verbatim Scripture + byte-pinned 1566 Catechism of Trent + CCC), (3) the <strong>Strongest Protestant / CARM / Skeptic Objection</strong> stated fairly, (4) <strong>What Remains Genuinely Disputed</strong>, and (5) an expandable <strong>Go Deeper (Bsar v0.5.0 Verse <code>&lt;transacts&gt;</code> &amp; Coalgebraic Bisimulation Receipt)</strong> drawer.
+    </div>
+    <div class="controls">
+      <label><strong>Bible Translation:</strong>
+        <select id="qa-bible-ver" onchange="renderActiveQuestion()">
+          <option value="drb">Douay-Rheims 1899 (73-Book Catholic PD)</option>
+          <option value="kjv">King James Version 1769 (66-Book + Apocrypha PD)</option>
+        </select>
+      </label>
+      <label><strong>Quick Jump:</strong>
+        <button class="tab-btn" onclick="selectQuestion('1374')">Lead #1: Eucharist ("This Is My Body")</button>
+        <button class="tab-btn" onclick="selectQuestion('1996')">#2: Justification vs. CARM</button>
+        <button class="tab-btn" onclick="selectQuestion('1031')">#3: Purgatory (Start With the Saved)</button>
+        <button class="tab-btn" onclick="selectQuestion('2106')">#4: Doctrinal Development</button>
+      </label>
+    </div>
+    <div class="grid-2">
+      <div class="sidebar-list" id="qa-sidebar"></div>
+      <div id="qa-detail"></div>
+    </div>
+  </section>
+
+  <!-- TAB 2: PASTORAL PATHWAYS & ORDINARIATE -->
+  <section id="panel-pathways" class="panel">
+    <div id="pathways-out"></div>
+  </section>
+
+  <!-- TAB 3: CCC -> BIBLE & TRENT -->
+  <section id="panel-ccc" class="panel">
     <div class="controls">
       <label><strong>Bible Translation:</strong>
         <select id="bible-ver" onchange="renderActiveCCC()">
@@ -999,11 +1571,12 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 
 <script>
 const BUNDLE = __BUNDLE_JSON__;
-let currentCCC = "604";
+let currentQuestionCCC = "1374";
+let currentCCC = "1374";
 
 function switchTab(name) {
   document.querySelectorAll('.tabs .tab-btn').forEach((b, idx) => {
-    const map = ['ccc', 'verse', 'rpipe', 'hume', 'cosm'];
+    const map = ['qa', 'pathways', 'ccc', 'verse', 'rpipe', 'hume', 'cosm'];
     b.classList.toggle('active', map[idx] === name);
   });
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
@@ -1012,8 +1585,27 @@ function switchTab(name) {
 
 function initApp() {
   const slab = BUNDLE.xcube_slab;
+  const bisim = (BUNDLE.bsar_v050_receipts || {}).doctrinal_bisimulation_receipt || {};
   document.getElementById('meta-rats').textContent =
     `Bsar Slab SHA-256: ${slab.rats_sha256.slice(0, 16)}… (${slab.counts.ccc_nodes} Nodes · ${slab.counts.sparse_edges} Hilbert Edges)`;
+  document.getElementById('meta-bisim').textContent =
+    `v0.5.0 Bisimulation Receipt: ${(bisim.receipt_sha256 || '').slice(0, 14)}… (${bisim.transitions_checked || 0} transitions verified · STAR RATS Valid)`;
+
+  const qaSidebar = document.getElementById('qa-sidebar');
+  const qaSortedIds = Object.keys(slab.nodes).sort((a, b) => {
+    const ra = ((slab.nodes[a].question_card || {}).priority_rank) || 99;
+    const rb = ((slab.nodes[b].question_card || {}).priority_rank) || 99;
+    return ra - rb;
+  });
+  qaSidebar.innerHTML = qaSortedIds.map(id => {
+    const n = slab.nodes[id];
+    const qc = n.question_card || {};
+    return `<button class="node-item ${id === currentQuestionCCC ? 'active' : ''}" id="nav-qa-${id}" onclick="selectQuestion('${id}')">
+      <small style="color:var(--burgundy);font-weight:700">${escapeHtml(qc.category_badge || n.pillar)}</small>
+      <strong>${escapeHtml(qc.question || n.topic)}</strong>
+      <small>CCC § ${id} · ${escapeHtml(n.topic)}</small>
+    </button>`;
+  }).join('');
 
   const sidebar = document.getElementById('ccc-sidebar');
   const nodeIds = Object.keys(slab.nodes).sort((a, b) => Number(a) - Number(b));
@@ -1032,6 +1624,8 @@ function initApp() {
     return `<option value="${vk}" ${vk === 'JHN.3.16' ? 'selected' : ''}>${escapeHtml(b.ref)} [${vk}] (${escapeHtml(b.canon)})</option>`;
   }).join('');
 
+  renderActiveQuestion();
+  renderPastoralPathways();
   renderActiveCCC();
   renderReverseVerse();
   runRPipe();
@@ -1043,9 +1637,152 @@ function escapeHtml(s) {
   return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
+function selectQuestion(id) {
+  currentQuestionCCC = String(id);
+  document.querySelectorAll('#qa-sidebar .node-item').forEach(el => el.classList.remove('active'));
+  const btn = document.getElementById('nav-qa-' + currentQuestionCCC);
+  if (btn) btn.classList.add('active');
+  renderActiveQuestion();
+}
+
+function renderActiveQuestion() {
+  const slab = BUNDLE.xcube_slab;
+  const node = slab.nodes[currentQuestionCCC];
+  const qc = node.question_card || {};
+  const tx = node.verse_transact_receipt || {};
+  const bisim = (BUNDLE.bsar_v050_receipts || {}).doctrinal_bisimulation_receipt || {};
+  const ver = document.getElementById('qa-bible-ver').value;
+
+  const edges = (slab.forward_ccc_to_edge_ids[currentQuestionCCC] || []).map(i => slab.edges[i]);
+  const cable = computeDeduplicatedCableDb(edges);
+  const trent = BUNDLE.trent_public_domain[node.trent_ref_id];
+  const L = node.tradition_lenses || {};
+
+  const pillarsHtml = (qc.three_pillars || []).map(p => `
+    <div class="lens-card" style="background:#fcfaf4">
+      <strong style="color:var(--pine);display:block;margin-bottom:.35rem">${escapeHtml(p.title)}</strong>
+      <p style="margin:0">${escapeHtml(p.body)}</p>
+    </div>
+  `).join('');
+
+  const versesHtml = edges.map(e => {
+    const b = BUNDLE.bible_public_domain[e.verse_ref] || { ref: e.verse_ref, drb: '', kjv: '', canon: e.canon_scope };
+    const canonBadge = b.canon === 'ECUMENICAL_66_SHARED'
+      ? `<span class="badge b-shared">66-Book Shared Canon</span>`
+      : `<span class="badge b-deut">7-Book Deuterocanon</span>`;
+    return `<div class="verse-box">
+      <div>
+        <strong>${escapeHtml(b.ref)}</strong> ${canonBadge}
+        <span class="badge b-db">+${(e.db_q8_8 / 256.0).toFixed(2)} dB</span>
+      </div>
+      <p style="margin:.35rem 0">"${escapeHtml(b[ver])}"</p>
+      <small style="color:var(--muted);font-family:system-ui,sans-serif">
+        Mediator: <code>${escapeHtml(e.mediator)}</code> · Newman Note: <code>${escapeHtml(e.newman_note)}</code>
+      </small>
+    </div>`;
+  }).join('');
+
+  document.getElementById('qa-detail').innerHTML = `
+    <div class="card">
+      <span class="badge b-shared">${escapeHtml(qc.category_badge || 'BOUNDED DOCTRINAL QUESTION')}</span>
+      <span class="badge b-db">CCC § ${node.ccc_id} · Newman Cable: +${cable.decibans} dB (${cable.clusterCount} Independent Clusters)</span>
+      <h2 style="margin:.5rem 0 .25rem 0">${escapeHtml(qc.question || node.topic)}</h2>
+      <p style="margin:.2rem 0 .6rem 0;color:var(--muted);font-style:italic"><strong>What a layperson asks:</strong> "${escapeHtml(qc.lay_hook || '')}"</p>
+
+      <div class="short-answer-box">
+        <strong>1. The 60-Second Short Answer (Plain English):</strong>
+        <p style="margin:.4rem 0 0 0">${escapeHtml(qc.short_answer || node.clean_room_proposition)}</p>
+      </div>
+
+      <h3 style="margin:1rem 0 .4rem 0">2. Key Breakdown &amp; Historical Context</h3>
+      <div class="lenses" style="margin-bottom:1rem">${pillarsHtml}</div>
+
+      <div class="objection-box">
+        <strong>3. The Strongest Objection (Steel-Manned Protestant / CARM / Skeptic Counter-Argument):</strong>
+        <p style="margin:.35rem 0 0 0">${escapeHtml(qc.strongest_objection || '')}</p>
+      </div>
+
+      <div class="dispute-box">
+        <strong>4. What the Evidence Supports vs. What Remains Genuinely Disputed:</strong>
+        <p style="margin:.3rem 0"><strong>Classification:</strong> <code>${escapeHtml(qc.dispute_taxonomy || '')}</code></p>
+        <p style="margin:.3rem 0 0 0">${escapeHtml(qc.what_evidence_supports_vs_disputes || '')}</p>
+      </div>
+
+      <div class="out-links">
+        <a class="btn-link" href="${escapeHtml(node.vatican_en_url)}" target="_blank" rel="noopener">Read Verbatim CCC § ${node.ccc_id} on Vatican.va ↗</a>
+        <a class="btn-link alt" href="${escapeHtml(node.vatican_latin_url)}" target="_blank" rel="noopener">Latin Editio Typica ↗</a>
+        <a class="btn-link luth" href="https://bookofconcord.org/" target="_blank" rel="noopener">Lutheran Book of Concord ↗</a>
+        <a class="btn-link carm" href="https://carm.org/roman-catholicism/summary-of-process-of-salvation-in-roman-catholicism/" target="_blank" rel="noopener">Compare CARM Salvation Summary ↗</a>
+        <button class="tab-btn" onclick="selectCCC('${node.ccc_id}');switchTab('ccc')">Open Full Technical CSR Matrix →</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>5. Primary Witnesses: Verbatim Scripture (${ver === 'drb' ? 'Douay-Rheims 1899' : 'KJV 1769'}) &amp; Byte-Pinned 1566 Catechism of Trent</h3>
+      ${versesHtml}
+      <h4 style="margin:1rem 0 .35rem 0">${escapeHtml(trent.title)} (Pin: <code>${escapeHtml(trent.line_range)}</code> in <code>rc-en.txt</code>)</h4>
+      <div class="trent-box">${escapeHtml(trent.verbatim_text)}</div>
+    </div>
+
+    <div class="card">
+      <h3>6. Four-Way Ecumenical Comparison &amp; Bsar v0.5.0 Verification Drawer</h3>
+      <div class="lenses">
+        <div class="lens-card"><strong>Catholic (Trent 1566 → CCC)</strong><p>${escapeHtml(L.catholic)}</p></div>
+        <div class="lens-card"><strong>Lutheran (Book of Concord)</strong><p>${escapeHtml(L.lutheran)}</p></div>
+        <div class="lens-card"><strong>Reformed / CARM (Matt Slick)</strong><p>${escapeHtml(L.reformed_carm)}</p></div>
+        <div class="lens-card"><strong>Epistemic / Skeptic Note</strong><p>${escapeHtml(L.skeptic_note)}</p></div>
+      </div>
+
+      <details class="go-deeper">
+        <summary>🔬 Go Deeper: Inspect Underlying Bsar v0.5.0 Verse &lt;transacts&gt; &amp; Coalgebraic Bisimulation Receipt</summary>
+        <p style="margin:.6rem 0;font-size:.86rem">
+          <strong>Why Speech-Acts Map to <code>bsar v0.5.0</code> Verse Effects:</strong> In <code>bsar.verse_effects</code>, a <code>&lt;reads&gt;</code> verb merely inspects an existing state without changing reality, whereas a <code>&lt;transacts&gt;</code> verb checks every guard condition and atomically commits a new state into the arena (<code>O(1)</code> rollback if any guard fails). When St. John Chrysostom (quoted in <code>CCC § 1375</code>) explains <em>"This is my body—this word transforms the things offered,"</em> he is describing a divine <code>&lt;transacts&gt;</code> speech-act rather than a passive <code>&lt;reads&gt;</code> description.
+        </p>
+        <pre class="code">${escapeHtml(tx.asar_asm || '; Verse <transacts> receipt')}
+; Node Commit: committed=${escapeHtml(String(tx.committed))} | Arena Cursor: ${escapeHtml(String(tx.arena_cursor_before))}B -> ${escapeHtml(String(tx.arena_cursor_after))}B
+; Coalgebraic Bisimulation (${escapeHtml(bisim.spec_name)} ~ ${escapeHtml(bisim.fast_name)}):
+;   Relation |R| = ${escapeHtml(String(bisim.bisimulation_relation_size))} | Transitions Checked = ${escapeHtml(String(bisim.transitions_checked))}
+;   STAR RATS Header = ${escapeHtml(bisim.rats_header_hex || '')} | Receipt SHA-256 = ${escapeHtml(bisim.receipt_sha256 || '')}</pre>
+      </details>
+    </div>
+  `;
+}
+
+function renderPastoralPathways() {
+  const guide = BUNDLE.pastoral_pathways_guide || { title: '', framing_note: '', pathways: [] };
+  const cards = (guide.pathways || []).map(p => `
+    <div class="card" style="border-left:5px solid var(--pine)">
+      <span class="badge b-shared">${escapeHtml(p.badge)}</span>
+      <h3 style="margin:.45rem 0">${escapeHtml(p.title)}</h3>
+      <p>${escapeHtml(p.summary)}</p>
+      <div class="lenses">
+        <div class="lens-card" style="background:#f4fbf7">
+          <strong>What Is Honored &amp; Retained:</strong>
+          <p style="margin:.35rem 0 0 0">${escapeHtml(p.what_is_preserved)}</p>
+        </div>
+        <div class="lens-card" style="background:#fdf8f6">
+          <strong>What Full Communion Requires (Honest Clarity):</strong>
+          <p style="margin:.35rem 0 0 0">${escapeHtml(p.what_is_required)}</p>
+        </div>
+      </div>
+      <div class="out-links">
+        <a class="btn-link" href="${escapeHtml(p.official_url)}" target="_blank" rel="noopener">Explore Official Resource / Ordinariate ↗</a>
+      </div>
+    </div>
+  `).join('');
+
+  document.getElementById('pathways-out').innerHTML = `
+    <div class="card">
+      <h2>${escapeHtml(guide.title)}</h2>
+      <p style="color:var(--muted)">${escapeHtml(guide.framing_note)}</p>
+    </div>
+    ${cards}
+  `;
+}
+
 function selectCCC(id) {
   currentCCC = String(id);
-  document.querySelectorAll('.node-item').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('#ccc-sidebar .node-item').forEach(el => el.classList.remove('active'));
   const btn = document.getElementById('nav-ccc-' + currentCCC);
   if (btn) btn.classList.add('active');
   renderActiveCCC();

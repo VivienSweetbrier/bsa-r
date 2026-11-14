@@ -125,9 +125,47 @@ class TestEpistemicConcordance(unittest.TestCase):
 
         bundle = build_concordance_bundle()
         self.assertEqual(bundle["trent_witness_sha256"], EXPECTED_TRENT_SHA256)
+        self.assertEqual(bundle["engine_version"], "bsar.v0.5.0")
         props = bundle["nicene_cosmology_boundary"]["propositions"]
         states = {p["state"] for p in props}
         self.assertEqual(states, {"1", "?", "0"})
+
+        # Verify Alethea 6-Layer Bounded Question Cards & bsar v0.5.0 receipts
+        nodes = bundle["xcube_slab"]["nodes"]
+        self.assertIn("1374", nodes)
+        q1374 = nodes["1374"]["question_card"]
+        self.assertEqual(q1374["priority_rank"], 1)
+        self.assertIn("This Is My Body", q1374["question"])
+        self.assertEqual(len(q1374["three_pillars"]), 3)
+        self.assertIn("Chrysostom", q1374["three_pillars"][1]["body"])
+
+        q1996 = nodes["1996"]["question_card"]
+        self.assertIn("CARM", q1996["three_pillars"][0]["title"])
+
+        q1031 = nodes["1031"]["question_card"]
+        self.assertIn("already saved", q1031["short_answer"])
+
+        bisim = bundle["bsar_v050_receipts"]["doctrinal_bisimulation_receipt"]
+        self.assertTrue(bisim["rats_valid"])
+        self.assertGreaterEqual(bisim["transitions_checked"], 56)
+
+        tx_commits = bundle["bsar_v050_receipts"]["verse_transact_node_commits"]
+        self.assertEqual(len(tx_commits), 11)
+        self.assertTrue(all(tx["committed"] for tx in tx_commits))
+
+        # Verify Verse <transacts> refusal-at-posting rollback when a required question_card is missing
+        c_bad = BsarXCubeCompiler()
+        bad_node = LuaAssociativeNode(999, pillar="I_CREED", topic="Incomplete", summary="Test")
+        bad_node.add_thread(
+            verse_ref="JHN.3.16",
+            cluster_id="CL_TEST",
+            warrant_mode="DIRECT_QUOTE",
+            canon_scope="ECUMENICAL_66_SHARED",
+            decibans=5.0,
+        )
+        tx_bad = c_bad.register_node_transact(bad_node, require_question_card=True)
+        self.assertFalse(tx_bad["committed"])
+        self.assertIn("missing_question_card", str(tx_bad["failure_reason"]))
 
 
 if __name__ == "__main__":
